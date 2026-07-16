@@ -11,6 +11,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
+/**
+ * DriveIO interface sets up the input and output systems for the drive train.
+ * Contains methods to control and monitor drive train.
+ */
+
 public interface DriveIO {
 
     @AutoLog
