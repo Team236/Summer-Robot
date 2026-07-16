@@ -15,14 +15,15 @@ import org.littletonrobotics.junction.AutoLog;
 public interface DriveIO {
 
     @AutoLog
-    class SwerveDriveInputs extends SwerveDriveState {
+    class SwerveDriveTelemetry extends SwerveDriveState {
         public double gyroAngle = 0.0;
 
-        SwerveDriveInputs() {
-            this.Pose = new Pose2d(); // Later abstract this out
+        SwerveDriveTelemetry() {
+            this.Pose = new Pose2d(); // Later abstract this out to helper class
         }
 
-        public void setFromState(SwerveDriveState currentState) {
+        // Update current SwerveDriveTelemetry's variables with new data (Own through inheritance)
+        public void updateFromState(SwerveDriveState currentState) {
             this.Pose = currentState.Pose;
             this.SuccessfulDaqs = currentState.SuccessfulDaqs;
             this.FailedDaqs = currentState.FailedDaqs;
@@ -35,7 +36,7 @@ public interface DriveIO {
 
     // Interface methods that must be implimented by DriveHarware
 
-    void getInputs(SwerveDriveInputs inputs);
+    void readInputs(SwerveDriveTelemetry inputs);
 
     void logModules(SwerveDriveState driveState);
 
