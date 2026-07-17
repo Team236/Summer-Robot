@@ -7,6 +7,7 @@
 
 package com.team236.frc2026;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -21,6 +22,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
+    private RobotContainer mRobotContainer;
+
     public Robot() {
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -60,16 +63,22 @@ public class Robot extends LoggedRobot {
         }
 
         // Start AdvantageKit logger
-        Logger.start();
+        // Logger.start();
+
+        mRobotContainer = new RobotContainer();
     }
 
     /** This function is called periodically during all modes. */
     @Override
-    public void robotPeriodic() {}
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
+    }
 
     /** This function is called once when the robot is disabled. */
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
 
     /** This function is called periodically when disabled. */
     @Override
