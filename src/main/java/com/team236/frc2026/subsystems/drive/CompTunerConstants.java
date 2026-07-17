@@ -257,8 +257,7 @@ public class CompTunerConstants {
      */
     public static TunerConstContainer createDrivetrain() {
         return new TunerConstContainer(
-        DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
-    );
+                DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }
 
     /**

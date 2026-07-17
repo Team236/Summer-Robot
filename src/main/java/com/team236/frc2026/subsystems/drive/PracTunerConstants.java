@@ -256,9 +256,8 @@ public class PracTunerConstants {
      * program. (Change name from CommandSwerveDrivetrain to TunerConstContainer)
      */
     public static TunerConstContainer createDrivetrain() {
-    return new TunerConstContainer(
-    DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
-    );
+        return new TunerConstContainer(
+                DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }
 
     /**
