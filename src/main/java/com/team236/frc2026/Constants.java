@@ -7,6 +7,8 @@
 
 package com.team236.frc2026;
 
+import com.team236.frc2026.subsystems.drive.DrivetrainProfile;
+import com.team236.frc2026.subsystems.drive.PracTunerConstants;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -29,10 +31,17 @@ public final class Constants {
         REPLAY
     }
 
+    public static final class Controller {
+        public static final byte kMainController = 0;
+    }
+
     public static final class DriveConstants {
         public static final double kOpenLoopDeadband = 0.05;
 
         public static final double kMaxDriveSpeed = 0.0;
         public static final double kMaxRotationalRate = 0.0;
+
+        public static final DrivetrainProfile kDrivetrain =
+                PracTunerConstants.createDrivetrain(); // Add logic later for comp + prac + sim
     }
 }
