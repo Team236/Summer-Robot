@@ -255,8 +255,8 @@ public class PracTunerConstants {
      * Creates a CommandSwerveDrivetrain instance. This should only be called once in your robot
      * program. (Change name from CommandSwerveDrivetrain to TunerConstContainer)
      */
-    public static TunerConstContainer createDrivetrain() {
-        return new TunerConstContainer(
+    public static DrivetrainProfile createDrivetrain() {
+        return new DrivetrainProfile(
                 DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
     }
 

@@ -4,14 +4,14 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 
 /**
- * The {@code TunerConstContainer} contains the TunerX constants for the specific robot we are
+ * The {@code DrivetrainConfig} contains the TunerX constants for the specific robot we are
  * operating. This allows us to store many TunerX files and still have one access point.
  */
-public class TunerConstContainer {
+public class DrivetrainProfile {
     SwerveDrivetrainConstants swerveDriveConstants;
     SwerveModuleConstants<?, ?, ?>[] moduleConstants;
 
-    TunerConstContainer(
+    DrivetrainProfile(
             SwerveDrivetrainConstants swerveDriveConstants,
             SwerveModuleConstants<?, ?, ?>... moduleConstants) {
         this.swerveDriveConstants = swerveDriveConstants;
