@@ -253,13 +253,13 @@ public class CompTunerConstants {
 
     /**
      * Creates a CommandSwerveDrivetrain instance. This should only be called once in your robot
-     * program,.
+     * program. (Change name from CommandSwerveDrivetrain to TunerConstContainer)
      */
-    // public static CommandSwerveDrivetrain createDrivetrain() {
-    // return new CommandSwerveDrivetrain(
-    // DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
-    // );
-    // }
+    public static TunerConstContainer createDrivetrain() {
+        return new TunerConstContainer(
+        DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight
+    );
+    }
 
     /**
      * Swerve Drive class utilizing CTR Electronics' Phoenix 6 API with the selected device types.
