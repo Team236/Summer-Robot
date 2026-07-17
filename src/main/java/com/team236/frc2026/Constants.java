@@ -38,8 +38,8 @@ public final class Constants {
     public static final class DriveConstants {
         public static final double kOpenLoopDeadband = 0.05;
 
-        public static final double kMaxDriveSpeed = 0.0;
-        public static final double kMaxRotationalRate = 0.0;
+        public static final double kMaxDriveSpeed = 3.0;
+        public static final double kMaxRotationalRate = 3.0;
 
         public static final DrivetrainProfile kDrivetrain =
                 PracTunerConstants.createDrivetrain(); // Add logic later for comp + prac + sim
