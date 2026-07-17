@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.XboxController;
 
 public class RobotContainer {
 
+    private final RobotState mRobotState = new RobotState();
+
     public static final XboxController driverController =
             new XboxController(Constants.Controller.kMainController);
 
@@ -19,7 +21,6 @@ public class RobotContainer {
     }
 
     private final DriveSubsystem mDriveSubsystem = buildDriveSubsystem();
-    private final RobotState mRobotState = new RobotState();
 
     private final TeleopSwerveDrive mDriveCommand =
             (new TeleopSwerveDrive(
