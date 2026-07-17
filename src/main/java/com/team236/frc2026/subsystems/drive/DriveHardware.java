@@ -1,11 +1,13 @@
 package com.team236.frc2026.subsystems.drive;
 
+import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.team236.lib.time.RobotTime;
-
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
@@ -13,18 +15,10 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
-
-public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder>
-implements DriveIO {
+public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements DriveIO {
 
     // Tread safe cache for telemetry data
     AtomicReference<SwerveDriveState> telemetryCache = new AtomicReference<>();
@@ -67,13 +61,9 @@ implements DriveIO {
     }
 
     // Interface methods
-    public void readInputs(DriveIOTelemetry inputs) {
+    public void readInputs(DriveIOTelemetry inputs) {}
 
-    }
-
-    public void logModules(SwerveDriveState driveState) {
-
-    }
+    public void logModules(SwerveDriveState driveState) {}
 
     public void setControl(SwerveRequest request) {
         super.setControl(request);
@@ -83,5 +73,4 @@ implements DriveIO {
             Supplier<SwerveRequest> requestSupplier, Subsystem subsystemRequired) {
         return Commands.run(() -> this.setControl(requestSupplier.get()), subsystemRequired);
     }
-
 }
