@@ -28,4 +28,11 @@ public final class Constants {
         /** Replaying from a log file. */
         REPLAY
     }
+
+    public static final class DriveConstants {
+        public static final double kOpenLoopDeadband = 0.05;
+
+        public static final double kMaxDriveSpeed = 0.0;
+        public static final double kMaxRotationalRate = 0.0;
+    }
 }
