@@ -21,7 +21,7 @@ public class RobotContainer {
     private final DriveSubsystem mDriveSubsystem = buildDriveSubsystem();
     private final RobotState mRobotState = new RobotState();
 
-    private final TeleopSwerveDrive driveCommand =
+    private final TeleopSwerveDrive mDriveCommand =
             (new TeleopSwerveDrive(
                     mDriveSubsystem,
                     mRobotState,
@@ -29,4 +29,12 @@ public class RobotContainer {
                     () -> driverController.getLeftX(),
                     () -> driverController.getLeftY(),
                     () -> driverController.getRightX()));
+
+    private void configureBindings() {
+        mDriveSubsystem.setDefaultCommand(mDriveCommand);
+    }
+
+    RobotContainer() {
+        configureBindings();
+    }
 }
