@@ -23,4 +23,8 @@ public class DriveSubsystem extends SubsystemBase {
     public void setControl(SwerveRequest request) {
         io.setControl(request);
     }
+
+    public void resetGyro() {
+        io.resetGyro();
+    }
 }

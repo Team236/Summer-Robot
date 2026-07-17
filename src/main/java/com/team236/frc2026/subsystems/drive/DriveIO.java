@@ -43,4 +43,6 @@ public interface DriveIO {
     void setControl(SwerveRequest request);
 
     Command applyRequest(Supplier<SwerveRequest> requestSupplier, Subsystem subsystemRequired);
+
+    void resetGyro();
 }

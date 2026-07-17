@@ -73,4 +73,8 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
             Supplier<SwerveRequest> requestSupplier, Subsystem subsystemRequired) {
         return Commands.run(() -> this.setControl(requestSupplier.get()), subsystemRequired);
     }
+
+    public void resetGyro() {
+        super.seedFieldCentric();
+    }
 }
