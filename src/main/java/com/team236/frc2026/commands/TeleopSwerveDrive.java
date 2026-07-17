@@ -40,6 +40,8 @@ public class TeleopSwerveDrive extends Command {
         mThrottleSupplier = throttle;
         mStrafeSupplier = strafe;
         mTurnSupplier = turn;
+
+        addRequirements(mDrivetrain);
     }
 
     @Override
