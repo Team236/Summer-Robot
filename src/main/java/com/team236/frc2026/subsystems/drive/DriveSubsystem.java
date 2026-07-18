@@ -3,28 +3,30 @@ package com.team236.frc2026.subsystems.drive;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-/** The {@code DriveSubsystem} class controlls the swerve drivetrain, manual and autonomous. */
+/**
+ * The {@code DriveSubsystem} class controls the swerve drivetrain for both manual and autonomous
+ * operation.
+ */
 public class DriveSubsystem extends SubsystemBase {
-    DriveIO io;
-
-    DriveIOTelemetryAutoLogged inputs = new DriveIOTelemetryAutoLogged();
+    private final DriveIO mIo;
+    private final DriveIOTelemetryAutoLogged mInputs = new DriveIOTelemetryAutoLogged();
 
     public DriveSubsystem(DriveIO io) {
-        this.io = io;
+        mIo = io;
     }
 
     @Override
     public void periodic() {
-        io.readInputs(inputs);
-        // Logger.processInputs("DriveInputs", inputs);
-        io.logModules(inputs);
+        mIo.readInputs(mInputs);
+        // Logger.processInputs("DriveInputs", mInputs);
+        mIo.logModules(mInputs);
     }
 
     public void setControl(SwerveRequest request) {
-        io.setControl(request);
+        mIo.setControl(request);
     }
 
     public void resetGyro() {
-        io.resetGyro();
+        mIo.resetGyro();
     }
 }
