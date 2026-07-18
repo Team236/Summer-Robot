@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLog;
 
 /**
- * The {@code DriveIO} interface sets up the input and output systems for the drive train. Contains
- * methods to control and monitor drive train.
+ * The {@code DriveIO} interface sets up the input and output systems for the drivetrain. It
+ * contains methods to control and monitor the drivetrain.
  */
 public interface DriveIO {
 
@@ -22,7 +22,7 @@ public interface DriveIO {
             this.Pose = new Pose2d(); // Later abstract this out to helper class
         }
 
-        // Update current SwerveDriveTelemetry's variables with new data (Own through inheritance)
+        // Update current DriveIOTelemetry's variables with new data (Inherited from SwerveDriveState)
         public void updateFromState(SwerveDriveState currentState) {
             this.Pose = currentState.Pose;
             this.SuccessfulDaqs = currentState.SuccessfulDaqs;
@@ -34,7 +34,7 @@ public interface DriveIO {
         }
     }
 
-    // Interface methods that must be implimented by DriveHarware
+    // Interface methods that must be implemented by DriveHardware
 
     void readInputs(DriveIOTelemetry inputs);
 
