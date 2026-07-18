@@ -22,7 +22,7 @@ public interface DriveIO {
             this.Pose = new Pose2d(); // Later abstract this out to helper class
         }
 
-        // Update current DriveIOTelemetry's variables with new data (Inherited from SwerveDriveState)
+        // Update current DriveIOTelemetry's variables with new data
         public void updateFromState(SwerveDriveState currentState) {
             this.Pose = currentState.Pose;
             this.SuccessfulDaqs = currentState.SuccessfulDaqs;
