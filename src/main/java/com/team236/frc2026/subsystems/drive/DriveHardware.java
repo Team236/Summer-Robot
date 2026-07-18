@@ -18,6 +18,10 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
+/**
+ * The {@code DriveHardware} class controls the drivetrain at the hardware level. It impliments
+ * {@code DriveIO} and uses CTRE's SwerveDrivetrain.
+ */
 public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements DriveIO {
 
     // Tread safe cache for telemetry data
