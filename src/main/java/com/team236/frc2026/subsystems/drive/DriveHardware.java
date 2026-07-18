@@ -19,56 +19,71 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 /**
- * The {@code DriveHardware} class controls the drivetrain at the hardware level. It impliments
+ * The {@code DriveHardware} class controls the drivetrain at the hardware level. It implements
  * {@code DriveIO} and uses CTRE's SwerveDrivetrain.
  */
 public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements DriveIO {
 
-    // Tread safe cache for telemetry data
-    AtomicReference<SwerveDriveState> telemetryCache = new AtomicReference<>();
+    // Thread constants
+    private static final double kOdometryFrequencyHz = 250.0;
+    private static final int kHighTelemetryFrequencyHz = 250;
+    private static final int kLowTelemetryFrequencyHz = 100;
+    private static final int kOdometryThreadPriority = 99;
 
-    private final StatusSignal<AngularVelocity> angularPitchVelocity;
-    private final StatusSignal<AngularVelocity> angularRollVelocity;
-    private final StatusSignal<AngularVelocity> angularYawVelocity;
-    private final StatusSignal<Angle> roll;
-    private final StatusSignal<Angle> pitch;
-    private final StatusSignal<LinearAcceleration> accelerationX;
-    private final StatusSignal<LinearAcceleration> accelerationY;
+    // Thread-safe cache for telemetry data
+    AtomicReference<SwerveDriveState> mTelemetryCache = new AtomicReference<>();
 
-    // Creation of drive train
+    private final StatusSignal<AngularVelocity> mAngularPitchVelocity;
+    private final StatusSignal<AngularVelocity> mAngularRollVelocity;
+    private final StatusSignal<AngularVelocity> mAngularYawVelocity;
+    private final StatusSignal<Angle> mRoll;
+    private final StatusSignal<Angle> mPitch;
+    private final StatusSignal<LinearAcceleration> mAccelerationX;
+    private final StatusSignal<LinearAcceleration> mAccelerationY;
+
+    // Creation of drivetrain
     public DriveHardware(
             RobotState robotState,
             SwerveDrivetrainConstants driveTrainConstants,
             SwerveModuleConstants<?, ?, ?>... modules) {
-        super(TalonFX::new, TalonFX::new, CANcoder::new, driveTrainConstants, 250.0, modules);
+        super(
+                TalonFX::new,
+                TalonFX::new,
+                CANcoder::new,
+                driveTrainConstants,
+                kOdometryFrequencyHz,
+                modules);
 
-        angularPitchVelocity = getPigeon2().getAngularVelocityYWorld();
-        angularRollVelocity = getPigeon2().getAngularVelocityXWorld();
-        angularYawVelocity = getPigeon2().getAngularVelocityZWorld();
-        roll = getPigeon2().getRoll();
-        pitch = getPigeon2().getPitch();
-        accelerationX = getPigeon2().getAccelerationX();
-        accelerationY = getPigeon2().getAccelerationY();
+        mAngularPitchVelocity = getPigeon2().getAngularVelocityYWorld();
+        mAngularRollVelocity = getPigeon2().getAngularVelocityXWorld();
+        mAngularYawVelocity = getPigeon2().getAngularVelocityZWorld();
+        mRoll = getPigeon2().getRoll();
+        mPitch = getPigeon2().getPitch();
+        mAccelerationX = getPigeon2().getAccelerationX();
+        mAccelerationY = getPigeon2().getAccelerationY();
 
         // Sets thread speed in parent class
-        BaseStatusSignal.setUpdateFrequencyForAll(250, angularYawVelocity);
+        BaseStatusSignal.setUpdateFrequencyForAll(kHighTelemetryFrequencyHz, mAngularYawVelocity);
         BaseStatusSignal.setUpdateFrequencyForAll(
-                100,
-                angularPitchVelocity,
-                angularRollVelocity,
-                roll,
-                pitch,
-                accelerationX,
-                accelerationY);
+                kLowTelemetryFrequencyHz,
+                mAngularPitchVelocity,
+                mAngularRollVelocity,
+                mRoll,
+                mPitch,
+                mAccelerationX,
+                mAccelerationY);
 
-        this.getOdometryThread().setThreadPriority(99);
+        this.getOdometryThread().setThreadPriority(kOdometryThreadPriority);
     }
 
     // Interface methods
+    @Override
     public void readInputs(DriveIOTelemetry inputs) {}
 
+    @Override
     public void logModules(SwerveDriveState driveState) {}
 
+    @Override
     public void setControl(SwerveRequest request) {
         super.setControl(request);
     }
@@ -78,6 +93,7 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
         return Commands.run(() -> this.setControl(requestSupplier.get()), subsystemRequired);
     }
 
+    @Override
     public void resetGyro() {
         super.seedFieldCentric();
     }
