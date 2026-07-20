@@ -78,7 +78,24 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
 
     // Interface methods
     @Override
-    public void readInputs(DriveIOTelemetry inputs) {}
+    public void readInputs(DriveIOTelemetry ioInputs) {
+        var state = mTelemetryCache.get();
+        if (state == null) return;
+
+        ioInputs.updateFromState(state);
+        ioInputs.gyroAngle = ioInputs.Pose.getRotation().getDegrees();
+
+        BaseStatusSignal.refreshAll(
+                mAngularYawVelocity,
+                mAngularPitchVelocity,
+                mAngularRollVelocity,
+                mRoll,
+                mPitch,
+                mAccelerationX,
+                mAccelerationY);
+
+        // Updating localization + other systems with this data
+    }
 
     @Override
     public void logModules(SwerveDriveState driveState) {}

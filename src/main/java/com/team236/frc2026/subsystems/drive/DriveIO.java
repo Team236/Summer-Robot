@@ -36,7 +36,7 @@ public interface DriveIO {
 
     // Interface methods that must be implemented by DriveHardware
 
-    void readInputs(DriveIOTelemetry inputs);
+    void readInputs(DriveIOTelemetry ioInputs);
 
     void logModules(SwerveDriveState driveState);
 
