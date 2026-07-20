@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
-
 /**
  * The {@code DriveHardware} class controls the drivetrain at the hardware level. It implements
  * {@code DriveIO} and uses CTRE's SwerveDrivetrain.
@@ -33,7 +32,6 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
     private static final int kOdometryThreadPriority = 99;
     private static final double kRotationToDegrees = 360.0;
     private static final String[] kModuleNames = {"Drive/FR", "Drive/FL", "Drive/BL", "Drive/BR"};
-
 
     // Thread-safe cache for telemetry data
     private AtomicReference<SwerveDriveState> mTelemetryCache = new AtomicReference<>();
@@ -108,11 +106,12 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
 
     @Override
     public void logModules(SwerveDriveState driveState) {
-        if(driveState.ModuleStates == null) return;
-        for(int i = 0; i < getModules().length; i++) {
+        if (driveState.ModuleStates == null) return;
+        for (int i = 0; i < getModules().length; i++) {
             Logger.recordOutput(
                     kModuleNames[i] + " Absolute Encoder Angle",
-                    getModule(i).getEncoder().getAbsolutePosition().getValueAsDouble() * kRotationToDegrees);
+                    getModule(i).getEncoder().getAbsolutePosition().getValueAsDouble()
+                            * kRotationToDegrees);
             Logger.recordOutput(
                     kModuleNames[i] + " Steering Angle", driveState.ModuleStates[i].angle);
             Logger.recordOutput(
@@ -124,7 +123,6 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
                     kModuleNames[i] + " Target Drive Velocity",
                     driveState.ModuleTargets[i].speedMetersPerSecond);
         }
-
     }
 
     @Override
