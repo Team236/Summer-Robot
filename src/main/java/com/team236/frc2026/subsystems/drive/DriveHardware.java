@@ -67,7 +67,13 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
         mAccelerationX = getPigeon2().getAccelerationX();
         mAccelerationY = getPigeon2().getAccelerationY();
 
-        // Sets thread speed in parent class
+        configureSignalUpdateFrequencies();
+
+        this.getOdometryThread().setThreadPriority(kOdometryThreadPriority);
+    }
+
+    // Sets polling rate for CTRE hardware
+    private void configureSignalUpdateFrequencies() {
         BaseStatusSignal.setUpdateFrequencyForAll(kHighTelemetryFrequencyHz, mAngularYawVelocity);
         BaseStatusSignal.setUpdateFrequencyForAll(
                 kLowTelemetryFrequencyHz,
@@ -77,8 +83,6 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
                 mPitch,
                 mAccelerationX,
                 mAccelerationY);
-
-        this.getOdometryThread().setThreadPriority(kOdometryThreadPriority);
     }
 
     // Interface methods
