@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
+
 
 /**
  * The {@code DriveHardware} class controls the drivetrain at the hardware level. It implements
@@ -98,7 +100,27 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
     }
 
     @Override
-    public void logModules(SwerveDriveState driveState) {}
+    public void logModules(SwerveDriveState driveState) {
+        final String[] moduleNames = {"Drive/FR", "Drive/FL", "Drive/BL", "Drive/BR"};
+
+        if(driveState.ModuleStates == null) return;
+        for(int i = 0; i < getModules().length; i++) {
+            Logger.recordOutput(
+                    moduleNames[i] + " Absolute Encoder Angle",
+                    getModule(i).getEncoder().getAbsolutePosition().getValueAsDouble() * 360);
+            Logger.recordOutput(
+                    moduleNames[i] + " Steering Angle", driveState.ModuleStates[i].angle);
+            Logger.recordOutput(
+                    moduleNames[i] + " Target Steering Angle", driveState.ModuleTargets[i].angle);
+            Logger.recordOutput(
+                    moduleNames[i] + " Drive Velocity",
+                    driveState.ModuleStates[i].speedMetersPerSecond);
+            Logger.recordOutput(
+                    moduleNames[i] + " Target Drive Velocity",
+                    driveState.ModuleTargets[i].speedMetersPerSecond);
+        }
+
+    }
 
     @Override
     public void setControl(SwerveRequest request) {
