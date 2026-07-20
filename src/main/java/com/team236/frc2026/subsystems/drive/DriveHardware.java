@@ -26,14 +26,17 @@ import org.littletonrobotics.junction.Logger;
  */
 public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements DriveIO {
 
-    // Thread constants
+    // Constants & Tuning gains
     private static final double kOdometryFrequencyHz = 250.0;
     private static final int kHighTelemetryFrequencyHz = 250;
     private static final int kLowTelemetryFrequencyHz = 100;
     private static final int kOdometryThreadPriority = 99;
+    private static final double kRotationToDegrees = 360.0;
+    private static final String[] kModuleNames = {"Drive/FR", "Drive/FL", "Drive/BL", "Drive/BR"};
+
 
     // Thread-safe cache for telemetry data
-    AtomicReference<SwerveDriveState> mTelemetryCache = new AtomicReference<>();
+    private AtomicReference<SwerveDriveState> mTelemetryCache = new AtomicReference<>();
 
     private final StatusSignal<AngularVelocity> mAngularPitchVelocity;
     private final StatusSignal<AngularVelocity> mAngularRollVelocity;
@@ -101,22 +104,20 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
 
     @Override
     public void logModules(SwerveDriveState driveState) {
-        final String[] moduleNames = {"Drive/FR", "Drive/FL", "Drive/BL", "Drive/BR"};
-
         if(driveState.ModuleStates == null) return;
         for(int i = 0; i < getModules().length; i++) {
             Logger.recordOutput(
-                    moduleNames[i] + " Absolute Encoder Angle",
-                    getModule(i).getEncoder().getAbsolutePosition().getValueAsDouble() * 360);
+                    kModuleNames[i] + " Absolute Encoder Angle",
+                    getModule(i).getEncoder().getAbsolutePosition().getValueAsDouble() * kRotationToDegrees);
             Logger.recordOutput(
-                    moduleNames[i] + " Steering Angle", driveState.ModuleStates[i].angle);
+                    kModuleNames[i] + " Steering Angle", driveState.ModuleStates[i].angle);
             Logger.recordOutput(
-                    moduleNames[i] + " Target Steering Angle", driveState.ModuleTargets[i].angle);
+                    kModuleNames[i] + " Target Steering Angle", driveState.ModuleTargets[i].angle);
             Logger.recordOutput(
-                    moduleNames[i] + " Drive Velocity",
+                    kModuleNames[i] + " Drive Velocity",
                     driveState.ModuleStates[i].speedMetersPerSecond);
             Logger.recordOutput(
-                    moduleNames[i] + " Target Drive Velocity",
+                    kModuleNames[i] + " Target Drive Velocity",
                     driveState.ModuleTargets[i].speedMetersPerSecond);
         }
 
