@@ -7,6 +7,7 @@
 
 package com.team236.frc2026;
 
+import com.team236.frc2026.subsystems.drive.CompTunerConstants;
 import com.team236.frc2026.subsystems.drive.DrivetrainProfile;
 import com.team236.frc2026.subsystems.drive.PracTunerConstants;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -48,7 +49,10 @@ public final class Constants {
         public static final double kMaxRotationalRate = 3.0;
 
         public static final DrivetrainProfile kDrivetrain =
-                PracTunerConstants.createDrivetrain(); // Add logic later for comp + prac + sim
+                kIsPracticeBot
+                        ? PracTunerConstants.createDrivetrain()
+                        : CompTunerConstants
+                                .createDrivetrain(); // Add logic later for comp + prac + sim
     }
 
     /**
