@@ -68,6 +68,7 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
         configureSignalUpdateFrequencies();
 
         this.getOdometryThread().setThreadPriority(kOdometryThreadPriority);
+        registerTelemetry(state -> mTelemetryCache.set(state.clone()));
     }
 
     // Sets polling rate for CTRE hardware
