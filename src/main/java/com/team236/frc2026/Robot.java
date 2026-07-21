@@ -7,6 +7,7 @@
 
 package com.team236.frc2026;
 
+import com.ctre.phoenix6.SignalLogger;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -25,6 +26,8 @@ public class Robot extends LoggedRobot {
     private RobotContainer mRobotContainer;
 
     public Robot() {
+        SignalLogger.enableAutoLogging(false);
+
         // Record metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -63,7 +66,7 @@ public class Robot extends LoggedRobot {
         }
 
         // Start AdvantageKit logger
-        // Logger.start();
+        Logger.start();
 
         mRobotContainer = new RobotContainer();
     }
