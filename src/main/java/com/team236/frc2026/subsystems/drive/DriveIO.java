@@ -1,6 +1,7 @@
 package com.team236.frc2026.subsystems.drive;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
+import com.team236.lib.math.GeometryHelpers;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,7 +20,7 @@ public interface DriveIO {
         public double gyroAngle = 0.0;
 
         DriveIOInputs() {
-            this.Pose = new Pose2d(); // Later abstract this out to helper class
+            this.Pose = GeometryHelpers.kPose2dZero;
         }
 
         // Update current DriveIOInputs's variables with new data
