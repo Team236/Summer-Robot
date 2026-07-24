@@ -86,7 +86,7 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
 
     // Interface methods
     @Override
-    public void readInputs(DriveIOTelemetry ioInputs) {
+    public void readInputs(DriveIOInputs ioInputs) {
         var state = mTelemetryCache.get();
         if (state == null) return;
 

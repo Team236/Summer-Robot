@@ -11,7 +11,7 @@ import org.littletonrobotics.junction.Logger;
  */
 public class DriveSubsystem extends SubsystemBase {
     private final DriveIO mIo;
-    private final DriveIOTelemetryAutoLogged mInputs = new DriveIOTelemetryAutoLogged();
+    private final DriveIOInputsAutoLogged mInputs = new DriveIOInputsAutoLogged();
 
     public DriveSubsystem(DriveIO io) {
         mIo = io;
