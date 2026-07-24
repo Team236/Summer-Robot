@@ -2,7 +2,7 @@ package com.team236.frc2026.commands;
 
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.team236.frc2026.Constants;
+import com.team236.frc2026.Constants.DriveConstants;
 import com.team236.frc2026.RobotContainer;
 import com.team236.frc2026.RobotState;
 import com.team236.frc2026.subsystems.drive.DriveSubsystem;
@@ -19,11 +19,11 @@ public class TeleopSwerveDrive extends Command {
     private final SwerveRequest.FieldCentric driveOpenLoop =
             new SwerveRequest.FieldCentric()
                     .withDeadband(
-                            Constants.DriveConstants.kMaxDriveSpeed
-                                    * Constants.DriveConstants.kOpenLoopDeadband)
+                            DriveConstants.kMaxDriveSpeed
+                                    * DriveConstants.kOpenLoopDeadband)
                     .withRotationalDeadband(
-                            Constants.DriveConstants.kMaxRotationalRate
-                                    * Constants.DriveConstants.kOpenLoopDeadband)
+                            DriveConstants.kMaxRotationalRate
+                                    * DriveConstants.kOpenLoopDeadband)
                     .withDriveRequestType(SwerveModule.DriveRequestType.Velocity);
 
     public TeleopSwerveDrive(
@@ -49,8 +49,8 @@ public class TeleopSwerveDrive extends Command {
 
     @Override
     public void execute() {
-        double throttle = mThrottleSupplier.getAsDouble() * Constants.DriveConstants.kMaxDriveSpeed;
-        double strafe = mStrafeSupplier.getAsDouble() * Constants.DriveConstants.kMaxDriveSpeed;
+        double throttle = mThrottleSupplier.getAsDouble() * DriveConstants.kMaxDriveSpeed;
+        double strafe = mStrafeSupplier.getAsDouble() * DriveConstants.kMaxDriveSpeed;
         double turnRate = mTurnSupplier.getAsDouble();
 
         double throttleFieldRelative = mRobotState.isRedAlliance() ? -throttle : throttle;
@@ -61,7 +61,7 @@ public class TeleopSwerveDrive extends Command {
                         .withVelocityX(throttleFieldRelative)
                         .withVelocityY(strafeFieldRelative)
                         .withRotationalRate(
-                                turnRate * Constants.DriveConstants.kMaxRotationalRate));
+                                turnRate * DriveConstants.kMaxRotationalRate));
     }
 
     @Override
