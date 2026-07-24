@@ -9,6 +9,7 @@ import java.util.Objects;
 
 /**
  * Represents an observation of a AprilTag with position and quality data.
+ *
  * @param id The AprilTag ID
  * @param txnc Normalized horizontal offset (-1 to 1)
  * @param tync Normalized vertical offset (-1 to 1)
