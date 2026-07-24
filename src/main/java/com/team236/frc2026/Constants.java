@@ -55,6 +55,19 @@ public final class Constants {
                                 .createDrivetrain(); // Add logic later for comp + prac + sim
     }
 
+    public static final class VisionConstants {
+        public static final String kLimelightAName = "limelight";
+        public static final int kStdDevArrayLength = 12;
+
+        public static final class CameraA {
+            public static final double kRobotToCameraX = 0.0;
+            public static final double kRobotToCameraY = 0.0;
+            public static final double kCameraHeightOffGroud = 0.0;
+            public static final double kCameraPitchDegrees = 0.0;
+            public static final double kCameraYawOffset = 0.0;
+        }
+    }
+
     /**
      * Check if this system has a certain mac address in any network device. (Taken from 254).
      *
