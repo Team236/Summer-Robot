@@ -23,6 +23,6 @@ public interface VisionIO {
         public CameraIputs cameraA = new CameraIputs();
     }
 
-    //Interface methods that must be implemented by VisionHardware
+    // Interface methods that must be implemented by VisionHardware
     void readInputs(VisionIOInputs inputs);
 }

@@ -18,12 +18,9 @@ public class TeleopSwerveDrive extends Command {
     private final DoubleSupplier mTurnSupplier;
     private final SwerveRequest.FieldCentric driveOpenLoop =
             new SwerveRequest.FieldCentric()
-                    .withDeadband(
-                            DriveConstants.kMaxDriveSpeed
-                                    * DriveConstants.kOpenLoopDeadband)
+                    .withDeadband(DriveConstants.kMaxDriveSpeed * DriveConstants.kOpenLoopDeadband)
                     .withRotationalDeadband(
-                            DriveConstants.kMaxRotationalRate
-                                    * DriveConstants.kOpenLoopDeadband)
+                            DriveConstants.kMaxRotationalRate * DriveConstants.kOpenLoopDeadband)
                     .withDriveRequestType(SwerveModule.DriveRequestType.Velocity);
 
     public TeleopSwerveDrive(
@@ -60,8 +57,7 @@ public class TeleopSwerveDrive extends Command {
                 driveOpenLoop
                         .withVelocityX(throttleFieldRelative)
                         .withVelocityY(strafeFieldRelative)
-                        .withRotationalRate(
-                                turnRate * DriveConstants.kMaxRotationalRate));
+                        .withRotationalRate(turnRate * DriveConstants.kMaxRotationalRate));
     }
 
     @Override
