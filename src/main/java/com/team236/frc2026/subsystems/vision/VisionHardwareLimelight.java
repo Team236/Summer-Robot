@@ -7,17 +7,22 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * The {@code VisionHardwareLimelight} class manages the hardware inputs and network table
+ * communications for the Limelight camera.
+ */
 public class VisionHardwareLimelight implements VisionIO {
-    NetworkTable tableA =
+
+    private NetworkTable mTableA =
             NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightAName);
-    RobotState robotState;
-    AtomicReference<VisionIOInputs> visionCache = new AtomicReference<>(new VisionIOInputs());
-    int imuMode = 1;
+    private RobotState mRobotState;
+    private AtomicReference<VisionIOInputs> mVisionCache =
+            new AtomicReference<>(new VisionIOInputs());
 
     private static final double[] kDefaultStd = new double[VisionConstants.kStdDevArrayLength];
 
-    void VisionHardwareLimelight(RobotState robotState) {
-        this.robotState = robotState;
+    public VisionHardwareLimelight(RobotState robotState) {
+        this.mRobotState = robotState;
         setLLConfig();
     }
 
@@ -31,11 +36,11 @@ public class VisionHardwareLimelight implements VisionIO {
             VisionConstants.CameraA.kCameraYawOffset
         };
 
-        tableA.getEntry("camerapose_robotspace_set").setDoubleArray(cameraAPose);
+        mTableA.getEntry("camerapose_robotspace_set").setDoubleArray(cameraAPose);
     }
 
     private void readCameraData(
-            NetworkTable table, VisionIOInputs.CameraIputs camInputs, String limelightName) {
+            NetworkTable table, VisionIOInputs.CameraInputs camInputs, String limelightName) {
         camInputs.seesTag = table.getEntry("tv").getDouble(0) == 1;
 
         if (camInputs.seesTag) {
@@ -64,8 +69,8 @@ public class VisionHardwareLimelight implements VisionIO {
 
     @Override
     public void readInputs(VisionIOInputs inputs) {
-        readCameraData(tableA, inputs.cameraA, VisionConstants.kLimelightAName);
+        readCameraData(mTableA, inputs.cameraA, VisionConstants.kLimelightAName);
 
-        visionCache.set(inputs);
+        mVisionCache.set(inputs);
     }
 }

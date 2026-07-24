@@ -2,13 +2,17 @@ package com.team236.frc2026.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
 
+/**
+ * The {@code VisionIO} interface defines the hardware inputs and data-reading contract for the
+ * vision subsystem.
+ */
 public interface VisionIO {
 
-    // ** Inputs from vision system */
+    /** The {@code VisionIOInputs} class holds all data variables from the vision system. */
     public static class VisionIOInputs {
 
-        // ** Inputs from a single camera */
-        class CameraIputs {
+        /** The {@code CameraInputs} class holds raw data from a single camera feed. */
+        class CameraInputs {
             public boolean seesTag;
             public FiducialObservation[] fiducialObservations;
             public MegatagPoseEstimate megatagPoseEstimate;
@@ -20,7 +24,7 @@ public interface VisionIO {
         }
 
         // Creation of Limelight camera
-        public CameraIputs cameraA = new CameraIputs();
+        public CameraInputs cameraA = new CameraInputs();
     }
 
     // Interface methods that must be implemented by VisionHardware
