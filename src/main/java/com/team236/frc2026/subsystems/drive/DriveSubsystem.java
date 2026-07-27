@@ -1,6 +1,8 @@
 package com.team236.frc2026.subsystems.drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+// import com.team236.frc2026.subsystems.drive.DriveIO.DriveIOInputs;
+// import com.team236.lib.limelight.LimelightHelpers;
 import com.team236.lib.time.RobotTime;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
@@ -11,20 +13,11 @@ import org.littletonrobotics.junction.Logger;
  */
 public class DriveSubsystem extends SubsystemBase {
     private final DriveIO mIo;
+    // private final DriveIOInputs mIoInputs = new DriveIOInputs();
     private final DriveIOInputsAutoLogged mInputs = new DriveIOInputsAutoLogged();
 
     public DriveSubsystem(DriveIO io) {
         mIo = io;
-    }
-
-    @Override
-    public void periodic() {
-        double timestamp = RobotTime.getTimestampSeconds();
-
-        mIo.readInputs(mInputs);
-        Logger.processInputs("DriveInputs", mInputs);
-        mIo.logModules(mInputs);
-        logDriveSubsystem(timestamp);
     }
 
     public void setControl(SwerveRequest request) {
@@ -41,5 +34,28 @@ public class DriveSubsystem extends SubsystemBase {
         Logger.recordOutput(
                 "Drive/currentCommand",
                 (getCurrentCommand() == null) ? "Default" : getCurrentCommand().getName());
+    }
+
+    // private void updateLimelightGyroData () {
+    //     LimelightHelpers.SetRobotOrientation(
+    //     "limelight",
+    //     mIoInputs.gyroAngle,
+    //     mIoInputs.yawVelocity,
+    //     mIoInputs.pitch,
+    //     mIoInputs.pitchVelocity,
+    //     mIoInputs.roll,
+    //     mIoInputs.rollVelocity
+    // );
+    // }
+
+    @Override
+    public void periodic() {
+        double timestamp = RobotTime.getTimestampSeconds();
+
+        mIo.readInputs(mInputs);
+        Logger.processInputs("DriveInputs", mInputs);
+
+        mIo.logModules(mInputs);
+        logDriveSubsystem(timestamp);
     }
 }
