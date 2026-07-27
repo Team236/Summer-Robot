@@ -39,11 +39,13 @@ public class VisionHardwareLimelight implements VisionIO {
 
     private void readCameraData(
             NetworkTable table, VisionIOInputs.CameraInputs camInputs, String limelightName) {
-        camInputs.seesTag = table.getEntry("tv").getDouble(0) == 1;
+        camInputs.seesTag =
+                LimelightHelpers.getTV(limelightName);
 
         if (camInputs.seesTag) {
             try {
                 var megatag = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
+                var megatag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
                 var robotPose3d =
                         LimelightHelpers.toPose3D(
                                 LimelightHelpers.getBotPose_wpiBlue(limelightName));
@@ -53,6 +55,10 @@ public class VisionHardwareLimelight implements VisionIO {
                     camInputs.megatagCount = megatag.tagCount;
                     camInputs.fiducialObservations =
                             FiducialObservation.fromLimelight(megatag.rawFiducials);
+                }
+                if (megatag2 != null) {
+                    camInputs.megatag2PoseEstimate = MegatagPoseEstimate.fromLimelight(megatag2);
+                    camInputs.megatag2Count = megatag2.tagCount;
                 }
                 if (robotPose3d != null) {
                     camInputs.pose3d = robotPose3d;
