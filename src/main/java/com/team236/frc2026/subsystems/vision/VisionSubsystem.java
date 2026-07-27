@@ -26,8 +26,8 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     private void logCameraInputs(String prefix, VisionIO.VisionIOInputs.CameraInputs camera) {
-        Logger.recordOutput(prefix, camera.seesTag);
-        Logger.recordOutput(prefix, camera.megatagCount);
+        Logger.recordOutput(prefix + "/SeesTag", camera.seesTag);
+        Logger.recordOutput(prefix + "/MegatagCount", camera.megatagCount);
 
         if (DriverStation.isDisabled()) {
             SmartDashboard.putBoolean(prefix + "/SeesTag", camera.seesTag);
