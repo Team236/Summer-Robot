@@ -16,8 +16,7 @@ public class VisionHardwareLimelight implements VisionIO {
     private NetworkTable mTableA =
             NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightAName);
     private RobotState mRobotState;
-    private AtomicReference<VisionIOInputs> mVisionCache =
-            new AtomicReference<>(new VisionIOInputs());
+    private static int errCount;
 
     private static final double[] kDefaultStd = new double[VisionConstants.kStdDevArrayLength];
 
@@ -62,7 +61,12 @@ public class VisionHardwareLimelight implements VisionIO {
                 camInputs.standardDeviations =
                         table.getEntry("stddevs").getDoubleArray(kDefaultStd);
             } catch (Exception err) {
-                System.err.println("Error processing vision data: " + err.getMessage());
+                if(errCount < 1){
+                    System.err.println("Error processing vision data: " + err.getMessage());
+                    errCount++;
+                } else {
+                    return;
+                }
             }
         }
     }
@@ -70,7 +74,5 @@ public class VisionHardwareLimelight implements VisionIO {
     @Override
     public void readInputs(VisionIOInputs inputs) {
         readCameraData(mTableA, inputs.cameraA, VisionConstants.kLimelightAName);
-
-        mVisionCache.set(inputs);
     }
 }
