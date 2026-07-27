@@ -17,6 +17,11 @@ public interface DriveIO {
     @AutoLog
     class DriveIOInputs extends SwerveDriveState {
         public double gyroAngle = 0.0;
+        public double yawVelocity;
+        public double pitchVelocity;
+        public double rollVelocity;
+        public double pitch;
+        public double roll;
 
         DriveIOInputs() {
             this.Pose = GeometryHelpers.kPose2dZero;
