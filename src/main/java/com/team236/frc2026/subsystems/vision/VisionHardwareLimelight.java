@@ -39,8 +39,7 @@ public class VisionHardwareLimelight implements VisionIO {
 
     private void readCameraData(
             NetworkTable table, VisionIOInputs.CameraInputs camInputs, String limelightName) {
-        camInputs.seesTag =
-                LimelightHelpers.getTV(limelightName);
+        camInputs.seesTag = LimelightHelpers.getTV(limelightName);
 
         if (camInputs.seesTag) {
             try {
