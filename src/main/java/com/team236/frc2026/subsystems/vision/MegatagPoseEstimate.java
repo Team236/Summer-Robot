@@ -72,12 +72,12 @@ public record MegatagPoseEstimate(
 
         @Override
         public int getSize() {
-            return Pose2d.struct.getSize() + 3 * Double.BYTES;
+            return Pose2d.struct.getSize() + 4 * Double.BYTES;
         }
 
         @Override
         public String getSchema() {
-            return "Pose2d fieldToRobot; double timestampSeconds; double latency; double avgTagArea";
+            return "Pose2d fieldToRobot; double timestampSeconds; double latency; double avgTagArea; double quality";
         }
 
         @Override
