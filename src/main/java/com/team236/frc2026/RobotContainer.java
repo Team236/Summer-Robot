@@ -3,6 +3,8 @@ package com.team236.frc2026;
 import com.team236.frc2026.commands.TeleopSwerveDrive;
 import com.team236.frc2026.subsystems.drive.DriveHardware;
 import com.team236.frc2026.subsystems.drive.DriveSubsystem;
+import com.team236.frc2026.subsystems.vision.VisionHardwareLimelight;
+import com.team236.frc2026.subsystems.vision.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -17,6 +19,8 @@ public class RobotContainer {
             new XboxController(Constants.Controller.kMainController);
 
     private final DriveSubsystem mDriveSubsystem = buildDriveSubsystem();
+    private final VisionSubsystem mVisionSubsystem =
+            new VisionSubsystem(new VisionHardwareLimelight(mRobotState), mRobotState);
 
     private final TeleopSwerveDrive mDriveCommand =
             new TeleopSwerveDrive(
