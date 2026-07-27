@@ -102,6 +102,12 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
                 mAccelerationX,
                 mAccelerationY);
 
+        ioInputs.yawVelocity = mAngularYawVelocity.getValueAsDouble();
+        ioInputs.pitchVelocity = mAngularPitchVelocity.getValueAsDouble();
+        ioInputs.rollVelocity = mAngularRollVelocity.getValueAsDouble();
+        ioInputs.roll = mRoll.getValueAsDouble();
+        ioInputs.pitch = mPitch.getValueAsDouble();
+
         // Updating localization + other systems with this data
     }
 
