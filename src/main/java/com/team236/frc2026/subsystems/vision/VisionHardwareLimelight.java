@@ -5,7 +5,6 @@ import com.team236.frc2026.RobotState;
 import com.team236.lib.limelight.LimelightHelpers;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The {@code VisionHardwareLimelight} class manages the hardware inputs and network table
@@ -61,7 +60,7 @@ public class VisionHardwareLimelight implements VisionIO {
                 camInputs.standardDeviations =
                         table.getEntry("stddevs").getDoubleArray(kDefaultStd);
             } catch (Exception err) {
-                if(errCount < 1){
+                if (errCount < 1) {
                     System.err.println("Error processing vision data: " + err.getMessage());
                     errCount++;
                 } else {
