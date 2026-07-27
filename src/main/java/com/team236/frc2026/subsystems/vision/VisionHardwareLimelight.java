@@ -29,7 +29,7 @@ public class VisionHardwareLimelight implements VisionIO {
             VisionConstants.CameraA.kRobotToCameraX,
             VisionConstants.CameraA.kRobotToCameraY,
             VisionConstants.CameraA.kCameraHeightOffGroud,
-            0.0,
+            180.0,
             VisionConstants.CameraA.kCameraPitchDegrees,
             VisionConstants.CameraA.kCameraYawOffset
         };
@@ -71,7 +71,7 @@ public class VisionHardwareLimelight implements VisionIO {
     }
 
     @Override
-    public void readInputs(VisionIOInputs inputs) {
-        readCameraData(mTableA, inputs.cameraA, VisionConstants.kLimelightAName);
+    public void readInputs(VisionIOInputs ioInputs) {
+        readCameraData(mTableA, ioInputs.cameraA, VisionConstants.kLimelightAName);
     }
 }
