@@ -56,7 +56,7 @@ public final class Constants {
     }
 
     public static final class VisionConstants {
-        public static final String kLimelightAName = "limelight-a";
+        public static final String kLimelightAName = "limelight";
         public static final int kStdDevArrayLength = 12;
 
         public static final class CameraA {
