@@ -8,6 +8,7 @@
 package com.team236.frc2026;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.team236.lib.limelight.Limelight3GConfig;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -26,6 +27,8 @@ public class Robot extends LoggedRobot {
     private RobotContainer mRobotContainer;
 
     public Robot() {
+        Limelight3GConfig.configureLimelight3G();
+
         SignalLogger.enableAutoLogging(false);
 
         // Record metadata
