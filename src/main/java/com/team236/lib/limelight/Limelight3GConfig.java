@@ -1,5 +1,6 @@
 package com.team236.lib.limelight;
 
+import com.team236.frc2026.Constants;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -22,9 +23,13 @@ public class Limelight3GConfig {
     private static String[] mModes = {"160x160 MJPEG 40 fps"};
 
     public static final void configureLimelight3G() {
-        // Only used when tethering.
-        LimelightHelpers.setupPortForwardingUSB(0);
+        if (!Constants.kIsConnectedViaWifi) {
+            configureTether();
+        }
+        configureWifi();
+    }
 
+    private static void configureWifi() {
         // Only used when connected over wifi.
         mLimelight3G = new HttpCamera("Limelight-3G", mHttpUrls);
 
@@ -38,5 +43,10 @@ public class Limelight3GConfig {
         limelightTable.getStringTopic("description").publish().set("Limelight 3G");
         limelightTable.getStringArrayTopic("modes").publish().set(mModes);
         limelightTable.getStringTopic("mode").publish().set("");
+    }
+
+    private static void configureTether() {
+        // Only used when tethering.
+        LimelightHelpers.setupPortForwardingUSB(0);
     }
 }
