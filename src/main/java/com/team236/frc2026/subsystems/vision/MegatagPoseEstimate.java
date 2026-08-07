@@ -22,16 +22,13 @@ public record MegatagPoseEstimate(
         double timestampSeconds,
         double latency,
         double avgTagArea,
-        double quality,
-        int[] fiducialIds)
+        int tagCount,
+        double avgTagDist)
         implements StructSerializable {
 
     public MegatagPoseEstimate {
         if (fieldToRobot == null) {
             fieldToRobot = GeometryHelpers.kPose2dZero;
-        }
-        if (fiducialIds == null) {
-            fiducialIds = new int[0];
         }
     }
 
@@ -41,19 +38,13 @@ public record MegatagPoseEstimate(
         if (fieldToRobot == null) {
             fieldToRobot = GeometryHelpers.kPose2dZero;
         }
-        int[] fiducialIds = new int[poseEstimate.rawFiducials.length];
-        for (int i = 0; i < poseEstimate.rawFiducials.length; i++) {
-            if (poseEstimate.rawFiducials[i] != null) {
-                fiducialIds[i] = poseEstimate.rawFiducials[i].id;
-            }
-        }
         return new MegatagPoseEstimate(
                 fieldToRobot,
                 poseEstimate.timestampSeconds,
                 poseEstimate.latency,
                 poseEstimate.avgTagArea,
-                fiducialIds.length > 1 ? 1.0 : 1.0 - poseEstimate.rawFiducials[0].ambiguity,
-                fiducialIds);
+                poseEstimate.tagCount,
+                poseEstimate.avgTagDist);
     }
 
     public static final MegatagPoseEstimateStruct struct = new MegatagPoseEstimateStruct();
@@ -72,12 +63,13 @@ public record MegatagPoseEstimate(
 
         @Override
         public int getSize() {
-            return Pose2d.struct.getSize() + 4 * Double.BYTES;
+            // Pose2d (72) + 3 doubles (24) + 1 int (4) + 1 double (8)
+            return Pose2d.struct.getSize() + (4 * Double.BYTES) + Integer.BYTES;
         }
 
         @Override
         public String getSchema() {
-            return "Pose2d fieldToRobot; double timestampSeconds; double latency; double avgTagArea; double quality";
+            return "Pose2d fieldToRobot; double timestampSeconds; double latency; double avgTagArea; int tagCount; double avgTagDist";
         }
 
         @Override
@@ -91,10 +83,10 @@ public record MegatagPoseEstimate(
             double timestampSeconds = bb.getDouble();
             double latency = bb.getDouble();
             double avgTagArea = bb.getDouble();
-            double quality = bb.getDouble();
-            int[] fiducialIds = new int[0];
+            int tagCount = bb.getInt();
+            double avgTagDist = bb.getDouble();
             return new MegatagPoseEstimate(
-                    fieldToRobot, timestampSeconds, latency, avgTagArea, quality, fiducialIds);
+                    fieldToRobot, timestampSeconds, latency, avgTagArea, tagCount, avgTagDist);
         }
 
         @Override
@@ -103,7 +95,8 @@ public record MegatagPoseEstimate(
             bb.putDouble(value.timestampSeconds());
             bb.putDouble(value.latency());
             bb.putDouble(value.avgTagArea());
-            bb.putDouble(value.quality());
+            bb.putInt(value.tagCount());
+            bb.putDouble(value.avgTagDist());
         }
 
         @Override
