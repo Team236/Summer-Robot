@@ -7,10 +7,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
+/**
+ * The {@code VisionSubsystem} coordinates vision hardware I/O and telemetry logging for targeting
+ * and odometry systems.
+ */
 public class VisionSubsystem extends SubsystemBase {
     private final VisionIO mIo;
     private final RobotState mRobotState;
-    private final VisionIO.VisionIOInputs inputs = new VisionIO.VisionIOInputs();
+    private final VisionIO.VisionIOInputs mInputs = new VisionIO.VisionIOInputs();
 
     public VisionSubsystem(VisionIO io, RobotState robotState) {
         this.mIo = io;
@@ -20,9 +24,9 @@ public class VisionSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         double startTime = RobotTime.getTimestampSeconds();
-        mIo.readInputs(inputs);
+        mIo.readInputs(mInputs);
 
-        logCameraInputs("Vision/CameraA", inputs.cameraA);
+        logCameraInputs("Vision/CameraA", mInputs.cameraA);
     }
 
     private void logCameraInputs(String prefix, VisionIO.VisionIOInputs.CameraInputs camera) {
@@ -41,7 +45,7 @@ public class VisionSubsystem extends SubsystemBase {
         if (camera.megatagPoseEstimate != null) {
             Logger.recordOutput(
                     prefix + "/MegatagPoseEstimate", camera.megatagPoseEstimate.fieldToRobot());
-            Logger.recordOutput(prefix + "/Quality", camera.megatagPoseEstimate.quality());
+            Logger.recordOutput(prefix + "/TagCount", camera.megatagPoseEstimate.tagCount());
             Logger.recordOutput(prefix + "/AvgTagArea", camera.megatagPoseEstimate.avgTagArea());
         }
 
