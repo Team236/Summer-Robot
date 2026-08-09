@@ -35,7 +35,7 @@ public final class Constants {
 
     public static final boolean kIsConnectedViaWifi = true;
 
-    public static final String kPracticeBotMacAddress = "00:80:2F:40:FC:4A";
+    private static final String kPracticeBotMacAddress = "00:80:2F:40:FC:4A";
     public static boolean kIsPracticeBot = NetworkHelpers.hasMacAddress(kPracticeBotMacAddress);
 
     public static final class Controller {
