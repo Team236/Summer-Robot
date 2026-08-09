@@ -8,7 +8,8 @@ import edu.wpi.first.util.struct.StructSerializable;
 import java.nio.ByteBuffer;
 
 /**
- * Represents a robot pose estimate using multiple AprilTags (Megatag).
+ * The {@code MegatagPoseEstimate} represents a robot pose estimate using multiple AprilTags
+ * (Megatag).
  *
  * @param fieldToRobot The estimated robot pose on the field
  * @param timestampSeconds The timestamp when this estimate was captured

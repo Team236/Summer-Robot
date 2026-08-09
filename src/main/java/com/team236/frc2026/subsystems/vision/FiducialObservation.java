@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Represents an observation of a AprilTag with position and quality data.
+ * The {@code FiducialObservation} represents an observation of an AprilTag with position and
+ * quality data.
  *
  * @param id The AprilTag ID
  * @param txnc Normalized horizontal offset (-1 to 1)

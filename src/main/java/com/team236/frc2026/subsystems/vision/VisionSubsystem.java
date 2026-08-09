@@ -57,11 +57,13 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     private boolean isOnField(Pose3d pose) {
-        if (pose == null) return false;
+        if (pose == null) {
+            return false;
+        }
 
         double poseX = pose.getX();
         double poseY = pose.getY();
-        double poseZ = pose.getY();
+        double poseZ = pose.getZ();
 
         return ((poseX > Constants.FieldDimentions.kMargMinX
                         && poseX < Constants.FieldDimentions.kMargMaxX)

@@ -12,7 +12,7 @@ public interface VisionIO {
     public static class VisionIOInputs {
 
         /** The {@code CameraInputs} class holds raw data from a single camera feed. */
-        class CameraInputs {
+        public static class CameraInputs {
             public boolean seesTag;
             public FiducialObservation[] fiducialObservations;
             public MegatagPoseEstimate megatagPoseEstimate;
