@@ -132,11 +132,11 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
     }
 
     public void addVisionMeasurement(VisionFieldPoseEstimate visionFieldPoseEstimate) {
-        if (visionFieldPoseEstimate.getvisionMeasurementStdDevs() != null) {
+        if (visionFieldPoseEstimate.getVisionMeasurementStdDevs() != null) {
             this.addVisionMeasurement(
                     visionFieldPoseEstimate.getVisionRobotPose(),
                     Utils.fpgaToCurrentTime(visionFieldPoseEstimate.getTimestampSeconds()),
-                    visionFieldPoseEstimate.getvisionMeasurementStdDevs());
+                    visionFieldPoseEstimate.getVisionMeasurementStdDevs());
         } else {
             System.err.println("Error while accessing visionFieldPoseEstimate matrix.");
             return;
