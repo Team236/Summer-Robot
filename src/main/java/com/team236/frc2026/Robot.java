@@ -30,7 +30,7 @@ public class Robot extends LoggedRobot {
         SignalLogger.enableAutoLogging(false);
 
         // Testbed configuration
-        if (Constants.kIsPracticeBot) Limelight3GConfig.configureLimelight3G();
+        if (Constants.kIsPracticeBot) Limelight3GConfig.configureNTLimelight3G();
 
         // Record robot code metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);

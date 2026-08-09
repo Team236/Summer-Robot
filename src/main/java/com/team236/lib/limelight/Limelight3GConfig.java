@@ -22,7 +22,7 @@ public class Limelight3GConfig {
 
     private static String[] mModes = {"160x160 MJPEG 40 fps"};
 
-    public static final void configureLimelight3G() {
+    public static final void configureNTLimelight3G() {
         if (!Constants.kIsConnectedViaWifi) {
             configureTether();
         }
