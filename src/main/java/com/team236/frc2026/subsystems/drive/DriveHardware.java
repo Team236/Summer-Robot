@@ -2,6 +2,7 @@ package com.team236.frc2026.subsystems.drive;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
@@ -9,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.team236.frc2026.RobotState;
+import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
@@ -140,6 +142,18 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
     public Command applyRequest(
             Supplier<SwerveRequest> requestSupplier, Subsystem subsystemRequired) {
         return Commands.run(() -> this.setControl(requestSupplier.get()), subsystemRequired);
+    }
+
+    public void addVisionMeasurement(VisionFieldPoseEstimate visionFieldPoseEstimate) {
+        if (visionFieldPoseEstimate.getvisionMeasurementStdDevs() != null) {
+            this.addVisionMeasurement(
+                    visionFieldPoseEstimate.getVisionRobotPose(),
+                    Utils.fpgaToCurrentTime(visionFieldPoseEstimate.getTimestampSeconds()),
+                    visionFieldPoseEstimate.getvisionMeasurementStdDevs());
+        } else {
+            System.err.println("Error while accessing visionFieldPoseEstimate matrix.");
+            return;
+        }
     }
 
     @Override
