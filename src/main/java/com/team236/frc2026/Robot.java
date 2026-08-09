@@ -27,11 +27,12 @@ public class Robot extends LoggedRobot {
     private RobotContainer mRobotContainer;
 
     public Robot() {
-        Limelight3GConfig.configureLimelight3G();
-
         SignalLogger.enableAutoLogging(false);
 
-        // Record metadata
+        // Testbed configuration
+        if (Constants.kIsPracticeBot) Limelight3GConfig.configureLimelight3G();
+
+        // Record robot code metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
         Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
