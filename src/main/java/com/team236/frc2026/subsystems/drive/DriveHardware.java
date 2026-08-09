@@ -73,19 +73,6 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
         registerTelemetry(state -> mTelemetryCache.set(state.clone()));
     }
 
-    // Sets polling rate for CTRE hardware
-    private void configureSignalUpdateFrequencies() {
-        BaseStatusSignal.setUpdateFrequencyForAll(kHighTelemetryFrequencyHz, mAngularYawVelocity);
-        BaseStatusSignal.setUpdateFrequencyForAll(
-                kLowTelemetryFrequencyHz,
-                mAngularPitchVelocity,
-                mAngularRollVelocity,
-                mRoll,
-                mPitch,
-                mAccelerationX,
-                mAccelerationY);
-    }
-
     // Interface methods
     @Override
     public void readInputs(DriveIOInputs ioInputs) {
@@ -159,5 +146,18 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
     @Override
     public void resetGyro() {
         super.seedFieldCentric();
+    }
+
+    // Sets polling rate for CTRE hardware
+    private void configureSignalUpdateFrequencies() {
+        BaseStatusSignal.setUpdateFrequencyForAll(kHighTelemetryFrequencyHz, mAngularYawVelocity);
+        BaseStatusSignal.setUpdateFrequencyForAll(
+                kLowTelemetryFrequencyHz,
+                mAngularPitchVelocity,
+                mAngularRollVelocity,
+                mRoll,
+                mPitch,
+                mAccelerationX,
+                mAccelerationY);
     }
 }
