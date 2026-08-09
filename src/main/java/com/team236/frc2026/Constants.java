@@ -11,6 +11,10 @@ import com.team236.frc2026.subsystems.drive.CompTunerConstants;
 import com.team236.frc2026.subsystems.drive.DrivetrainProfile;
 import com.team236.frc2026.subsystems.drive.PracTunerConstants;
 import com.team236.lib.robot.NetworkHelpers;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -60,11 +64,19 @@ public final class Constants {
         public static final int kStdDevArrayLength = 12;
 
         public static final class CameraA {
+            // Inches
             public static final double kRobotToCameraX = 0.0;
             public static final double kRobotToCameraY = 0.0;
             public static final double kCameraHeightOffGroud = 0.0;
             public static final double kCameraPitchDegrees = 0.0;
             public static final double kCameraYawOffset = 0.0;
+
+            public static final Transform2d kCameraToRobot =
+                    new Transform2d(
+                            new Translation2d(
+                                    Units.inchesToMeters(kRobotToCameraX),
+                                    Units.inchesToMeters(kRobotToCameraY)),
+                            new Rotation2d(0.0));
         }
     }
 
