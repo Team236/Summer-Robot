@@ -15,6 +15,10 @@ import org.littletonrobotics.junction.AutoLog;
  */
 public interface DriveIO {
 
+    /**
+     * The {@code DriveIOInputs} class encapsulates all inputs and telemetry data for the
+     * drivetrain.
+     */
     @AutoLog
     class DriveIOInputs extends SwerveDriveState {
         public double gyroAngle = 0.0;

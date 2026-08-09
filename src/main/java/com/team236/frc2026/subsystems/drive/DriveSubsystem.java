@@ -36,18 +36,6 @@ public class DriveSubsystem extends SubsystemBase {
                 (getCurrentCommand() == null) ? "Default" : getCurrentCommand().getName());
     }
 
-    // private void updateLimelightGyroData () {
-    //     LimelightHelpers.SetRobotOrientation(
-    //     "limelight",
-    //     mIoInputs.gyroAngle,
-    //     mIoInputs.yawVelocity,
-    //     mIoInputs.pitch,
-    //     mIoInputs.pitchVelocity,
-    //     mIoInputs.roll,
-    //     mIoInputs.rollVelocity
-    // );
-    // }
-
     @Override
     public void periodic() {
         double timestamp = RobotTime.getTimestampSeconds();
@@ -58,4 +46,16 @@ public class DriveSubsystem extends SubsystemBase {
         mIo.logModules(mInputs);
         logDriveSubsystem(timestamp);
     }
+
+    // private void updateLimelightGyroData () {
+    //     LimelightHelpers.SetRobotOrientation(
+    //             "limelight",
+    //             mIoInputs.gyroAngle,
+    //             mIoInputs.yawVelocity,
+    //             mIoInputs.pitch,
+    //             mIoInputs.pitchVelocity,
+    //             mIoInputs.roll,
+    //             mIoInputs.rollVelocity
+    //     );
+    // }
 }
