@@ -67,4 +67,13 @@ public final class Constants {
             public static final double kCameraYawOffset = 0.0;
         }
     }
+    
+    public static final class FieldDimentions {
+            public static final double kFieldMinX = 0.0;
+            public static final double kFieldMaxX = 16.540988;
+            public static final double kFieldMinY = 0.0;
+            public static final double kFieldMaxY = 8.069326;
+            public static final double kFieldMinZ = 0.0;
+            public static final double kFieldMaxZ = 1.0;
+    }
 }
