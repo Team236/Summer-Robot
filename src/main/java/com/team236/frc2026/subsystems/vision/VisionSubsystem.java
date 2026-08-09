@@ -1,7 +1,9 @@
 package com.team236.frc2026.subsystems.vision;
 
+import com.team236.frc2026.Constants;
 import com.team236.frc2026.RobotState;
 import com.team236.lib.time.RobotTime;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -52,5 +54,20 @@ public class VisionSubsystem extends SubsystemBase {
         if (camera.fiducialObservations != null) {
             Logger.recordOutput(prefix + "/FiducialCount", camera.fiducialObservations.length);
         }
+    }
+
+    private boolean isOnField(Pose3d pose) {
+        if (pose == null) return false;
+
+        double poseX = pose.getX();
+        double poseY = pose.getY();
+        double poseZ = pose.getY();
+
+        return ((poseX > Constants.FieldDimentions.kMargMinX
+                        && poseX < Constants.FieldDimentions.kMargMaxX)
+                && (poseY > Constants.FieldDimentions.kMargMinY
+                        && poseY < Constants.FieldDimentions.kMargMaxY)
+                && (poseZ > Constants.FieldDimentions.kMargMinZ
+                        && poseZ < Constants.FieldDimentions.kMargMaxZ));
     }
 }
