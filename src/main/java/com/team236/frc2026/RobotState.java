@@ -26,4 +26,8 @@ public class RobotState {
     public double getLastUsedMegatagTimestamp() {
         return lastUsedMegatagTimestamp;
     }
+
+    public Optional<Pose2d> getPriorPose(double timestamp) {
+        return fieldToRobot.getSample(timestamp);
+    }   
 }
