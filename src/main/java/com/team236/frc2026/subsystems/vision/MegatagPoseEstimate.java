@@ -14,7 +14,6 @@ import java.nio.ByteBuffer;
  * @param fieldToRobot The estimated robot pose on the field
  * @param timestampSeconds The timestamp when this estimate was captured
  * @param latency Processing latency in seconds
- * @param avgTagArea Average area of detected tags
  * @param quality Quality score of the pose estimate (0-1)
  * @param fiducialIds IDs of fiducials used for this estimate
  */
@@ -22,7 +21,6 @@ public record MegatagPoseEstimate(
         Pose2d fieldToRobot,
         double timestampSeconds,
         double latency,
-        double avgTagArea,
         int tagCount,
         double avgTagDist)
         implements StructSerializable {
@@ -43,7 +41,6 @@ public record MegatagPoseEstimate(
                 fieldToRobot,
                 poseEstimate.timestampSeconds,
                 poseEstimate.latency,
-                poseEstimate.avgTagArea,
                 poseEstimate.tagCount,
                 poseEstimate.avgTagDist);
     }
@@ -70,7 +67,7 @@ public record MegatagPoseEstimate(
 
         @Override
         public String getSchema() {
-            return "Pose2d fieldToRobot; double timestampSeconds; double latency; double avgTagArea; int tagCount; double avgTagDist";
+            return "Pose2d fieldToRobot; double timestampSeconds; double latency; int tagCount; double avgTagDist";
         }
 
         @Override
@@ -83,11 +80,10 @@ public record MegatagPoseEstimate(
             Pose2d fieldToRobot = Pose2d.struct.unpack(bb);
             double timestampSeconds = bb.getDouble();
             double latency = bb.getDouble();
-            double avgTagArea = bb.getDouble();
             int tagCount = bb.getInt();
             double avgTagDist = bb.getDouble();
             return new MegatagPoseEstimate(
-                    fieldToRobot, timestampSeconds, latency, avgTagArea, tagCount, avgTagDist);
+                    fieldToRobot, timestampSeconds, latency, tagCount, avgTagDist);
         }
 
         @Override
@@ -95,7 +91,6 @@ public record MegatagPoseEstimate(
             Pose2d.struct.pack(bb, value.fieldToRobot());
             bb.putDouble(value.timestampSeconds());
             bb.putDouble(value.latency());
-            bb.putDouble(value.avgTagArea());
             bb.putInt(value.tagCount());
             bb.putDouble(value.avgTagDist());
         }
