@@ -61,7 +61,7 @@ public class VisionSubsystem extends SubsystemBase {
             Logger.recordOutput("Vision/CameraA/IsOnField", true);
         }
 
-        if (camInputs.megatagPoseEstimate != null || camInputs.fiducialObservations != null) {
+        if (camInputs.megatagPoseEstimate != null && camInputs.fiducialObservations != null) {
             Optional<VisionFieldPoseEstimate> mtEstimate =
                     processMegatagPoseEstimate(camInputs, logPrefix);
 
