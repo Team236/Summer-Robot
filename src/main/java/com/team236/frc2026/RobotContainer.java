@@ -3,18 +3,29 @@ package com.team236.frc2026;
 import com.team236.frc2026.commands.TeleopSwerveDrive;
 import com.team236.frc2026.subsystems.drive.DriveHardware;
 import com.team236.frc2026.subsystems.drive.DriveSubsystem;
+import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.frc2026.subsystems.vision.VisionHardwareLimelight;
 import com.team236.frc2026.subsystems.vision.VisionSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import java.util.function.Consumer;
 
 /**
  * The {@code RobotContainer} class holds robot subsystems, commands, and operator interface
  * bindings. It acts as the primary structure for dependency injection and button mapping.
  */
 public class RobotContainer {
-    private final RobotState mRobotState = new RobotState();
+
+    private final Consumer<VisionFieldPoseEstimate> visionEstimateConsumer =
+            new Consumer<VisionFieldPoseEstimate>() {
+                @Override
+                public void accept(VisionFieldPoseEstimate estimate) {
+                    mDriveSubsystem.addVisionMeasurement(estimate);
+                }
+            };
+
+    private final RobotState mRobotState = new RobotState(visionEstimateConsumer);
     private final XboxController mDriverController =
             new XboxController(Constants.Controller.kMainController);
 
