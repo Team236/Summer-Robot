@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * A concurrent version of WPILib's TimeInterpolatableBuffer class to avoid the need for explicit
- * synchronization in robot code.
+ * synchronization in robot code. By Team 254.
  *
  * @param <T> The type stored in this buffer.
  */
