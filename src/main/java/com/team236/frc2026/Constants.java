@@ -89,7 +89,7 @@ public final class Constants {
         }
     }
 
-    public static final class FieldDimentions {
+    public static final class FieldDimensions {
         private static final double kFieldMinX = 0.0;
         private static final double kFieldMaxX = 16.540988;
         private static final double kFieldMinY = 0.0;
@@ -103,7 +103,7 @@ public final class Constants {
         public static final double kMargMaxX = kFieldMaxX + kFieldBoarderMargin;
         public static final double kMargMinY = kFieldMinY - kFieldBoarderMargin;
         public static final double kMargMaxY = kFieldMaxY + kFieldBoarderMargin;
-        public static final double kMargMinZ = kFieldMinZ + kFieldBoarderMargin;
+        public static final double kMargMinZ = kFieldMinZ - kFieldBoarderMargin;
         public static final double kMargMaxZ = kFieldMaxZ;
     }
 }
