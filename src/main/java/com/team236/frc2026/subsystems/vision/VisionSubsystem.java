@@ -52,10 +52,12 @@ public class VisionSubsystem extends SubsystemBase {
         Optional<VisionFieldPoseEstimate> estimate = Optional.empty();
 
         if (!camInputs.seesTag) {
+            Logger.recordOutput(logPrefix + "/RejectReason", "No tag seen");
             return estimate;
         }
 
         if (!isOnField(camInputs.pose3d)) {
+            Logger.recordOutput(logPrefix + "/RejectReason", "Not on field");
             return estimate;
         } else {
             Logger.recordOutput("Vision/CameraA/IsOnField", true);
@@ -82,8 +84,16 @@ public class VisionSubsystem extends SubsystemBase {
             VisionIO.VisionIOInputs.CameraInputs camInputs, String logPrefix) {
         if (camInputs.megatagPoseEstimate.timestampSeconds()
                 <= mRobotState.getLastUsedMegatagTimestamp()) {
+            Logger.recordOutput(logPrefix + "/RejectReason", "Stale timestamp");
             return Optional.empty();
         }
+
+        if (camInputs.megatagPoseEstimate.tagCount() == 0) {
+            Logger.recordOutput(logPrefix + "/RejectReason", "0 tags");
+            return Optional.empty();
+        }
+
+        Logger.recordOutput(logPrefix + "/RawMegatagPose", camInputs.megatagPoseEstimate.fieldToRobot());
 
         // Extra checks for singular tag readings
         if (camInputs.megatagPoseEstimate.tagCount() < 2
@@ -92,14 +102,21 @@ public class VisionSubsystem extends SubsystemBase {
                     camInputs.megatagPoseEstimate.tagCount() > 1
                             ? 1.0
                             : 1 - camInputs.fiducialObservations[0].ambiguity();
+            
+            double ambiguity = camInputs.fiducialObservations[0].ambiguity();
+            double area = camInputs.fiducialObservations[0].area();
+            Logger.recordOutput(logPrefix + "/Tag0Ambiguity", ambiguity);
+            Logger.recordOutput(logPrefix + "/Tag0Area", area);
 
             if (camInputs.fiducialObservations[0].ambiguity()
                     > VisionConstants.kSingleTagAmbiguityThreshold) {
+                Logger.recordOutput(logPrefix + "/RejectReason", "High ambiguity");
                 return Optional.empty();
             }
 
             if (camInputs.fiducialObservations[0].area()
                     < VisionConstants.kSingleTagAreaThreshold) {
+                Logger.recordOutput(logPrefix + "/RejectReason", "Low area");
                 return Optional.empty();
             }
 
@@ -115,17 +132,26 @@ public class VisionSubsystem extends SubsystemBase {
                                                         .fieldToRobot()
                                                         .getRotation()
                                                         .getRadians()));
+                
+                Logger.recordOutput(logPrefix + "/YawDiffDegrees", Units.radiansToDegrees(yawDif));
 
                 if (yawDif > Units.degreesToRadians(VisionConstants.kSingleTagYawThreshold)) {
                     return Optional.empty();
+                    Logger.recordOutput(logPrefix + "/Norm", norm);
                 }
 
                 if (camInputs.megatagPoseEstimate.fieldToRobot().getTranslation().getNorm()
                         < VisionConstants.kSingleTagNormThreshold) {
+                    Logger.recordOutput(logPrefix + "/RejectReason", "Norm too low");
                     return Optional.empty();
                 }
+            } else {
+                Logger.recordOutput(logPrefix + "/PriorPoseState", "Missing");
             }
         }
+
+        Logger.recordOutput(logPrefix + "/RejectReason", "Accepted");
+        Logger.recordOutput(logPrefix + "/Quality", quality);
         // Later would like to add local pose based on tag ID here:
 
         Pose2d estimatePose = camInputs.megatagPoseEstimate.fieldToRobot();
