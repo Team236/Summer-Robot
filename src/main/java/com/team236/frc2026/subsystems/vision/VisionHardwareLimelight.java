@@ -61,12 +61,12 @@ public class VisionHardwareLimelight implements VisionIO {
                 camInputs.megatagPoseEstimate = MegatagPoseEstimate.fromLimelight(megatag);
                 camInputs.megatagCount = megatag.tagCount;
                 camInputs.pose3d = new Pose3d(megatag.pose);
+                camInputs.fiducialObservations =
+                        FiducialObservation.fromLimelight(megatag.rawFiducials);
             }
             if (megatag2 != null) {
                 camInputs.megatag2PoseEstimate = MegatagPoseEstimate.fromLimelight(megatag2);
                 camInputs.megatag2Count = megatag2.tagCount;
-                // camera.fiducialObservations =
-                //             FiducialObservation.fromLimelight(megatag.rawFiducials);
             }
 
             camInputs.standardDeviations = table.getEntry("stddevs").getDoubleArray(kDefaultStd);
