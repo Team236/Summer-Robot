@@ -57,10 +57,21 @@ public class VisionSubsystem extends SubsystemBase {
 
         if (!isOnField(camInputs.pose3d)) {
             return estimate;
+        } else {
+            Logger.recordOutput("Vision/CameraA/IsOnField", true);
         }
 
         if (camInputs.megatagPoseEstimate != null || camInputs.fiducialObservations != null) {
-            processMegatagPoseEstimate(camInputs, logPrefix);
+            Optional<VisionFieldPoseEstimate> mtEstimate =
+                    processMegatagPoseEstimate(camInputs, logPrefix);
+
+            mtEstimate.ifPresent(
+                    est ->
+                            Logger.recordOutput(
+                                    logPrefix + "/AcceptedMegatagEstimate",
+                                    est.getVisionRobotPose()));
+
+            return mtEstimate;
         }
 
         // for now return optional
@@ -173,11 +184,15 @@ public class VisionSubsystem extends SubsystemBase {
         double poseY = pose.getY();
         double poseZ = pose.getZ();
 
-        return ((poseX > Constants.FieldDimentions.kMargMinX
-                        && poseX < Constants.FieldDimentions.kMargMaxX)
-                && (poseY > Constants.FieldDimentions.kMargMinY
-                        && poseY < Constants.FieldDimentions.kMargMaxY)
-                && (poseZ > Constants.FieldDimentions.kMargMinZ
-                        && poseZ < Constants.FieldDimentions.kMargMaxZ));
+        Logger.recordOutput("Vision/CameraA/PoseX", poseX);
+        Logger.recordOutput("Vision/CameraA/PoseY", poseY);
+        Logger.recordOutput("Vision/CameraA/PoseZ", poseZ);
+
+        return ((poseX > Constants.FieldDimensions.kMargMinX
+                        && poseX < Constants.FieldDimensions.kMargMaxX)
+                && (poseY > Constants.FieldDimensions.kMargMinY
+                        && poseY < Constants.FieldDimensions.kMargMaxY)
+                && (poseZ > Constants.FieldDimensions.kMargMinZ
+                        && poseZ < Constants.FieldDimensions.kMargMaxZ));
     }
 }
