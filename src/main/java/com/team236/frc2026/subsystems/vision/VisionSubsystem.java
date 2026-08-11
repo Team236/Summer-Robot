@@ -4,10 +4,19 @@ import com.team236.frc2026.Constants;
 import com.team236.frc2026.Constants.VisionConstants;
 import com.team236.frc2026.RobotState;
 import com.team236.lib.time.RobotTime;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.Optional;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -18,6 +27,7 @@ public class VisionSubsystem extends SubsystemBase {
     private final VisionIO mIo;
     private final RobotState mRobotState;
     private final VisionIO.VisionIOInputs mInputs = new VisionIO.VisionIOInputs();
+    private double quality;
 
     public VisionSubsystem(VisionIO io, RobotState robotState) {
         this.mIo = io;
@@ -34,8 +44,10 @@ public class VisionSubsystem extends SubsystemBase {
         processCamera(mInputs.cameraA, "CameraA", VisionConstants.CameraA.kCameraToRobot);
     }
 
-    private Optional<VisionFieldPoseEstimate> processCamera(VisionIO.VisionIOInputs.CameraInputs camInputs,
-            String camName, Transform2d cameraToRobot) {
+    private Optional<VisionFieldPoseEstimate> processCamera(
+            VisionIO.VisionIOInputs.CameraInputs camInputs,
+            String camName,
+            Transform2d cameraToRobot) {
         String logPrefix = "Vision/" + camName;
         Optional<VisionFieldPoseEstimate> estimate = Optional.empty();
 
@@ -43,60 +55,75 @@ public class VisionSubsystem extends SubsystemBase {
             return estimate;
         }
 
-        if(!isOnField(camInputs.pose3d)){
+        if (!isOnField(camInputs.pose3d)) {
             return estimate;
         }
 
-        if(camInputs.megatagPoseEstimate != null || camInputs.fiducialObservations != null){
+        if (camInputs.megatagPoseEstimate != null || camInputs.fiducialObservations != null) {
             processMegatagPoseEstimate(camInputs, logPrefix);
         }
-        
+
+        // for now return optional
+        return Optional.empty();
     }
 
-    private Optional<VisionFieldPoseEstimate> processFiducials(VisionIO.VisionIOInputs.CameraInputs camInputs, String logPrefix) {
-        if(camInputs.megatagPoseEstimate.timestampSeconds() <= mRobotState.getLastVisionMeasurementTime()) {
+    private Optional<VisionFieldPoseEstimate> processMegatagPoseEstimate(
+            VisionIO.VisionIOInputs.CameraInputs camInputs, String logPrefix) {
+        if (camInputs.megatagPoseEstimate.timestampSeconds()
+                <= mRobotState.getLastUsedMegatagTimestamp()) {
             return Optional.empty();
         }
 
         // Extra checks for singular tag readings
-        if(camInputs.megatagPoseEstimate.tagCount() < 2) {
-            if(camInputs.fiducialObservations.abiguity() > VisionConstants.kSingleTagAmbiguityThreshold) {
+        if (camInputs.megatagPoseEstimate.tagCount() < 2
+                && camInputs.fiducialObservations[0] != null) {
+            quality =
+                    camInputs.megatagPoseEstimate.tagCount() > 1
+                            ? 1.0
+                            : 1 - camInputs.fiducialObservations[0].ambiguity();
+
+            if (camInputs.fiducialObservations[0].ambiguity()
+                    > VisionConstants.kSingleTagAmbiguityThreshold) {
                 return Optional.empty();
             }
 
-            if(camInputs.fiducialObservations.area() < VisionConstants.kSingleTagAreaThreshold) {
+            if (camInputs.fiducialObservations[0].area()
+                    < VisionConstants.kSingleTagAreaThreshold) {
                 return Optional.empty();
             }
 
-            var priorPose = mRobotState.getPriorPose(camInputs.megatagPoseEstimate.timestampSeconds());
-            if(priorPose.isPresent()){
-                double yawDif = Math.abs(
-                    MathUtil.angleModulus(
-                        priorPose.get().getRotation().getRadians()
-                        - camInputs.megatagPoseEstimate.fieldToRobot().getRotation().getRadians()
-                    )
-                );
+            var priorPose =
+                    mRobotState.getPriorPose(camInputs.megatagPoseEstimate.timestampSeconds());
+            if (priorPose.isPresent()) {
+                double yawDif =
+                        Math.abs(
+                                MathUtil.angleModulus(
+                                        priorPose.get().getRotation().getRadians()
+                                                - camInputs
+                                                        .megatagPoseEstimate
+                                                        .fieldToRobot()
+                                                        .getRotation()
+                                                        .getRadians()));
 
-                if(yawDif > Utils.degreesToRadians(VisionConstants.kSingleTagYawThreshold)){
+                if (yawDif > Units.degreesToRadians(VisionConstants.kSingleTagYawThreshold)) {
                     return Optional.empty();
                 }
 
                 if (camInputs.megatagPoseEstimate.fieldToRobot().getTranslation().getNorm()
-                < VisionConstants.kSingleTagNormThreshold) {
+                        < VisionConstants.kSingleTagNormThreshold) {
                     return Optional.empty();
                 }
             }
-            
         }
         // Later would like to add local pose based on tag ID here:
 
-
         Pose2d estimatePose = camInputs.megatagPoseEstimate.fieldToRobot();
-        double quality = camInputs.megatagPoseEstimate.tagCount() > 1 ? 1.0 : 1 - camInputs.fiducialObservations.ambiguity();
-        double scaleFactor = 1/quality;
-        
-        double xStd = camInputs.standardDeviations[VisionConstants.kMegatag1XStdDevIndex] * scaleFactor;
-        double yStd = camInputs.standardDeviations[VisionConstants.kMegatag1YStdDevIndex] * scaleFactor;
+        double scaleFactor = 1 / quality;
+
+        double xStd =
+                camInputs.standardDeviations[VisionConstants.kMegatag1XStdDevIndex] * scaleFactor;
+        double yStd =
+                camInputs.standardDeviations[VisionConstants.kMegatag1YStdDevIndex] * scaleFactor;
         double rotStd =
                 camInputs.standardDeviations[VisionConstants.kMegatag1YawStdDevIndex] * scaleFactor;
 
@@ -106,10 +133,9 @@ public class VisionSubsystem extends SubsystemBase {
         return Optional.of(
                 new VisionFieldPoseEstimate(
                         estimatePose,
-                        CameraInputs.MegatagPoseEstimate.timestampSeconds(),
+                        camInputs.megatagPoseEstimate.timestampSeconds(),
                         visionStdDevs,
-                        CameraInputs.MegatagPoseEstimate.tagCount()));
-
+                        camInputs.megatagPoseEstimate.tagCount()));
     }
 
     private void logCameraInputs(String logPrefix, VisionIO.VisionIOInputs.CameraInputs camera) {
@@ -129,7 +155,8 @@ public class VisionSubsystem extends SubsystemBase {
             Logger.recordOutput(
                     logPrefix + "/MegatagPoseEstimate", camera.megatagPoseEstimate.fieldToRobot());
             Logger.recordOutput(logPrefix + "/TagCount", camera.megatagPoseEstimate.tagCount());
-            Logger.recordOutput(logPrefix + "/AvgTagArea", camera.megatagPoseEstimate.avgTagArea());
+            // Logger.recordOutput(logPrefix + "/AvgTagArea",
+            // camera.megatagPoseEstimate.avgTagArea());
         }
 
         if (camera.fiducialObservations != null) {

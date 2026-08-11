@@ -116,7 +116,8 @@ public final class ConcurrentTimeInterpolatableBuffer<T> {
             return Optional.of(topBound.getValue());
         } else {
             // Otherwise, interpolate.
-            // Ratio of (time difference between current time and bottom bound) to (time difference between top and bottom bounds).
+            // Ratio of (time difference between current time and bottom bound) to (time difference
+            // between top and bottom bounds).
             return Optional.of(
                     m_interpolatingFunc.interpolate(
                             bottomBound.getValue(),
@@ -128,7 +129,7 @@ public final class ConcurrentTimeInterpolatableBuffer<T> {
 
     /**
      * Returns the latest sample in the buffer.
-     * 
+     *
      * @return The latest sample in the buffer.
      */
     public Entry<Double, T> getLatest() {

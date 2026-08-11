@@ -13,10 +13,7 @@ public class RobotState {
     private final ConcurrentTimeInterpolatableBuffer<Pose2d> fieldToRobot =
             ConcurrentTimeInterpolatableBuffer.createBuffer(kLogBackTime);
 
-
-    public RobotState(){
-
-    }
+    public RobotState() {}
 
     public boolean isRedAlliance() {
         return DriverStation.getAlliance().isPresent()
@@ -29,5 +26,5 @@ public class RobotState {
 
     public Optional<Pose2d> getPriorPose(double timestamp) {
         return fieldToRobot.getSample(timestamp);
-    }   
+    }
 }
