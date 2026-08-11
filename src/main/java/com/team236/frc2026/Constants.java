@@ -61,7 +61,16 @@ public final class Constants {
 
     public static final class VisionConstants {
         public static final String kLimelightAName = "limelight";
+
         public static final int kStdDevArrayLength = 12;
+        public static final int kMegatag1XStdDevIndex = 0;
+        public static final int kMegatag1YStdDevIndex = 1;
+        public static final int kMegatag1YawStdDevIndex = 5;
+
+        public static final double kSingleTagAmbiguityThreshold = 0.19;
+        public static final double kSingleTagAreaThreshold = 0.5;
+        public static final double kSingleTagYawThreshold = 5.0;
+        public static final double kSingleTagNormThreshold = 1.0;
 
         public static final class CameraA {
             // Inches
