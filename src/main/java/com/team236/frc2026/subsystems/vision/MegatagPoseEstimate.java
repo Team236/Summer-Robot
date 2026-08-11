@@ -14,8 +14,8 @@ import java.nio.ByteBuffer;
  * @param fieldToRobot The estimated robot pose on the field
  * @param timestampSeconds The timestamp when this estimate was captured
  * @param latency Processing latency in seconds
- * @param quality Quality score of the pose estimate (0-1)
- * @param fiducialIds IDs of fiducials used for this estimate
+ * @param tagCount Number of tags used for this estimate
+ * @param avgTagDist Average distance to tags in meters
  */
 public record MegatagPoseEstimate(
         Pose2d fieldToRobot,
