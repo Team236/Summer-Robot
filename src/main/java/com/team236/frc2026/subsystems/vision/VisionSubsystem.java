@@ -93,7 +93,8 @@ public class VisionSubsystem extends SubsystemBase {
             return Optional.empty();
         }
 
-        Logger.recordOutput(logPrefix + "/RawMegatagPose", camInputs.megatagPoseEstimate.fieldToRobot());
+        Logger.recordOutput(
+                logPrefix + "/RawMegatagPose", camInputs.megatagPoseEstimate.fieldToRobot());
 
         // Extra checks for singular tag readings
         if (camInputs.megatagPoseEstimate.tagCount() < 2
@@ -102,7 +103,7 @@ public class VisionSubsystem extends SubsystemBase {
                     camInputs.megatagPoseEstimate.tagCount() > 1
                             ? 1.0
                             : 1 - camInputs.fiducialObservations[0].ambiguity();
-            
+
             double ambiguity = camInputs.fiducialObservations[0].ambiguity();
             double area = camInputs.fiducialObservations[0].area();
             Logger.recordOutput(logPrefix + "/Tag0Ambiguity", ambiguity);
@@ -132,12 +133,11 @@ public class VisionSubsystem extends SubsystemBase {
                                                         .fieldToRobot()
                                                         .getRotation()
                                                         .getRadians()));
-                
+
                 Logger.recordOutput(logPrefix + "/YawDiffDegrees", Units.radiansToDegrees(yawDif));
 
                 if (yawDif > Units.degreesToRadians(VisionConstants.kSingleTagYawThreshold)) {
                     return Optional.empty();
-                    Logger.recordOutput(logPrefix + "/Norm", norm);
                 }
 
                 if (camInputs.megatagPoseEstimate.fieldToRobot().getTranslation().getNorm()
