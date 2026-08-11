@@ -1,6 +1,7 @@
 package com.team236.frc2026.subsystems.vision;
 
 import com.team236.frc2026.Constants;
+import com.team236.frc2026.Constants.VisionConstants;
 import com.team236.frc2026.RobotState;
 import com.team236.lib.time.RobotTime;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -29,30 +30,110 @@ public class VisionSubsystem extends SubsystemBase {
         mIo.readInputs(mInputs);
 
         logCameraInputs("Vision/CameraA", mInputs.cameraA);
+
+        processCamera(mInputs.cameraA, "CameraA", VisionConstants.CameraA.kCameraToRobot);
     }
 
-    private void logCameraInputs(String prefix, VisionIO.VisionIOInputs.CameraInputs camera) {
-        Logger.recordOutput(prefix + "/SeesTag", camera.seesTag);
-        Logger.recordOutput(prefix + "/MegatagCount", camera.megatagCount);
+    private Optional<VisionFieldPoseEstimate> processCamera(VisionIO.VisionIOInputs.CameraInputs camInputs,
+            String camName, Transform2d cameraToRobot) {
+        String logPrefix = "Vision/" + camName;
+        Optional<VisionFieldPoseEstimate> estimate = Optional.empty();
+
+        if (!camInputs.seesTag) {
+            return estimate;
+        }
+
+        if(!isOnField(camInputs.pose3d)){
+            return estimate;
+        }
+
+        if(camInputs.megatagPoseEstimate != null || camInputs.fiducialObservations != null){
+            processMegatagPoseEstimate(camInputs, logPrefix);
+        }
+        
+    }
+
+    private Optional<VisionFieldPoseEstimate> processFiducials(VisionIO.VisionIOInputs.CameraInputs camInputs, String logPrefix) {
+        if(camInputs.megatagPoseEstimate.timestampSeconds() <= mRobotState.getLastVisionMeasurementTime()) {
+            return Optional.empty();
+        }
+
+        // Extra checks for singular tag readings
+        if(camInputs.megatagPoseEstimate.tagCount() < 2) {
+            if(camInputs.fiducialObservations.abiguity() > VisionConstants.kSingleTagAmbiguityThreshold) {
+                return Optional.empty();
+            }
+
+            if(camInputs.fiducialObservations.area() < VisionConstants.kSingleTagAreaThreshold) {
+                return Optional.empty();
+            }
+
+            var priorPose = mRobotState.getPriorPose(camInputs.megatagPoseEstimate.timestampSeconds());
+            if(priorPose.isPresent()){
+                double yawDif = Math.abs(
+                    MathUtil.angleModulus(
+                        priorPose.get().getRotation().getRadians()
+                        - camInputs.megatagPoseEstimate.fieldToRobot().getRotation().getRadians()
+                    )
+                );
+
+                if(yawDif > Utils.degreesToRadians(VisionConstants.kSingleTagYawThreshold)){
+                    return Optional.empty();
+                }
+
+                if (camInputs.megatagPoseEstimate.fieldToRobot().getTranslation().getNorm()
+                < VisionConstants.kSingleTagNormThreshold) {
+                    return Optional.empty();
+                }
+            }
+            
+        }
+        // Later would like to add local pose based on tag ID here:
+
+
+        Pose2d estimatePose = camInputs.megatagPoseEstimate.fieldToRobot();
+        double quality = camInputs.megatagPoseEstimate.tagCount() > 1 ? 1.0 : 1 - camInputs.fiducialObservations.ambiguity();
+        double scaleFactor = 1/quality;
+        
+        double xStd = camInputs.standardDeviations[VisionConstants.kMegatag1XStdDevIndex] * scaleFactor;
+        double yStd = camInputs.standardDeviations[VisionConstants.kMegatag1YStdDevIndex] * scaleFactor;
+        double rotStd =
+                camInputs.standardDeviations[VisionConstants.kMegatag1YawStdDevIndex] * scaleFactor;
+
+        double xyStd = Math.max(xStd, yStd);
+        Matrix<N3, N1> visionStdDevs = VecBuilder.fill(xyStd, xyStd, rotStd);
+
+        return Optional.of(
+                new VisionFieldPoseEstimate(
+                        estimatePose,
+                        CameraInputs.MegatagPoseEstimate.timestampSeconds(),
+                        visionStdDevs,
+                        CameraInputs.MegatagPoseEstimate.tagCount()));
+
+    }
+
+    private void logCameraInputs(String logPrefix, VisionIO.VisionIOInputs.CameraInputs camera) {
+        Logger.recordOutput(logPrefix + "/SeesTag", camera.seesTag);
+        Logger.recordOutput(logPrefix + "/MegatagCount", camera.megatagCount);
 
         if (DriverStation.isDisabled()) {
-            SmartDashboard.putBoolean(prefix + "/SeesTag", camera.seesTag);
-            SmartDashboard.putNumber(prefix + "/MegatagCount", camera.megatagCount);
+            SmartDashboard.putBoolean(logPrefix + "/SeesTag", camera.seesTag);
+            SmartDashboard.putNumber(logPrefix + "/MegatagCount", camera.megatagCount);
         }
 
         if (camera.pose3d != null) {
-            Logger.recordOutput(prefix + "/Pose3d", camera.pose3d);
+            Logger.recordOutput(logPrefix + "/Pose3d", camera.pose3d);
         }
 
         if (camera.megatagPoseEstimate != null) {
             Logger.recordOutput(
-                    prefix + "/MegatagPoseEstimate", camera.megatagPoseEstimate.fieldToRobot());
-            Logger.recordOutput(prefix + "/TagCount", camera.megatagPoseEstimate.tagCount());
-            Logger.recordOutput(prefix + "/AvgTagArea", camera.megatagPoseEstimate.avgTagArea());
+                    logPrefix + "/MegatagPoseEstimate", camera.megatagPoseEstimate.fieldToRobot());
+            Logger.recordOutput(logPrefix + "/TagCount", camera.megatagPoseEstimate.tagCount());
+            Logger.recordOutput(logPrefix + "/AvgTagArea", camera.megatagPoseEstimate.avgTagArea());
         }
 
         if (camera.fiducialObservations != null) {
-            Logger.recordOutput(prefix + "/FiducialCount", camera.fiducialObservations.length);
+            Logger.recordOutput(logPrefix + "/FiducialCount", camera.fiducialObservations.length);
         }
     }
 
