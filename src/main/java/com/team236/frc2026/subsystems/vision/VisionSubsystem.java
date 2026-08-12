@@ -76,7 +76,23 @@ public class VisionSubsystem extends SubsystemBase {
             return mtEstimate;
         }
 
+        if (camInputs.megatag2PoseEstimate != null && camInputs.fiducialObservations != null) {
+            Optional<VisionFieldPoseEstimate> mt2Estimate =
+                    processMegatag2PoseEstimate(camInputs, logPrefix);
+
+            mt2Estimate.ifPresent(
+                    est ->
+                            Logger.recordOutput(
+                                    logPrefix + "/AcceptedMegatag2Estimate",
+                                    est.getVisionRobotPose()));
+        }
+
         // for now return optional
+        return Optional.empty();
+    }
+
+    private Optional<VisionFieldPoseEstimate> processMegatag2PoseEstimate(
+            VisionIO.VisionIOInputs.CameraInputs camInputs, String logPrefix) {
         return Optional.empty();
     }
 
