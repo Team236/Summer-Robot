@@ -28,6 +28,10 @@ public class RobotState {
                 && DriverStation.getAlliance().equals(Optional.of(Alliance.Red));
     }
 
+    public void addOdometryMeasurement(double timestamp, Pose2d pose) {
+        fieldToRobot.addSample(timestamp, pose);
+    }
+
     public double getLastUsedMegatagTimestamp() {
         return lastUsedMegatagTimestamp;
     }
