@@ -11,6 +11,8 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.team236.frc2026.RobotState;
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
+import com.team236.lib.time.RobotTime;
+
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
@@ -18,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
@@ -26,6 +29,8 @@ import org.littletonrobotics.junction.Logger;
  * {@code DriveIO} and uses CTRE's SwerveDrivetrain.
  */
 public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements DriveIO {
+
+    RobotState mRobotState;
 
     // Constants & Tuning gains
     private static final double kOdometryFrequencyHz = 250.0;
@@ -59,6 +64,8 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
                 kOdometryFrequencyHz,
                 modules);
 
+        this.mRobotState = robotState;
+
         mAngularPitchVelocity = getPigeon2().getAngularVelocityYWorld();
         mAngularRollVelocity = getPigeon2().getAngularVelocityXWorld();
         mAngularYawVelocity = getPigeon2().getAngularVelocityZWorld();
@@ -70,8 +77,17 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
         configureSignalUpdateFrequencies();
 
         this.getOdometryThread().setThreadPriority(kOdometryThreadPriority);
-        registerTelemetry(state -> mTelemetryCache.set(state.clone()));
+        registerTelemetry(mTelemetryConsumer);
     }
+
+    private final Consumer<SwerveDriveState> mTelemetryConsumer =
+            swerveDriveState -> {
+                mTelemetryCache.set(swerveDriveState.clone());
+                mRobotState.addOdometryMeasurement(
+                        (RobotTime.getTimestampSeconds() - Utils.getCurrentTimeSeconds())
+                                + swerveDriveState.Timestamp,
+                        swerveDriveState.Pose);
+            };
 
     // Interface methods
     @Override
