@@ -41,7 +41,17 @@ public class VisionSubsystem extends SubsystemBase {
 
         logCameraInputs("Vision/CameraA", mInputs.cameraA);
 
-        processCamera(mInputs.cameraA, "CameraA", VisionConstants.CameraA.kCameraToRobot);
+        var maybeMPTE =
+                processCamera(mInputs.cameraA, "CameraA", VisionConstants.CameraA.kCameraToRobot);
+
+        maybeMPTE.ifPresent(
+                est -> {
+                    Logger.recordOutput(
+                            "Vision/CameraA/AcceptedMegatagEstimate", est.getVisionRobotPose());
+                    mRobotState.updateMegatagEstimate(est);
+                });
+
+        processMegatag2PoseEstimate(mInputs.cameraA, "Vision/CameraA");
     }
 
     private Optional<VisionFieldPoseEstimate> processCamera(
@@ -67,12 +77,6 @@ public class VisionSubsystem extends SubsystemBase {
             Optional<VisionFieldPoseEstimate> mtEstimate =
                     processMegatagPoseEstimate(camInputs, logPrefix);
 
-            mtEstimate.ifPresent(
-                    est ->
-                            Logger.recordOutput(
-                                    logPrefix + "/AcceptedMegatagEstimate",
-                                    est.getVisionRobotPose()));
-
             return mtEstimate;
         }
 
@@ -93,6 +97,17 @@ public class VisionSubsystem extends SubsystemBase {
 
     private Optional<VisionFieldPoseEstimate> processMegatag2PoseEstimate(
             VisionIO.VisionIOInputs.CameraInputs camInputs, String logPrefix) {
+        Pose2d estimate = camInputs.megatag2PoseEstimate.fieldToRobot();
+
+        if (estimate != null) {
+            Logger.recordOutput(logPrefix + "/AcceptedMegatag2Estimate", estimate);
+            return Optional.of(
+                    new VisionFieldPoseEstimate(
+                            estimate,
+                            camInputs.megatag2PoseEstimate.timestampSeconds(),
+                            null,
+                            camInputs.megatag2PoseEstimate.tagCount()));
+        }
         return Optional.empty();
     }
 
