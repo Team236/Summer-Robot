@@ -11,8 +11,8 @@ import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.team236.frc2026.RobotState;
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
+import com.team236.lib.limelight.LimelightHelpers;
 import com.team236.lib.time.RobotTime;
-
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
@@ -114,6 +114,9 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
         ioInputs.pitch = mPitch.getValueAsDouble();
 
         // Updating localization + other systems with this data
+        
+        // Not currently working. Later move to subsystem.
+        updateLimelightGyroData(ioInputs);
     }
 
     @Override
@@ -175,5 +178,16 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
                 mPitch,
                 mAccelerationX,
                 mAccelerationY);
+    }
+
+        private void updateLimelightGyroData(DriveIOInputs ioInputs) {
+        LimelightHelpers.SetRobotOrientation(
+                "limelight",
+                ioInputs.gyroAngle,
+                ioInputs.yawVelocity,
+                ioInputs.pitch,
+                ioInputs.pitchVelocity,
+                ioInputs.roll,
+                ioInputs.rollVelocity);
     }
 }
