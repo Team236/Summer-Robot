@@ -39,10 +39,10 @@ public class VisionSubsystem extends SubsystemBase {
 
         logCameraInputs("Vision/CameraA", mInputs.cameraA);
 
-        Optional<VisionFieldPoseEstimate> maybeMTA = processCamera(mInputs.cameraA, "CameraA", VisionConstants.CameraA.kCameraToRobot);
+        Optional<VisionFieldPoseEstimate> maybeMTA =
+                processCamera(mInputs.cameraA, "CameraA", VisionConstants.CameraA.kCameraToRobot);
 
-        maybeMTA.ifPresent(est -> 
-            mRobotState.updateMegatagEstimate(est));
+        maybeMTA.ifPresent(est -> mRobotState.updateMegatagEstimate(est));
     }
 
     private Optional<VisionFieldPoseEstimate> processCamera(
@@ -57,16 +57,14 @@ public class VisionSubsystem extends SubsystemBase {
 
         Optional<VisionFieldPoseEstimate> mt1Estimate = Optional.empty();
         Optional<VisionFieldPoseEstimate> mt2Estimate = Optional.empty();
-        
+
         if (camInputs.megatagPoseEstimate != null && camInputs.fiducialObservations != null) {
             mt1Estimate = processMegatagPoseEstimate(camInputs, logPrefix);
 
             mt1Estimate.ifPresent(
                     est ->
                             Logger.recordOutput(
-                                    logPrefix + "/AcceptedMegatag1Pose",
-                                    est.getVisionRobotPose())
-                        );
+                                    logPrefix + "/AcceptedMegatag1Pose", est.getVisionRobotPose()));
         }
 
         if (camInputs.megatag2PoseEstimate != null && camInputs.fiducialObservations != null) {
@@ -75,11 +73,10 @@ public class VisionSubsystem extends SubsystemBase {
             mt2Estimate.ifPresent(
                     est ->
                             Logger.recordOutput(
-                                    logPrefix + "/AcceptedMegatag2Pose",
-                                    est.getVisionRobotPose()));
+                                    logPrefix + "/AcceptedMegatag2Pose", est.getVisionRobotPose()));
         }
 
-        if(camInputs.megatagCount < 2 && mt2Estimate.isPresent()) {
+        if (camInputs.megatagCount < 2 && mt2Estimate.isPresent()) {
             Logger.recordOutput(logPrefix + "/AcceptedMegatag1Estimate", false);
             Logger.recordOutput(logPrefix + "/AcceptedMegatag2Estimate", true);
             return mt2Estimate;
@@ -119,14 +116,17 @@ public class VisionSubsystem extends SubsystemBase {
 
         double revArea = 1.0;
 
-        for(FiducialObservation obs : camInputs.fiducialObservations) {
+        for (FiducialObservation obs : camInputs.fiducialObservations) {
             revArea -= obs.area();
         }
 
         double scaleFactor = 1.0 / revArea;
-        double xStd = camInputs.standardDeviations[VisionConstants.kMegatag2XStdDevIndex] * scaleFactor;
-        double yStd = camInputs.standardDeviations[VisionConstants.kMegatag2YStdDevIndex] * scaleFactor;
-        double rotStd = camInputs.standardDeviations[VisionConstants.kMegatag2YawStdDevIndex] * scaleFactor;
+        double xStd =
+                camInputs.standardDeviations[VisionConstants.kMegatag2XStdDevIndex] * scaleFactor;
+        double yStd =
+                camInputs.standardDeviations[VisionConstants.kMegatag2YStdDevIndex] * scaleFactor;
+        double rotStd =
+                camInputs.standardDeviations[VisionConstants.kMegatag2YawStdDevIndex] * scaleFactor;
 
         double xyStd = Math.max(xStd, yStd);
         Matrix<N3, N1> visionStdDevs = VecBuilder.fill(xyStd, xyStd, rotStd);
@@ -174,9 +174,9 @@ public class VisionSubsystem extends SubsystemBase {
             }
 
             if (camInputs.megatagPoseEstimate.fieldToRobot().getTranslation().getNorm()
-                        < VisionConstants.kSingleTagNormThreshold) {
-                    return Optional.empty();
-                }
+                    < VisionConstants.kSingleTagNormThreshold) {
+                return Optional.empty();
+            }
 
             var priorPose =
                     mRobotState.getPriorPose(camInputs.megatagPoseEstimate.timestampSeconds());
@@ -193,7 +193,7 @@ public class VisionSubsystem extends SubsystemBase {
             }
         }
 
-        if(quality < 0.01) {
+        if (quality < 0.01) {
             quality = 0.01;
         }
 

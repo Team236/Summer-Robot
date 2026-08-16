@@ -114,7 +114,7 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
         ioInputs.pitch = mPitch.getValueAsDouble();
 
         // Updating localization + other systems with this data
-        
+
         // Not currently working. Later move to subsystem.
         updateLimelightGyroData(ioInputs);
     }
@@ -180,7 +180,7 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
                 mAccelerationY);
     }
 
-        private void updateLimelightGyroData(DriveIOInputs ioInputs) {
+    private void updateLimelightGyroData(DriveIOInputs ioInputs) {
         LimelightHelpers.SetRobotOrientation(
                 "limelight",
                 ioInputs.gyroAngle,
