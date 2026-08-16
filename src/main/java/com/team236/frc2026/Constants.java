@@ -67,10 +67,14 @@ public final class Constants {
         public static final int kMegatag1YStdDevIndex = 1;
         public static final int kMegatag1YawStdDevIndex = 5;
 
-        public static final double kSingleTagAmbiguityThreshold = 0.19;
+        public static final int kMegatag2XStdDevIndex = 6;
+        public static final int kMegatag2YStdDevIndex = 7;
+        public static final int kMegatag2YawStdDevIndex = 11;
+
+        public static final double kSingleTagAmbiguityThreshold = 1 - 0.19;
         public static final double kSingleTagAreaThreshold = 0.5;
         public static final double kSingleTagYawThreshold = 5.0;
-        public static final double kSingleTagNormThreshold = 1.0;
+        public static final double kSingleTagNormThreshold = 0.5;
 
         public static final class CameraA {
             // Inches
