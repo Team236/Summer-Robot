@@ -9,6 +9,10 @@ package com.team236.frc2026;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.team236.lib.limelight.Limelight3GConfig;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -73,12 +77,20 @@ public class Robot extends LoggedRobot {
         Logger.start();
 
         mRobotContainer = new RobotContainer();
+
+        if (RobotBase.isSimulation()) {
+            mRobotContainer.getDriveSubsystem().resetOdometry(new Pose2d(3, 3, new Rotation2d()));
+        }
     }
 
     /** This function is called periodically during all modes. */
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
+        if (Robot.isSimulation()) {
+            mRobotContainer.getSimulatedRobotState().updateSim();
+        }
     }
 
     /** This function is called once when the robot is disabled. */
@@ -124,8 +136,5 @@ public class Robot extends LoggedRobot {
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
-        if (mRobotContainer != null && mRobotContainer.getSimulatedRobotState() != null) {
-            mRobotContainer.getSimulatedRobotState().updateSim();
-        }
     }
 }

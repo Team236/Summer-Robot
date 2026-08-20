@@ -6,6 +6,8 @@ import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.lib.limelight.LimelightHelpers;
 import com.team236.lib.simulation.MapleSimSwerveDrivetrain;
 import com.team236.lib.time.RobotTime;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,8 +27,8 @@ public class DriveSubsystem extends SubsystemBase {
         mIo.setControl(request);
     }
 
-    public void resetGyro() {
-        mIo.resetGyro();
+    public void resetOdometry(Pose2d pose) {
+        mIo.resetOdometry(pose);
     }
 
     public void logDriveSubsystem(double timestamp) {

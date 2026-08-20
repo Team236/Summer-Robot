@@ -5,6 +5,8 @@ import com.team236.lib.robot.ConcurrentTimeInterpolatableBuffer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -39,6 +41,11 @@ public class RobotState {
     public Optional<Pose2d> getPriorPose(double timestamp) {
         return fieldToRobot.getSample(timestamp);
     }
+
+    public Map.Entry<Double, Pose2d> getLatestFieldToRobot() {
+        return fieldToRobot.getLatest();
+    }
+
 
     public void updateMegatagEstimate(VisionFieldPoseEstimate megatagEstimate) {
         lastUsedMegatagTimestamp = megatagEstimate.getTimestampSeconds();

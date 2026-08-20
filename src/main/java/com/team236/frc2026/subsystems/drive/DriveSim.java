@@ -96,12 +96,12 @@ public class DriveSim extends DriveHardware {
     }
 
     @Override
-    public void resetGyro() {
+    public void resetOdometry(Pose2d pose) {
         if (Constants.useMapleSim && mapleSimSwerveDrivetrain != null) {
-            mapleSimSwerveDrivetrain.mapleSimDrive.setSimulationWorldPose(new Pose2d(mapleSimSwerveDrivetrain.mapleSimDrive.getSimulatedDriveTrainPose().getTranslation(), new Rotation2d()));
+            mapleSimSwerveDrivetrain.mapleSimDrive.setSimulationWorldPose(pose);
             Timer.delay(0.05);
         }
-        super.resetGyro();
+        super.resetOdometry(pose);
     }
 
     @Override
