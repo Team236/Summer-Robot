@@ -5,9 +5,10 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.team236.frc2026.Constants;
 import com.team236.frc2026.RobotState;
-import com.team236.frc2026.simulation.SimulatedRobotState;
-import com.team236.frc2026.utils.simulations.MapleSimSwerveDrivetrain;
+import com.team236.frc2026.SimulatedRobotState;
+import com.team236.lib.simulation.MapleSimSwerveDrivetrain;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.units.measure.Mass;
@@ -44,8 +45,7 @@ public class DriveSim extends DriveHardware {
                             mapleSimSwerveDrivetrain.mapleSimDrive.getSimulatedDriveTrainPose();
                 }
                 simRobotState.addFieldToRobot(swerveDriveState.Pose);
-                // We don't have telemetryConsumer_ from DriveIOHardware here since it was private or non-existent in DriveHardware
-                // but we can just use the telemetry logic from DriveHardware
+                telemetryConsumer.accept(swerveDriveState);
             };
 
     public DriveSim(
@@ -53,8 +53,7 @@ public class DriveSim extends DriveHardware {
             SimulatedRobotState simRobotState,
             SwerveDrivetrainConstants driveTrainConstants,
             @SuppressWarnings("rawtypes") SwerveModuleConstants... modules) {
-        super(robotState, driveTrainConstants, 
-              Constants.useMapleSim ? MapleSimSwerveDrivetrain.regulateModuleConstantsForSimulation(modules) : modules);
+        super(robotState, driveTrainConstants, modules);
         this.simRobotState = simRobotState;
 
         // Rewrite the telemetry consumer with a consumer for sim
@@ -68,19 +67,19 @@ public class DriveSim extends DriveHardware {
             mapleSimSwerveDrivetrain =
                     new MapleSimSwerveDrivetrain(
                             Units.Seconds.of(kSimLoopPeriod),
-                            Units.Pounds.of(Constants.DriveConstants.kRobotWeightPounds),
-                            Units.Inches.of(Constants.DriveConstants.kBumperLengthInches),
-                            Units.Inches.of(Constants.DriveConstants.kBumperWidthInches),
-                            DCMotor.getKrakenX60(Constants.DriveConstants.kDriveMotorCount),
-                            DCMotor.getKrakenX60(Constants.DriveConstants.kDriveMotorCount),
-                            Constants.DriveConstants.kWheelCoefficientOfFriction,
+                            Units.Pounds.of(Constants.SimulationConstants.kRobotWeightPounds),
+                            Units.Inches.of(Constants.SimulationConstants.kBumperWidthInches),
+                            Units.Inches.of(Constants.SimulationConstants.kBumperLengthInches),
+                            DCMotor.getKrakenX60(Constants.SimulationConstants.kDriveMotorCount),
+                            DCMotor.getKrakenX60(Constants.SimulationConstants.kDriveMotorCount),
+                            1.2,
                             getModuleLocations(),
                             getPigeon2(),
                             getModules(),
-                            Constants.DriveConstants.kDrivetrain.getModuleConstants()[0],
-                            Constants.DriveConstants.kDrivetrain.getModuleConstants()[1],
-                            Constants.DriveConstants.kDrivetrain.getModuleConstants()[2],
-                            Constants.DriveConstants.kDrivetrain.getModuleConstants()[3]);
+                            SimTunerConstants.FrontLeft,
+                            SimTunerConstants.FrontRight,
+                            SimTunerConstants.BackLeft,
+                            SimTunerConstants.BackRight);
             simNotifier = new Notifier(mapleSimSwerveDrivetrain::update);
         } else {
             lastSimTime = Utils.getCurrentTimeSeconds();
@@ -97,18 +96,9 @@ public class DriveSim extends DriveHardware {
     }
 
     @Override
-    public void seedFieldCentric() {
-        if (Constants.useMapleSim && mapleSimSwerveDrivetrain != null) {
-            mapleSimSwerveDrivetrain.mapleSimDrive.setSimulationWorldPose(new Pose2d());
-            Timer.delay(0.05);
-        }
-        super.seedFieldCentric();
-    }
-
-    @Override
     public void resetGyro() {
         if (Constants.useMapleSim && mapleSimSwerveDrivetrain != null) {
-            mapleSimSwerveDrivetrain.mapleSimDrive.setSimulationWorldPose(new Pose2d());
+            mapleSimSwerveDrivetrain.mapleSimDrive.setSimulationWorldPose(new Pose2d(mapleSimSwerveDrivetrain.mapleSimDrive.getSimulatedDriveTrainPose().getTranslation(), new Rotation2d()));
             Timer.delay(0.05);
         }
         super.resetGyro();

@@ -14,7 +14,7 @@ public class RobotState {
     public double lastUsedMegatagTimestamp = 0;
     private Pose2d lastUsedMegatagPose = Pose2d.kZero;
 
-    public final double kLogBackTime = 1.0;
+    public final static double kLogBackTime = 1.0;
 
     private final ConcurrentTimeInterpolatableBuffer<Pose2d> fieldToRobot =
             ConcurrentTimeInterpolatableBuffer.createBuffer(kLogBackTime);

@@ -76,10 +76,10 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
         configureSignalUpdateFrequencies();
 
         this.getOdometryThread().setThreadPriority(kOdometryThreadPriority);
-        registerTelemetry(mTelemetryConsumer);
+        registerTelemetry(telemetryConsumer);
     }
 
-    private final Consumer<SwerveDriveState> mTelemetryConsumer =
+    final Consumer<SwerveDriveState> telemetryConsumer =
             swerveDriveState -> {
                 mTelemetryCache.set(swerveDriveState.clone());
                 mRobotState.addOdometryMeasurement(
