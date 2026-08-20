@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * (log replay from a file).
  */
 public final class Constants {
+    public static final boolean useMapleSim = true;
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
@@ -45,6 +46,15 @@ public final class Constants {
     public static final class Controller {
         public static final byte kMainController = 0;
     }
+
+    public static final class SimulationConstants {
+        public static final double kRobotWeightPounds = 50.0;
+        public static final double kBumperLengthInches = 36.0;
+        public static final double kBumperWidthInches = 36.0;
+        public static final double kWheelCoefficientOfFriction = 1.2;
+        public static final int kDriveMotorCount = 4;
+    }
+        
 
     public static final class DriveConstants {
         public static final double kOpenLoopDeadband = 0.05;
