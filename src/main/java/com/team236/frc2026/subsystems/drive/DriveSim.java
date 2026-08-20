@@ -36,7 +36,7 @@ public class DriveSim extends DriveHardware {
                     return;
                 }
 
-                if (Constants.useMapleSim && mapleSimSwerveDrivetrain != null) {
+                if (Constants.kUseMapleSim && mapleSimSwerveDrivetrain != null) {
                     swerveDriveState.Pose =
                             mapleSimSwerveDrivetrain.mapleSimDrive.getSimulatedDriveTrainPose();
                 }
@@ -52,7 +52,7 @@ public class DriveSim extends DriveHardware {
         super(
                 robotState,
                 driveTrainConstants,
-                Constants.useMapleSim
+                Constants.kUseMapleSim
                         ? MapleSimSwerveDrivetrain.regulateModuleConstantsForSimulation(modules)
                         : modules);
         this.simRobotState = simRobotState;
@@ -64,7 +64,7 @@ public class DriveSim extends DriveHardware {
 
     @SuppressWarnings("unchecked")
     public void startSimThread() {
-        if (Constants.useMapleSim) {
+        if (Constants.kUseMapleSim) {
             mapleSimSwerveDrivetrain =
                     new MapleSimSwerveDrivetrain(
                             Units.Seconds.of(kSimLoopPeriod),
@@ -98,7 +98,7 @@ public class DriveSim extends DriveHardware {
 
     @Override
     public void resetOdometry(Pose2d pose) {
-        if (Constants.useMapleSim && mapleSimSwerveDrivetrain != null) {
+        if (Constants.kUseMapleSim && mapleSimSwerveDrivetrain != null) {
             mapleSimSwerveDrivetrain.mapleSimDrive.setSimulationWorldPose(pose);
             Timer.delay(0.05);
         }
