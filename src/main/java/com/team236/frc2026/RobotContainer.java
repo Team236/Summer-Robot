@@ -6,6 +6,8 @@ import com.team236.frc2026.subsystems.drive.DriveSubsystem;
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.frc2026.subsystems.vision.VisionHardwareLimelight;
 import com.team236.frc2026.subsystems.vision.VisionSubsystem;
+import com.team236.frc2026.subsystems.drive.DriveSim;
+import com.team236.frc2026.simulation.SimulatedRobotState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -29,6 +31,7 @@ public class RobotContainer {
     private final XboxController mDriverController =
             new XboxController(Constants.Controller.kMainController);
 
+    private final SimulatedRobotState mSimulatedRobotState = new SimulatedRobotState(this);
     private final DriveSubsystem mDriveSubsystem = buildDriveSubsystem();
     private final VisionSubsystem mVisionSubsystem =
             new VisionSubsystem(new VisionHardwareLimelight(mRobotState), mRobotState);
@@ -44,14 +47,24 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
+        mSimulatedRobotState.init();
     }
 
     private DriveSubsystem buildDriveSubsystem() {
-        return new DriveSubsystem(
-                new DriveHardware(
-                        mRobotState,
-                        Constants.DriveConstants.kDrivetrain.getDrivetrainConstants(),
-                        Constants.DriveConstants.kDrivetrain.getModuleConstants()));
+        if (Constants.currentMode == Constants.Mode.SIM) {
+            return new DriveSubsystem(
+                    new DriveSim(
+                            mRobotState,
+                            mSimulatedRobotState,
+                            Constants.DriveConstants.kDrivetrain.getDrivetrainConstants(),
+                            Constants.DriveConstants.kDrivetrain.getModuleConstants()));
+        } else {
+            return new DriveSubsystem(
+                    new DriveHardware(
+                            mRobotState,
+                            Constants.DriveConstants.kDrivetrain.getDrivetrainConstants(),
+                            Constants.DriveConstants.kDrivetrain.getModuleConstants()));
+        }
     }
 
     private void configureBindings() {
@@ -59,5 +72,13 @@ public class RobotContainer {
 
         new JoystickButton(mDriverController, XboxController.Button.kY.value)
                 .onTrue(new InstantCommand(mDriveSubsystem::resetGyro, mDriveSubsystem));
+    }
+
+    public DriveSubsystem getDriveSubsystem() {
+        return mDriveSubsystem;
+    }
+
+    public SimulatedRobotState getSimulatedRobotState() {
+        return mSimulatedRobotState;
     }
 }
