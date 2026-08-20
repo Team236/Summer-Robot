@@ -54,7 +54,6 @@ public final class Constants {
         public static final double kWheelCoefficientOfFriction = 1.2;
         public static final int kDriveMotorCount = 4;
     }
-        
 
     public static final class DriveConstants {
         public static final double kOpenLoopDeadband = 0.05;

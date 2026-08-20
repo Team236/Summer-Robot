@@ -5,7 +5,6 @@ import com.team236.lib.robot.ConcurrentTimeInterpolatableBuffer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -16,7 +15,7 @@ public class RobotState {
     public double lastUsedMegatagTimestamp = 0;
     private Pose2d lastUsedMegatagPose = Pose2d.kZero;
 
-    public final static double kLogBackTime = 1.0;
+    public static final double kLogBackTime = 1.0;
 
     private final ConcurrentTimeInterpolatableBuffer<Pose2d> fieldToRobot =
             ConcurrentTimeInterpolatableBuffer.createBuffer(kLogBackTime);
@@ -45,7 +44,6 @@ public class RobotState {
     public Map.Entry<Double, Pose2d> getLatestFieldToRobot() {
         return fieldToRobot.getLatest();
     }
-
 
     public void updateMegatagEstimate(VisionFieldPoseEstimate megatagEstimate) {
         lastUsedMegatagTimestamp = megatagEstimate.getTimestampSeconds();

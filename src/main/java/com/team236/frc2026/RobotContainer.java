@@ -2,18 +2,16 @@ package com.team236.frc2026;
 
 import com.team236.frc2026.commands.TeleopSwerveDrive;
 import com.team236.frc2026.subsystems.drive.DriveHardware;
+import com.team236.frc2026.subsystems.drive.DriveSim;
 import com.team236.frc2026.subsystems.drive.DriveSubsystem;
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.frc2026.subsystems.vision.VisionHardwareLimelight;
 import com.team236.frc2026.subsystems.vision.VisionSubsystem;
 import com.team236.lib.math.GeometryHelpers;
-import com.team236.frc2026.subsystems.drive.DriveSim;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.function.Consumer;
 
@@ -68,7 +66,6 @@ public class RobotContainer {
                                 ? GeometryHelpers.kRotation2dPi
                                 : GeometryHelpers.kRotation2dZero));
     }
-
 
     private DriveSubsystem buildDriveSubsystem() {
         if (Constants.currentMode == Constants.Mode.SIM) {
