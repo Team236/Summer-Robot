@@ -138,8 +138,8 @@ public class Robot extends LoggedRobot {
         ballSim.placeFieldBalls();  // spawns all the game pieces
 
         // tell it about your robot
-        // ballSim.configureRobot(34, 34, 10,
-        //     () -> mRobotState.getPose(), () -> swerve.getChassisSpeeds());
+        ballSim.configureRobot(34, 34, 10,
+            () -> mRobotState.getPose(), () -> swerve.getChassisSpeeds());
 
         // in simulationPeriodic()
         ballSim.tick();  // runs physics, publishes ball positions to NT
