@@ -10,11 +10,10 @@ package com.team236.frc2026;
 import com.ctre.phoenix6.SignalLogger;
 import com.team236.lib.limelight.Limelight3GConfig;
 import com.team236.lib.simulation.FuelPhysicsSim;
-import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -142,23 +141,21 @@ public class Robot extends LoggedRobot {
 
         // tell it about your robot
         mBallSim.configureRobot(
-            Units.inchesToMeters(Constants.SimulationConstants.kBumperWidthInches), 
-            Units.inchesToMeters(Constants.SimulationConstants.kBumperLengthInches), 
-            Units.inchesToMeters(10), // bumper height
-            () -> {
-                Pose2d pose = mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot();
-                return pose != null ? pose : new Pose2d();
-            }, 
-            () -> {
-                var simDrive = mRobotContainer.getDriveSubsystem().getMapleSimDrive();
-                if (simDrive != null) {
-                    return simDrive.mapleSimDrive.getDriveTrainSimulatedChassisSpeedsRobotRelative();
-                }
-                return new ChassisSpeeds();
-            }
-        );
-
-
+                Units.inchesToMeters(Constants.SimulationConstants.kBumperWidthInches),
+                Units.inchesToMeters(Constants.SimulationConstants.kBumperLengthInches),
+                Units.inchesToMeters(10), // bumper height
+                () -> {
+                    Pose2d pose = mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot();
+                    return pose != null ? pose : new Pose2d();
+                },
+                () -> {
+                    var simDrive = mRobotContainer.getDriveSubsystem().getMapleSimDrive();
+                    if (simDrive != null) {
+                        return simDrive.mapleSimDrive
+                                .getDriveTrainSimulatedChassisSpeedsRobotRelative();
+                    }
+                    return new ChassisSpeeds();
+                });
     }
 
     /** This function is called periodically whilst in simulation. */
