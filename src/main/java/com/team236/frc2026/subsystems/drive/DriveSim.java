@@ -49,7 +49,12 @@ public class DriveSim extends DriveHardware {
             SimulatedRobotState simRobotState,
             SwerveDrivetrainConstants driveTrainConstants,
             @SuppressWarnings("rawtypes") SwerveModuleConstants... modules) {
-        super(robotState, driveTrainConstants, modules);
+        super(
+                robotState,
+                driveTrainConstants,
+                Constants.useMapleSim
+                        ? MapleSimSwerveDrivetrain.regulateModuleConstantsForSimulation(modules)
+                        : modules);
         this.simRobotState = simRobotState;
 
         // Rewrite the telemetry consumer with a consumer for sim
@@ -66,8 +71,8 @@ public class DriveSim extends DriveHardware {
                             Units.Pounds.of(Constants.SimulationConstants.kRobotWeightPounds),
                             Units.Inches.of(Constants.SimulationConstants.kBumperWidthInches),
                             Units.Inches.of(Constants.SimulationConstants.kBumperLengthInches),
-                            DCMotor.getKrakenX60(Constants.SimulationConstants.kDriveMotorCount),
-                            DCMotor.getKrakenX60(Constants.SimulationConstants.kDriveMotorCount),
+                            DCMotor.getKrakenX60(1),
+                            DCMotor.getKrakenX60(1),
                             1.2,
                             getModuleLocations(),
                             getPigeon2(),
