@@ -10,7 +10,9 @@ package com.team236.frc2026;
 import com.ctre.phoenix6.SignalLogger;
 import com.team236.lib.limelight.Limelight3GConfig;
 import com.team236.lib.simulation.FuelPhysicsSim;
-
+import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -30,6 +32,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
     private RobotContainer mRobotContainer;
+    private FuelPhysicsSim mBallSim;
 
     public Robot() {
         SignalLogger.enableAutoLogging(false);
@@ -133,20 +136,36 @@ public class Robot extends LoggedRobot {
     /** This function is called once when the robot is first started up. */
     @Override
     public void simulationInit() {
-        FuelPhysicsSim ballSim = new FuelPhysicsSim("Sim/Fuel");
-        ballSim.enable();
-        ballSim.placeFieldBalls();  // spawns all the game pieces
+        mBallSim = new FuelPhysicsSim("Sim/Fuel");
+        mBallSim.enable();
+        mBallSim.placeFieldBalls();
 
         // tell it about your robot
-        ballSim.configureRobot(34, 34, 10,
-            () -> mRobotState.getPose(), () -> swerve.getChassisSpeeds());
+        mBallSim.configureRobot(
+            Units.inchesToMeters(Constants.SimulationConstants.kBumperWidthInches), 
+            Units.inchesToMeters(Constants.SimulationConstants.kBumperLengthInches), 
+            Units.inchesToMeters(10), // bumper height
+            () -> {
+                Pose2d pose = mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot();
+                return pose != null ? pose : new Pose2d();
+            }, 
+            () -> {
+                var simDrive = mRobotContainer.getDriveSubsystem().getMapleSimDrive();
+                if (simDrive != null) {
+                    return simDrive.mapleSimDrive.getDriveTrainSimulatedChassisSpeedsRobotRelative();
+                }
+                return new ChassisSpeeds();
+            }
+        );
 
-        // in simulationPeriodic()
-        ballSim.tick();  // runs physics, publishes ball positions to NT
 
     }
 
     /** This function is called periodically whilst in simulation. */
     @Override
-    public void simulationPeriodic() {}
+    public void simulationPeriodic() {
+        if (mBallSim != null) {
+            mBallSim.tick();
+        }
+    }
 }
