@@ -26,6 +26,7 @@ import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 import org.ironmaple.simulation.motorsims.SimulatedBattery;
 import org.ironmaple.simulation.motorsims.SimulatedMotorController;
+import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
 
 /**
  *
@@ -111,6 +112,13 @@ public class MapleSimSwerveDrivetrain {
                     new SimSwerveModule(moduleConstants[0], moduleSimulations[i], modules[i]);
 
         SimulatedArena.overrideSimulationTimings(simPeriod, 1);
+
+        // This turns a barrier wall on or off for the ramp area, also eff mode is if 400+ balls
+        // spawn isntead of 100
+        Arena2026Rebuilt arena = new Arena2026Rebuilt(false);
+        arena.setEfficiencyMode(false);
+
+        SimulatedArena.overrideInstance(arena);
         SimulatedArena.getInstance().addDriveTrainSimulation(mapleSimDrive);
     }
 
