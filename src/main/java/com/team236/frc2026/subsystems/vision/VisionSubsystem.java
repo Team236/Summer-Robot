@@ -8,7 +8,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -39,16 +38,13 @@ public class VisionSubsystem extends SubsystemBase {
 
         logCameraInputs("Vision/CameraA", mInputs.cameraA);
 
-        Optional<VisionFieldPoseEstimate> maybeMTA =
-                processCamera(mInputs.cameraA, "CameraA", VisionConstants.CameraA.kCameraToRobot);
+        Optional<VisionFieldPoseEstimate> maybeMTA = processCamera(mInputs.cameraA, "CameraA");
 
         maybeMTA.ifPresent(est -> mRobotState.updateMegatagEstimate(est));
     }
 
     private Optional<VisionFieldPoseEstimate> processCamera(
-            VisionIO.VisionIOInputs.CameraInputs camInputs,
-            String camName,
-            Transform2d cameraToRobot) {
+            VisionIO.VisionIOInputs.CameraInputs camInputs, String camName) {
         String logPrefix = "Vision/" + camName;
 
         if (!camInputs.seesTag) {
