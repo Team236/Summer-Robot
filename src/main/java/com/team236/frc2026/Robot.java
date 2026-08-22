@@ -1,10 +1,3 @@
-// Copyright (c) 2021-2026 Littleton Robotics
-// http://github.com/Mechanical-Advantage
-//
-// Use of this source code is governed by a BSD
-// license that can be found in the LICENSE file
-// at the root directory of this project.
-
 package com.team236.frc2026;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -22,21 +15,19 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
+ * The {@code Robot} class handles the main initialization, mode switching, and periodic execution
+ * loops for the robot, integrating AdvantageKit logging and testbed configurations.
  */
 public class Robot extends LoggedRobot {
     private RobotContainer mRobotContainer;
-
-    // private FuelPhysicsSim mBallSim;
 
     public Robot() {
         SignalLogger.enableAutoLogging(false);
 
         // Testbed configuration
-        if (Constants.kIsPracticeBot) Limelight3GConfig.configureNTLimelight3G();
+        if (Constants.kIsPracticeBot) {
+            Limelight3GConfig.configureNTLimelight3G();
+        }
 
         // Record robot code metadata
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
@@ -53,7 +44,7 @@ public class Robot extends LoggedRobot {
                 });
 
         // Set up data receivers & replay source
-        switch (Constants.currentMode) {
+        switch (Constants.kCurrentMode) {
             case REAL:
                 // Running on a real robot, log to a USB stick ("/U/logs")
                 Logger.addDataReceiver(new WPILOGWriter());
@@ -134,41 +125,14 @@ public class Robot extends LoggedRobot {
     /** This function is called once when the robot is first started up. */
     @Override
     public void simulationInit() {
-
         if (Constants.kUseMapleSim) {
             SimulatedArena.getInstance().placeGamePiecesOnField();
-
-            // mBallSim = new FuelPhysicsSim("Sim/Fuel");
-            // mBallSim.enable();
-            // mBallSim.placeFieldBalls();
-
-            // // tell it about your robot
-            // mBallSim.configureRobot(
-            //         Units.inchesToMeters(Constants.SimulationConstants.kBumperWidthInches),
-            //         Units.inchesToMeters(Constants.SimulationConstants.kBumperLengthInches),
-            //         Units.inchesToMeters(10), // bumper height
-            //         () -> {
-            //             Pose2d pose =
-            //                     mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot();
-            //             return pose != null ? pose : new Pose2d();
-            //         },
-            //         () -> {
-            //             var simDrive = mRobotContainer.getDriveSubsystem().getMapleSimDrive();
-            //             if (simDrive != null) {
-            //                 return simDrive.mapleSimDrive
-            //                         .getDriveTrainSimulatedChassisSpeedsRobotRelative();
-            //             }
-            //             return new ChassisSpeeds();
-            //         });
         }
     }
 
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
-        // if (mBallSim != null) {
-        //     mBallSim.tick();
-        // }
         Logger.recordOutput(
                 "Sim/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
     }

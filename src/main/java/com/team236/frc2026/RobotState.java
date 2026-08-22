@@ -9,19 +9,22 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+/**
+ * The {@code RobotState} manages the global tracking of the robot's pose on the field, integrating
+ * historical odometry and vision estimates.
+ */
 public class RobotState {
-    private final Consumer<VisionFieldPoseEstimate> visionEstimateConsumer;
-
-    public double lastUsedMegatagTimestamp = 0;
-    private Pose2d lastUsedMegatagPose = Pose2d.kZero;
-
     public static final double kLogBackTime = 1.0;
 
-    private final ConcurrentTimeInterpolatableBuffer<Pose2d> fieldToRobot =
+    private final Consumer<VisionFieldPoseEstimate> mVisionEstimateConsumer;
+    private final ConcurrentTimeInterpolatableBuffer<Pose2d> mFieldToRobot =
             ConcurrentTimeInterpolatableBuffer.createBuffer(kLogBackTime);
 
+    private double mLastUsedMegatagTimestamp = 0;
+    private Pose2d mLastUsedMegatagPose = Pose2d.kZero;
+
     public RobotState(Consumer<VisionFieldPoseEstimate> visionEstimateConsumer) {
-        this.visionEstimateConsumer = visionEstimateConsumer;
+        this.mVisionEstimateConsumer = visionEstimateConsumer;
     }
 
     public boolean isRedAlliance() {
@@ -30,24 +33,24 @@ public class RobotState {
     }
 
     public void addOdometryMeasurement(double timestamp, Pose2d pose) {
-        fieldToRobot.addSample(timestamp, pose);
+        mFieldToRobot.addSample(timestamp, pose);
     }
 
     public double getLastUsedMegatagTimestamp() {
-        return lastUsedMegatagTimestamp;
+        return mLastUsedMegatagTimestamp;
     }
 
     public Optional<Pose2d> getPriorPose(double timestamp) {
-        return fieldToRobot.getSample(timestamp);
+        return mFieldToRobot.getSample(timestamp);
     }
 
     public Map.Entry<Double, Pose2d> getLatestFieldToRobot() {
-        return fieldToRobot.getLatest();
+        return mFieldToRobot.getLatest();
     }
 
     public void updateMegatagEstimate(VisionFieldPoseEstimate megatagEstimate) {
-        lastUsedMegatagTimestamp = megatagEstimate.getTimestampSeconds();
-        lastUsedMegatagPose = megatagEstimate.getVisionRobotPose();
-        visionEstimateConsumer.accept(megatagEstimate);
+        mLastUsedMegatagTimestamp = megatagEstimate.getTimestampSeconds();
+        mLastUsedMegatagPose = megatagEstimate.getVisionRobotPose();
+        mVisionEstimateConsumer.accept(megatagEstimate);
     }
 }

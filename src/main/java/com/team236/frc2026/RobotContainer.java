@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  */
 public class RobotContainer {
 
-    private final Consumer<VisionFieldPoseEstimate> visionEstimateConsumer =
+    private final Consumer<VisionFieldPoseEstimate> mVisionEstimateConsumer =
             new Consumer<VisionFieldPoseEstimate>() {
                 @Override
                 public void accept(VisionFieldPoseEstimate estimate) {
@@ -29,7 +29,7 @@ public class RobotContainer {
                 }
             };
 
-    private final RobotState mRobotState = new RobotState(visionEstimateConsumer);
+    private final RobotState mRobotState = new RobotState(mVisionEstimateConsumer);
     private final XboxController mDriverController =
             new XboxController(Constants.Controller.kMainController);
 
@@ -67,8 +67,16 @@ public class RobotContainer {
                                 : GeometryHelpers.kRotation2dZero));
     }
 
+    public DriveSubsystem getDriveSubsystem() {
+        return mDriveSubsystem;
+    }
+
+    public SimulatedRobotState getSimulatedRobotState() {
+        return mSimulatedRobotState;
+    }
+
     private DriveSubsystem buildDriveSubsystem() {
-        if (Constants.currentMode == Constants.Mode.SIM) {
+        if (Constants.kCurrentMode == Constants.Mode.SIM) {
             return new DriveSubsystem(
                     new DriveSim(
                             mRobotState,
@@ -89,13 +97,5 @@ public class RobotContainer {
 
         new JoystickButton(mDriverController, XboxController.Button.kY.value)
                 .onTrue(Commands.runOnce(() -> this.resetHeading()));
-    }
-
-    public DriveSubsystem getDriveSubsystem() {
-        return mDriveSubsystem;
-    }
-
-    public SimulatedRobotState getSimulatedRobotState() {
-        return mSimulatedRobotState;
     }
 }

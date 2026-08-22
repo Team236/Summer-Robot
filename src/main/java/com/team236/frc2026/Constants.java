@@ -1,10 +1,3 @@
-// Copyright (c) 2021-2026 Littleton Robotics
-// http://github.com/Mechanical-Advantage
-//
-// Use of this source code is governed by a BSD
-// license that can be found in the LICENSE file
-// at the root directory of this project.
-
 package com.team236.frc2026;
 
 import com.team236.frc2026.subsystems.drive.CompTunerConstants;
@@ -18,16 +11,16 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
- * This class defines the runtime mode used by AdvantageKit. The mode is always "real" when running
- * on a roboRIO. Change the value of "simMode" to switch between "sim" (physics sim) and "replay"
- * (log replay from a file).
+ * The {@code Constants} defines the runtime mode and globally accessible hardware, tuning, and
+ * structural values for the robot.
  */
 public final class Constants {
-    public static final boolean kUseMapleSim = true;
-    public static final Mode simMode = Mode.SIM;
-    public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
-    public static enum Mode {
+    public static final boolean kUseMapleSim = true;
+    public static final Mode kSimMode = Mode.SIM;
+    public static final Mode kCurrentMode = RobotBase.isReal() ? Mode.REAL : kSimMode;
+
+    public enum Mode {
         /** Running on a real robot. */
         REAL,
 
@@ -43,10 +36,12 @@ public final class Constants {
     private static final String kPracticeBotMacAddress = "00:80:2F:40:FC:4A";
     public static boolean kIsPracticeBot = NetworkHelpers.hasMacAddress(kPracticeBotMacAddress);
 
+    /** The {@code Controller} holds constants for driver input devices. */
     public static final class Controller {
         public static final byte kMainController = 0;
     }
 
+    /** The {@code SimulationConstants} contains physical properties for the physics simulator. */
     public static final class SimulationConstants {
         public static final double kRobotWeightPounds = 50.0;
         public static final double kBumperLengthInches = 36.0;
@@ -55,6 +50,7 @@ public final class Constants {
         public static final int kDriveMotorCount = 4;
     }
 
+    /** The {@code DriveConstants} holds tuning and configuration values for the drivetrain. */
     public static final class DriveConstants {
         public static final double kOpenLoopDeadband = 0.05;
 
@@ -64,10 +60,10 @@ public final class Constants {
         public static final DrivetrainProfile kDrivetrain =
                 kIsPracticeBot
                         ? PracTunerConstants.createDrivetrain()
-                        : CompTunerConstants
-                                .createDrivetrain(); // Add logic later for comp + prac + sim
+                        : CompTunerConstants.createDrivetrain();
     }
 
+    /** The {@code VisionConstants} defines camera and AprilTag pipeline configurations. */
     public static final class VisionConstants {
         public static final String kLimelightAName = "limelight";
 
@@ -85,6 +81,7 @@ public final class Constants {
         public static final double kSingleTagYawThreshold = 5.0;
         public static final double kSingleTagNormThreshold = 0.5;
 
+        /** The {@code CameraA} holds specific transform data for the primary Limelight. */
         public static final class CameraA {
             // Inches
             public static final double kRobotToCameraX = 0.0;
@@ -102,6 +99,7 @@ public final class Constants {
         }
     }
 
+    /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */
     public static final class FieldDimensions {
         private static final double kFieldMinX = 0.0;
         private static final double kFieldMaxX = 16.540988;
