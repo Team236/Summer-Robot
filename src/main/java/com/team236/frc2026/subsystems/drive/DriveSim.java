@@ -69,12 +69,12 @@ public class DriveSim extends DriveHardware {
             mMapleSimSwerveDrivetrain =
                     new MapleSimSwerveDrivetrain(
                             Units.Seconds.of(kSimLoopPeriod),
-                            Units.Pounds.of(Constants.SimulationConstants.kRobotWeightPounds),
-                            Units.Inches.of(Constants.SimulationConstants.kBumperWidthInches),
-                            Units.Inches.of(Constants.SimulationConstants.kBumperLengthInches),
-                            DCMotor.getKrakenX60(1),
-                            DCMotor.getKrakenX60(1),
-                            1.2,
+                            Units.Pounds.of(Constants.TestbedConstants.kRobotWeightPounds),
+                            Units.Inches.of(Constants.TestbedConstants.kBumperWidthInches),
+                            Units.Inches.of(Constants.TestbedConstants.kBumperLengthInches),
+                            DCMotor.getKrakenX60(Constants.TestbedConstants.kDriveMotorCount),
+                            DCMotor.getKrakenX60(Constants.TestbedConstants.kDriveMotorCount),
+                            Constants.TestbedConstants.kWheelCoefficientOfFriction,
                             getModuleLocations(),
                             getPigeon2(),
                             getModules(),
@@ -117,7 +117,7 @@ public class DriveSim extends DriveHardware {
         }
     }
 
-    public MapleSimSwerveDrivetrain getMapleSimDrive() {
+    public MapleSimSwerveDrivetrain getMapleSimDrivetrain() {
         return mMapleSimSwerveDrivetrain;
     }
 }
