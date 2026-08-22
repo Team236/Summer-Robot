@@ -14,11 +14,9 @@ import java.util.function.Consumer;
  * historical odometry and vision estimates.
  */
 public class RobotState {
-    public static final double kLogBackTime = 1.0;
-
     private final Consumer<VisionFieldPoseEstimate> mVisionEstimateConsumer;
     private final ConcurrentTimeInterpolatableBuffer<Pose2d> mFieldToRobot =
-            ConcurrentTimeInterpolatableBuffer.createBuffer(kLogBackTime);
+            ConcurrentTimeInterpolatableBuffer.createBuffer(Constants.kLogBackTime);
 
     private double mLastUsedMegatagTimestamp = 0;
     private Pose2d mLastUsedMegatagPose = Pose2d.kZero;

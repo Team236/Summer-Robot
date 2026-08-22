@@ -1,10 +1,10 @@
 package com.team236.frc2026.simulation;
 
+import com.team236.frc2026.Constants;
 import com.team236.frc2026.RobotContainer;
-import com.team236.frc2026.RobotState;
+import com.team236.lib.robot.ConcurrentTimeInterpolatableBuffer;
 import com.team236.lib.time.RobotTime;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 
 /**
@@ -13,18 +13,18 @@ import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
  */
 public class SimulatedRobotState {
 
-    private final TimeInterpolatableBuffer<Pose2d> mFieldToRobotSimulatedTruth =
-            TimeInterpolatableBuffer.createBuffer(RobotState.kLogBackTime);
+    private final ConcurrentTimeInterpolatableBuffer<Pose2d> mFieldToRobotSimulatedTruth =
+            ConcurrentTimeInterpolatableBuffer.createBuffer(Constants.kLogBackTime);
 
     private SwerveDriveSimulation mSimDrive;
-    private final RobotContainer mContainer;
+    private final RobotContainer mRobotContainer;
 
     public SimulatedRobotState(RobotContainer container) {
-        this.mContainer = container;
+        this.mRobotContainer = container;
     }
 
     public void init() {
-        this.mSimDrive = this.mContainer.getDriveSubsystem().getMapleSimDrivetrain().mapleSimDrive;
+        this.mSimDrive = this.mRobotContainer.getDriveSubsystem().getMapleSimDrivetrain().mapleSimDrive;
     }
 
     public synchronized void addFieldToRobot(Pose2d pose) {
@@ -42,4 +42,8 @@ public class SimulatedRobotState {
     public void updateSim() {
         // Implement simulation update logic here if/when new subsystems are added
     }
+
+    public SwerveDriveSimulation getSimDrive() {
+        return this.mSimDrive;
+    }   
 }

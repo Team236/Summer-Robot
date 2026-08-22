@@ -37,6 +37,8 @@ public final class Constants {
     private static final String kPracticeBotMacAddress = "00:80:2F:40:FC:4A";
     public static boolean kIsPracticeBot = NetworkHelpers.hasMacAddress(kPracticeBotMacAddress);
 
+    public static final double kLogBackTime = 1.0;
+
     /** The {@code Controller} holds constants for driver input devices. */
     public static final class Controller {
         public static final byte kMainController = 0;
