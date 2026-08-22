@@ -95,7 +95,8 @@ public class RobotContainer {
 
     private VisionSubsystem buildVisionSubsystem() {
         if (Constants.kCurrentMode == Constants.Mode.SIM) {
-            return new VisionSubsystem(new VisionSimPhoton(mRobotState, mSimulatedRobotState), mRobotState);
+            return new VisionSubsystem(
+                    new VisionSimPhoton(mRobotState, mSimulatedRobotState), mRobotState);
         } else {
             return new VisionSubsystem(new VisionHardwareLimelight(mRobotState), mRobotState);
         }

@@ -98,7 +98,7 @@ public final class Constants {
             public static final double kCameraHeightOffGroud = 6.0;
             public static final double kCameraPitchDegrees = 0.0;
             public static final double kCameraRoll = 0.0;
-            public static final double kCameraPitch = 30.0;
+            public static final double kCameraPitch = -30.0;
             public static final double kCameraYawOffset = 0.0;
 
             public static final Transform3d kCameraAToRobot =
