@@ -5,7 +5,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.team236.frc2026.Constants;
 import com.team236.frc2026.RobotState;
-import com.team236.frc2026.SimulatedRobotState;
+import com.team236.frc2026.simulation.SimulatedRobotState;
 import com.team236.lib.simulation.MapleSimSwerveDrivetrain;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.system.plant.DCMotor;
