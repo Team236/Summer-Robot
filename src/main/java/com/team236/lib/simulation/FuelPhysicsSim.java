@@ -25,6 +25,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -2455,5 +2456,23 @@ public class FuelPhysicsSim {
         lastLaunchSpeed = 0;
         blueHub.resetScore();
         redHub.resetScore();
+    }
+
+    public static void configureFuelSim(
+            double bumperWidth,
+            double bumperLength,
+            double bumperHeight,
+            Supplier<Pose2d> poseSupplier,
+            Supplier<ChassisSpeeds> speedsSupplier) {
+        FuelPhysicsSim sim = new FuelPhysicsSim("Sim/Fuel");
+        sim.enable();
+        sim.placeFieldBalls();
+
+        sim.configureRobot(
+                Units.inchesToMeters(bumperWidth),
+                Units.inchesToMeters(bumperLength),
+                Units.inchesToMeters(bumperHeight),
+                poseSupplier,
+                speedsSupplier);
     }
 }
