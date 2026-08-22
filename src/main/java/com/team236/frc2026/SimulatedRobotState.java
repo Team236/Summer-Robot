@@ -5,10 +5,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 
+/**
+ * The {@code SimulatedRobotState} tracks the simulated physical truth data 
+ * of the robot over time using a time-interpolatable pose buffer.
+ */
 public class SimulatedRobotState {
-    TimeInterpolatableBuffer<Pose2d> fieldToRobotSimulatedTruth =
-            TimeInterpolatableBuffer.createBuffer(RobotState.kLogBackTime);
 
+    private final TimeInterpolatableBuffer<Pose2d> mFieldToRobotSimulatedTruth =
+            TimeInterpolatableBuffer.createBuffer(RobotState.kLogBackTime);
+    
     private SwerveDriveSimulation mSimDrive;
     private final RobotContainer mContainer;
 
@@ -21,11 +26,11 @@ public class SimulatedRobotState {
     }
 
     public synchronized void addFieldToRobot(Pose2d pose) {
-        fieldToRobotSimulatedTruth.addSample(RobotTime.getTimestampSeconds(), pose);
+        mFieldToRobotSimulatedTruth.addSample(RobotTime.getTimestampSeconds(), pose);
     }
 
     public synchronized Pose2d getLatestFieldToRobot() {
-        var entry = fieldToRobotSimulatedTruth.getInternalBuffer().lastEntry();
+        var entry = mFieldToRobotSimulatedTruth.getInternalBuffer().lastEntry();
         if (entry == null) {
             return null;
         }

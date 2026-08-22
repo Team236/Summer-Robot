@@ -117,7 +117,6 @@ public class MapleSimSwerveDrivetrain {
         // spawn isntead of 100
         Arena2026Rebuilt arena = new Arena2026Rebuilt(false);
         arena.setEfficiencyMode(false);
-
         SimulatedArena.overrideInstance(arena);
         SimulatedArena.getInstance().addDriveTrainSimulation(mapleSimDrive);
     }

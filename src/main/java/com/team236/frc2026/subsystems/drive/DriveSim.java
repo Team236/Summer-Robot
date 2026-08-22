@@ -17,30 +17,31 @@ import java.util.function.Consumer;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * The {@code DriveIOSim} class extends {@link DriveHardware} to provide simulation-specific
+ * The {@code DriveSim} class extends {@link DriveHardware} to provide simulation-specific
  * functionality for the swerve drive system.
  */
 public class DriveSim extends DriveHardware {
 
-    private SimulatedRobotState simRobotState = null;
     private static final double kSimLoopPeriod = 0.005; // 5 ms
-    private Notifier simNotifier = null;
-    private double lastSimTime;
-    public MapleSimSwerveDrivetrain mapleSimSwerveDrivetrain = null;
 
-    Pose2d lastConsumedPose = null;
-    Consumer<SwerveDriveState> simTelemetryConsumer =
+    private SimulatedRobotState mSimRobotState = null;
+    private Notifier mSimNotifier = null;
+    private double mLastSimTime;
+    private MapleSimSwerveDrivetrain mMapleSimSwerveDrivetrain = null;
+    private Pose2d mLastConsumedPose = null;
+
+    private Consumer<SwerveDriveState> mSimTelemetryConsumer =
             swerveDriveState -> {
                 // Protect at init
-                if (simRobotState == null) {
+                if (mSimRobotState == null) {
                     return;
                 }
 
-                if (Constants.kUseMapleSim && mapleSimSwerveDrivetrain != null) {
+                if (Constants.kUseMapleSim && mMapleSimSwerveDrivetrain != null) {
                     swerveDriveState.Pose =
-                            mapleSimSwerveDrivetrain.mapleSimDrive.getSimulatedDriveTrainPose();
+                            mMapleSimSwerveDrivetrain.mapleSimDrive.getSimulatedDriveTrainPose();
                 }
-                simRobotState.addFieldToRobot(swerveDriveState.Pose);
+                mSimRobotState.addFieldToRobot(swerveDriveState.Pose);
                 telemetryConsumer.accept(swerveDriveState);
             };
 
@@ -55,17 +56,17 @@ public class DriveSim extends DriveHardware {
                 Constants.kUseMapleSim
                         ? MapleSimSwerveDrivetrain.regulateModuleConstantsForSimulation(modules)
                         : modules);
-        this.simRobotState = simRobotState;
+        this.mSimRobotState = simRobotState;
 
         // Rewrite the telemetry consumer with a consumer for sim
-        registerTelemetry(simTelemetryConsumer);
+        registerTelemetry(mSimTelemetryConsumer);
         startSimThread();
     }
 
     @SuppressWarnings("unchecked")
     public void startSimThread() {
         if (Constants.kUseMapleSim) {
-            mapleSimSwerveDrivetrain =
+            mMapleSimSwerveDrivetrain =
                     new MapleSimSwerveDrivetrain(
                             Units.Seconds.of(kSimLoopPeriod),
                             Units.Pounds.of(Constants.SimulationConstants.kRobotWeightPounds),
@@ -81,25 +82,25 @@ public class DriveSim extends DriveHardware {
                             SimTunerConstants.FrontRight,
                             SimTunerConstants.BackLeft,
                             SimTunerConstants.BackRight);
-            simNotifier = new Notifier(mapleSimSwerveDrivetrain::update);
+            mSimNotifier = new Notifier(mMapleSimSwerveDrivetrain::update);
         } else {
-            lastSimTime = Utils.getCurrentTimeSeconds();
-            simNotifier =
+            mLastSimTime = Utils.getCurrentTimeSeconds();
+            mSimNotifier =
                     new Notifier(
                             () -> {
                                 final double currentTime = Utils.getCurrentTimeSeconds();
-                                double deltaTime = currentTime - lastSimTime;
-                                lastSimTime = currentTime;
+                                double deltaTime = currentTime - mLastSimTime;
+                                mLastSimTime = currentTime;
                                 updateSimState(deltaTime, RobotController.getBatteryVoltage());
                             });
         }
-        simNotifier.startPeriodic(kSimLoopPeriod);
+        mSimNotifier.startPeriodic(kSimLoopPeriod);
     }
 
     @Override
     public void resetOdometry(Pose2d pose) {
-        if (Constants.kUseMapleSim && mapleSimSwerveDrivetrain != null) {
-            mapleSimSwerveDrivetrain.mapleSimDrive.setSimulationWorldPose(pose);
+        if (Constants.kUseMapleSim && mMapleSimSwerveDrivetrain != null) {
+            mMapleSimSwerveDrivetrain.mapleSimDrive.setSimulationWorldPose(pose);
             Timer.delay(0.05);
         }
         super.resetOdometry(pose);
@@ -110,13 +111,13 @@ public class DriveSim extends DriveHardware {
         super.readInputs(inputs);
 
         // Handle the viz
-        var pose = simRobotState.getLatestFieldToRobot();
+        var pose = mSimRobotState.getLatestFieldToRobot();
         if (pose != null) {
-            Logger.recordOutput("Drive/Viz/SimPose", simRobotState.getLatestFieldToRobot());
+            Logger.recordOutput("Drive/Viz/SimPose", mSimRobotState.getLatestFieldToRobot());
         }
     }
 
     public MapleSimSwerveDrivetrain getMapleSimDrive() {
-        return mapleSimSwerveDrivetrain;
+        return mMapleSimSwerveDrivetrain;
     }
 }
