@@ -5,6 +5,7 @@ import com.team236.lib.limelight.Limelight3GConfig;
 import com.team236.lib.simulation.FuelPhysicsSim;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.ironmaple.simulation.SimulatedArena;
@@ -129,18 +130,30 @@ public class Robot extends LoggedRobot {
     public void simulationInit() {
         if (Constants.kUseMapleSim) {
             if (!Constants.kUseMapleSimFuel && Constants.kIsPracticeBot) {
-                FuelPhysicsSim.configureFuelSim(
-                        mFuelSim,
-                        Constants.TestbedConstants.kBumperWidthInches,
-                        Constants.TestbedConstants.kBumperLengthInches,
-                        Constants.TestbedConstants.kBumperHeightInches,
-                        () -> mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot(),
-                        () ->
-                                mRobotContainer
-                                        .getDriveSubsystem()
-                                        .getMapleSimDrivetrain()
-                                        .mapleSimDrive
-                                        .getDriveTrainSimulatedChassisSpeedsFieldRelative());
+                mFuelSim =
+                        FuelPhysicsSim.configureFuelSim(
+                                Constants.TestbedConstants.kBumperWidthInches,
+                                Constants.TestbedConstants.kBumperLengthInches,
+                                Constants.TestbedConstants.kBumperHeightInches,
+                                () -> {
+                                    Pose2d pose =
+                                            mRobotContainer
+                                                    .getSimulatedRobotState()
+                                                    .getLatestFieldToRobot();
+                                    return pose != null ? pose : new Pose2d();
+                                },
+                                () -> {
+                                    var simDrive =
+                                            mRobotContainer
+                                                    .getDriveSubsystem()
+                                                    .getMapleSimDrivetrain();
+                                    if (simDrive != null) {
+                                        return simDrive.mapleSimDrive
+                                                .getDriveTrainSimulatedChassisSpeedsRobotRelative();
+                                    }
+                                    return new ChassisSpeeds();
+                                });
+
             } else {
                 SimulatedArena.getInstance().placeGamePiecesOnField();
             }
@@ -150,7 +163,7 @@ public class Robot extends LoggedRobot {
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
-        if (mFuelSim.isRunning()) {
+        if (mFuelSim != null) {
             mFuelSim.tick();
         }
 

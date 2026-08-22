@@ -2458,14 +2458,13 @@ public class FuelPhysicsSim {
         redHub.resetScore();
     }
 
-    public static void configureFuelSim(
-            FuelPhysicsSim sim,
+    public static FuelPhysicsSim configureFuelSim(
             double bumperWidth,
             double bumperLength,
             double bumperHeight,
             Supplier<Pose2d> poseSupplier,
             Supplier<ChassisSpeeds> speedsSupplier) {
-        sim = new FuelPhysicsSim("Sim/Fuel");
+        FuelPhysicsSim sim = new FuelPhysicsSim("Sim/Fuel");
         sim.enable();
         sim.placeFieldBalls();
 
@@ -2475,5 +2474,7 @@ public class FuelPhysicsSim {
                 Units.inchesToMeters(bumperHeight),
                 poseSupplier,
                 speedsSupplier);
+
+        return sim;
     }
 }
