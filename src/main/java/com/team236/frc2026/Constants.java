@@ -4,9 +4,11 @@ import com.team236.frc2026.subsystems.drive.CompTunerConstants;
 import com.team236.frc2026.subsystems.drive.DrivetrainProfile;
 import com.team236.frc2026.subsystems.drive.PracTunerConstants;
 import com.team236.lib.robot.NetworkHelpers;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -38,6 +40,9 @@ public final class Constants {
     public static boolean kIsPracticeBot = NetworkHelpers.hasMacAddress(kPracticeBotMacAddress);
 
     public static final double kLogBackTime = 1.0;
+
+    public static final AprilTagFieldLayout kRebuiltAprilTagLayout =
+            AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
 
     /** The {@code Controller} holds constants for driver input devices. */
     public static final class Controller {
@@ -90,16 +95,22 @@ public final class Constants {
             // Inches
             public static final double kRobotToCameraX = 0.0;
             public static final double kRobotToCameraY = 0.0;
-            public static final double kCameraHeightOffGroud = 0.0;
+            public static final double kCameraHeightOffGroud = 6.0;
             public static final double kCameraPitchDegrees = 0.0;
+            public static final double kCameraRoll = 0.0;
+            public static final double kCameraPitch = 30.0;
             public static final double kCameraYawOffset = 0.0;
 
-            public static final Transform2d kCameraToRobot =
-                    new Transform2d(
-                            new Translation2d(
+            public static final Transform3d kCameraAToRobot =
+                    new Transform3d(
+                            new Translation3d(
                                     Units.inchesToMeters(kRobotToCameraX),
-                                    Units.inchesToMeters(kRobotToCameraY)),
-                            new Rotation2d(0.0));
+                                    Units.inchesToMeters(kRobotToCameraY),
+                                    Units.inchesToMeters(kCameraHeightOffGroud)),
+                            new Rotation3d(
+                                    Units.degreesToRadians(kCameraRoll),
+                                    Units.degreesToRadians(kCameraPitch),
+                                    Units.degreesToRadians(kCameraYawOffset)));
         }
     }
 
