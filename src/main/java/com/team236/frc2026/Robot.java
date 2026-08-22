@@ -1,6 +1,7 @@
 package com.team236.frc2026;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.team236.frc2026.simulation.SimulatedRobotState;
 import com.team236.lib.limelight.Limelight3GConfig;
 import com.team236.lib.simulation.FuelPhysicsSim;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -135,24 +136,8 @@ public class Robot extends LoggedRobot {
                                 Constants.TestbedConstants.kBumperWidthInches,
                                 Constants.TestbedConstants.kBumperLengthInches,
                                 Constants.TestbedConstants.kBumperHeightInches,
-                                () -> {
-                                    Pose2d pose =
-                                            mRobotContainer
-                                                    .getSimulatedRobotState()
-                                                    .getLatestFieldToRobot();
-                                    return pose != null ? pose : new Pose2d();
-                                },
-                                () -> {
-                                    var simDrive =
-                                            mRobotContainer
-                                                    .getDriveSubsystem()
-                                                    .getMapleSimDrivetrain();
-                                    if (simDrive != null) {
-                                        return simDrive.mapleSimDrive
-                                                .getDriveTrainSimulatedChassisSpeedsRobotRelative();
-                                    }
-                                    return new ChassisSpeeds();
-                                });
+                                () -> mRobotContainer.getSimulatedRobotState().getSimDrive().getSimulatedDriveTrainPose(),
+                                () -> mRobotContainer.getSimulatedRobotState().getSimDrive().getDriveTrainSimulatedChassisSpeedsFieldRelative());
 
             } else {
                 SimulatedArena.getInstance().placeGamePiecesOnField();
