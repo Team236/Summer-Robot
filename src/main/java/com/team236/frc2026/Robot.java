@@ -21,6 +21,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
     private RobotContainer mRobotContainer;
+    private FuelPhysicsSim mFuelSim;
 
     public Robot() {
         SignalLogger.enableAutoLogging(false);
@@ -126,31 +127,36 @@ public class Robot extends LoggedRobot {
     /** This function is called once when the robot is first started up. */
     @Override
     public void simulationInit() {
-        if (Constants.kUseMapleSim && Constants.kUseMapleSimFuel) {
-            SimulatedArena.getInstance().placeGamePiecesOnField();
-        }
-
-        if (!Constants.kUseMapleSimFuel) {
-            FuelPhysicsSim.configureFuelSim(
-                    Constants.TestbedConstants.kBumperWidthInches,
-                    Constants.TestbedConstants.kBumperLengthInches,
-                    Constants.TestbedConstants.kBumperHeightInches,
-                    () -> mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot(),
-                    () ->
-                            mRobotContainer
-                                    .getDriveSubsystem()
-                                    .getMapleSimDrivetrain()
-                                    .mapleSimDrive
-                                    .getDriveTrainSimulatedChassisSpeedsFieldRelative());
+        if (Constants.kUseMapleSim) {
+            if (!Constants.kUseMapleSimFuel && Constants.kIsPracticeBot) {
+                FuelPhysicsSim.configureFuelSim(
+                        mFuelSim,
+                        Constants.TestbedConstants.kBumperWidthInches,
+                        Constants.TestbedConstants.kBumperLengthInches,
+                        Constants.TestbedConstants.kBumperHeightInches,
+                        () -> mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot(),
+                        () ->
+                                mRobotContainer
+                                        .getDriveSubsystem()
+                                        .getMapleSimDrivetrain()
+                                        .mapleSimDrive
+                                        .getDriveTrainSimulatedChassisSpeedsFieldRelative());
+            } else {
+                SimulatedArena.getInstance().placeGamePiecesOnField();
+            }
         }
     }
 
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
-        if (!Constants.kUseMapleSimFuel) {}
+        if (mFuelSim.isRunning()) {
+            mFuelSim.tick();
+        }
 
-        Logger.recordOutput(
-                "Sim/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
+        if (Constants.kUseMapleSimFuel) {
+            Logger.recordOutput(
+                    "Sim/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
+        }
     }
 }

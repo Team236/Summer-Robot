@@ -2459,12 +2459,13 @@ public class FuelPhysicsSim {
     }
 
     public static void configureFuelSim(
+            FuelPhysicsSim sim,
             double bumperWidth,
             double bumperLength,
             double bumperHeight,
             Supplier<Pose2d> poseSupplier,
             Supplier<ChassisSpeeds> speedsSupplier) {
-        FuelPhysicsSim sim = new FuelPhysicsSim("Sim/Fuel");
+        sim = new FuelPhysicsSim("Sim/Fuel");
         sim.enable();
         sim.placeFieldBalls();
 
