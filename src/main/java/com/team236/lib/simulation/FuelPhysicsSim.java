@@ -36,25 +36,9 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 /**
- * Full-field ball physics simulation for FRC 2026 REBUILT. Handles drag, Magnus lift, friction,
- * ball-ball collisions, wall bounces, hub scoring, sleeping, CCD, and robot interaction. Single
- * file, only depends on WPILib (wpimath + ntcore). Drop it into your sim and watch balls fly.
- *
- * <p>Physics: symplectic Euler integration, 3D angular velocity for Magnus (omega x v cross
- * product), Coulomb friction with spin transfer, sequential impulse collision solver with warm
- * starting and Baumgarte stabilization. Spatial hashing for ball-ball broadphase. Ball sleeping
- * keeps 350+ resting balls under 2ms/tick.
- *
- * <p>Usage:
- *
- * <pre>
- *   FuelPhysicsSim ballSim = new FuelPhysicsSim("Sim/Fuel");
- *   ballSim.enable();
- *   ballSim.placeFieldBalls();   // spawns all the game pieces
- *   // in simulationPeriodic():
- *   ballSim.configureRobot(width, length, bumperH, poseSupplier, speedsSupplier);
- *   ballSim.tick();              // runs physics, publishes to NT
- * </pre>
+ * The code {@code FuelPhysicsSim} simulates fuel game pieces for 2026 FRC. Handles drag, Magnus
+ * lift, friction, ball-ball collisions, wall bounces, hub scoring, sleeping, CCD, and robot
+ * interaction.
  */
 public class FuelPhysicsSim {
 

@@ -9,20 +9,20 @@ import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
- * A concurrent version of WPILib's TimeInterpolatableBuffer class to avoid the need for explicit
- * synchronization in robot code. By Team 254.
+ * The {@code ConcurrentTimeInterpolatableBuffer} provides a concurrent version of WPILib's
+ * TimeInterpolatableBuffer class to avoid the need for explicit synchronization in robot code.
  *
  * @param <T> The type stored in this buffer.
  */
 public final class ConcurrentTimeInterpolatableBuffer<T> {
-    private final double m_historySize;
-    private final Interpolator<T> m_interpolatingFunc;
-    private final ConcurrentNavigableMap<Double, T> m_pastSnapshots = new ConcurrentSkipListMap<>();
+    private final double mHistorySize;
+    private final Interpolator<T> mInterpolatingFunc;
+    private final ConcurrentNavigableMap<Double, T> mPastSnapshots = new ConcurrentSkipListMap<>();
 
     private ConcurrentTimeInterpolatableBuffer(
             Interpolator<T> interpolateFunction, double historySizeSeconds) {
-        this.m_historySize = historySizeSeconds;
-        this.m_interpolatingFunc = interpolateFunction;
+        this.mHistorySize = historySizeSeconds;
+        this.mInterpolatingFunc = interpolateFunction;
     }
 
     /**
@@ -69,22 +69,13 @@ public final class ConcurrentTimeInterpolatableBuffer<T> {
      * @param sample The sample object.
      */
     public void addSample(double timeSeconds, T sample) {
-        m_pastSnapshots.put(timeSeconds, sample);
+        mPastSnapshots.put(timeSeconds, sample);
         cleanUp(timeSeconds);
-    }
-
-    /**
-     * Removes samples older than our current history size.
-     *
-     * @param time The current timestamp.
-     */
-    private void cleanUp(double time) {
-        m_pastSnapshots.headMap(time - m_historySize, false).clear();
     }
 
     /** Clear all old samples. */
     public void clear() {
-        m_pastSnapshots.clear();
+        mPastSnapshots.clear();
     }
 
     /**
@@ -94,18 +85,18 @@ public final class ConcurrentTimeInterpolatableBuffer<T> {
      * @return The interpolated value at that timestamp or an empty Optional.
      */
     public Optional<T> getSample(double timeSeconds) {
-        if (m_pastSnapshots.isEmpty()) {
+        if (mPastSnapshots.isEmpty()) {
             return Optional.empty();
         }
 
         // Special case for when the requested time is the same as a sample
-        var nowEntry = m_pastSnapshots.get(timeSeconds);
+        var nowEntry = mPastSnapshots.get(timeSeconds);
         if (nowEntry != null) {
             return Optional.of(nowEntry);
         }
 
-        var bottomBound = m_pastSnapshots.floorEntry(timeSeconds);
-        var topBound = m_pastSnapshots.ceilingEntry(timeSeconds);
+        var bottomBound = mPastSnapshots.floorEntry(timeSeconds);
+        var topBound = mPastSnapshots.ceilingEntry(timeSeconds);
 
         // Return empty if neither sample exists
         if (topBound == null && bottomBound == null) {
@@ -119,7 +110,7 @@ public final class ConcurrentTimeInterpolatableBuffer<T> {
             // Ratio of (time difference between current time and bottom bound) to (time difference
             // between top and bottom bounds).
             return Optional.of(
-                    m_interpolatingFunc.interpolate(
+                    mInterpolatingFunc.interpolate(
                             bottomBound.getValue(),
                             topBound.getValue(),
                             (timeSeconds - bottomBound.getKey())
@@ -133,7 +124,7 @@ public final class ConcurrentTimeInterpolatableBuffer<T> {
      * @return The latest sample in the buffer.
      */
     public Entry<Double, T> getLatest() {
-        return m_pastSnapshots.lastEntry();
+        return mPastSnapshots.lastEntry();
     }
 
     /**
@@ -143,6 +134,15 @@ public final class ConcurrentTimeInterpolatableBuffer<T> {
      * @return The internal sample buffer.
      */
     public ConcurrentNavigableMap<Double, T> getInternalBuffer() {
-        return m_pastSnapshots;
+        return mPastSnapshots;
+    }
+
+    /**
+     * Removes samples older than our current history size.
+     *
+     * @param time The current timestamp.
+     */
+    private void cleanUp(double time) {
+        mPastSnapshots.headMap(time - mHistorySize, false).clear();
     }
 }

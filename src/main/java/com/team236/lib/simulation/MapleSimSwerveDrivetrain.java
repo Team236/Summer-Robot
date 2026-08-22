@@ -107,7 +107,7 @@ public class MapleSimSwerveDrivetrain {
         SimulatedArena.overrideSimulationTimings(simPeriod, 1);
 
         // This turns a barrier wall on or off for the ramp area, also eff mode is if 400+ balls
-        // spawn instead of 100
+        // spawn instead of ~100.
         Arena2026Rebuilt arena = new Arena2026Rebuilt(false);
         arena.setEfficiencyMode(false);
         SimulatedArena.overrideInstance(arena);
