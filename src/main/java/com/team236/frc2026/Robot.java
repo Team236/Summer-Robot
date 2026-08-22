@@ -1,12 +1,10 @@
 package com.team236.frc2026;
 
 import com.ctre.phoenix6.SignalLogger;
-import com.team236.frc2026.simulation.SimulatedRobotState;
 import com.team236.lib.limelight.Limelight3GConfig;
 import com.team236.lib.simulation.FuelPhysicsSim;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.ironmaple.simulation.SimulatedArena;
@@ -130,14 +128,22 @@ public class Robot extends LoggedRobot {
     @Override
     public void simulationInit() {
         if (Constants.kUseMapleSim) {
-            if (!Constants.kUseMapleSimFuel && Constants.kIsPracticeBot) {
+            if (!Constants.kUseMapleSimFuel) {
                 mFuelSim =
                         FuelPhysicsSim.configureFuelSim(
                                 Constants.TestbedConstants.kBumperWidthInches,
                                 Constants.TestbedConstants.kBumperLengthInches,
                                 Constants.TestbedConstants.kBumperHeightInches,
-                                () -> mRobotContainer.getSimulatedRobotState().getSimDrive().getSimulatedDriveTrainPose(),
-                                () -> mRobotContainer.getSimulatedRobotState().getSimDrive().getDriveTrainSimulatedChassisSpeedsFieldRelative());
+                                () ->
+                                        mRobotContainer
+                                                .getSimulatedRobotState()
+                                                .getSimDrive()
+                                                .getSimulatedDriveTrainPose(),
+                                () ->
+                                        mRobotContainer
+                                                .getSimulatedRobotState()
+                                                .getSimDrive()
+                                                .getDriveTrainSimulatedChassisSpeedsFieldRelative());
 
             } else {
                 SimulatedArena.getInstance().placeGamePiecesOnField();
