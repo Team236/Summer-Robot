@@ -38,10 +38,11 @@ public class DriveSim extends DriveHardware {
                 }
 
                 if (Constants.kUseMapleSim && mMapleSimSwerveDrivetrain != null) {
-                    swerveDriveState.Pose =
-                            mMapleSimSwerveDrivetrain.mapleSimDrive.getSimulatedDriveTrainPose();
+                    mSimRobotState.addFieldToRobot(
+                            mMapleSimSwerveDrivetrain.mapleSimDrive.getSimulatedDriveTrainPose());
+                } else {
+                    mSimRobotState.addFieldToRobot(swerveDriveState.Pose);
                 }
-                mSimRobotState.addFieldToRobot(swerveDriveState.Pose);
                 telemetryConsumer.accept(swerveDriveState);
             };
 
