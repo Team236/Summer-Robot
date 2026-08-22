@@ -54,9 +54,9 @@ public class DriveSubsystem extends SubsystemBase {
         mIo.addVisionMeasurement(visionFieldPoseEstimate);
     }
 
-    public MapleSimSwerveDrivetrain getMapleSimDrive() {
+    public MapleSimSwerveDrivetrain getMapleSimDrivetrain() {
         if (mIo instanceof DriveSim) {
-            return ((DriveSim) mIo).getMapleSimDrive();
+            return ((DriveSim) mIo).getMapleSimDrivetrain();
         }
         return null;
     }
