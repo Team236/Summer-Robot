@@ -29,24 +29,16 @@ import org.ironmaple.simulation.motorsims.SimulatedMotorController;
 import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
 
 /**
- *
- *
- * <h2>Injects Maple-Sim simulation data into a CTRE swerve drivetrain.</h2>
- *
- * <p>This class retrieves simulation data from Maple-Sim and injects it into the CTRE {@link
- * com.ctre.phoenix6.swerve.SwerveDrivetrain} instance.
- *
- * <p>It replaces the {@link com.ctre.phoenix6.swerve.SimSwerveDrivetrain} class.
+ * The {@code MapleSimSwerveDrivetrain} retrieves simulation data from Maple-Sim and injects it into
+ * the CTRE SwerveDrivetrain instance, replacing the default SimSwerveDrivetrain class.
  */
 public class MapleSimSwerveDrivetrain {
-    private final Pigeon2SimState pigeonSim;
-    private final SimSwerveModule[] simModules;
+    private final Pigeon2SimState mPigeonSim;
+    private final SimSwerveModule[] mSimModules;
     public final SwerveDriveSimulation mapleSimDrive;
 
     /**
-     *
-     *
-     * <h2>Constructs a drivetrain simulation using the specified parameters.</h2>
+     * Constructs a drivetrain simulation using the specified parameters.
      *
      * @param simPeriod the time period of the simulation
      * @param robotMassWithBumpers the total mass of the robot, including bumpers
@@ -55,14 +47,14 @@ public class MapleSimSwerveDrivetrain {
      * @param bumperWidthY the width of the bumper along the Y-axis (influences the collision space
      *     of the robot)
      * @param driveMotorModel the {@link DCMotor} model for the drive motor, typically <code>
-     *     DCMotor.getKrakenX60Foc()
-     *     </code>
+     *        DCMotor.getKrakenX60Foc()
+     *        </code>
      * @param steerMotorModel the {@link DCMotor} model for the steer motor, typically <code>
-     *     DCMotor.getKrakenX60Foc()
-     *     </code>
+     *        DCMotor.getKrakenX60Foc()
+     *        </code>
      * @param wheelCOF the coefficient of friction of the drive wheels
      * @param moduleLocations the locations of the swerve modules on the robot, in the order <code>
-     *     FL, FR, BL, BR</code>
+     *        FL, FR, BL, BR</code>
      * @param pigeon the {@link Pigeon2} IMU used in the drivetrain
      * @param modules the {@link SwerveModule}s, typically obtained via {@link
      *     SwerveDrivetrain#getModules()}
@@ -85,8 +77,8 @@ public class MapleSimSwerveDrivetrain {
                                     TalonFXConfiguration,
                                     CANcoderConfiguration>...
                             moduleConstants) {
-        this.pigeonSim = pigeon.getSimState();
-        simModules = new SimSwerveModule[moduleConstants.length];
+        this.mPigeonSim = pigeon.getSimState();
+        mSimModules = new SimSwerveModule[moduleConstants.length];
         DriveTrainSimulationConfig simulationConfig =
                 DriveTrainSimulationConfig.Default()
                         .withRobotMass(robotMassWithBumpers)
@@ -107,42 +99,100 @@ public class MapleSimSwerveDrivetrain {
         mapleSimDrive = new SwerveDriveSimulation(simulationConfig, new Pose2d());
 
         SwerveModuleSimulation[] moduleSimulations = mapleSimDrive.getModules();
-        for (int i = 0; i < this.simModules.length; i++)
-            simModules[i] =
+        for (int i = 0; i < mSimModules.length; i++) {
+            mSimModules[i] =
                     new SimSwerveModule(moduleConstants[0], moduleSimulations[i], modules[i]);
+        }
 
         SimulatedArena.overrideSimulationTimings(simPeriod, 1);
 
         // This turns a barrier wall on or off for the ramp area, also eff mode is if 400+ balls
-        // spawn isntead of 100
+        // spawn instead of 100
         Arena2026Rebuilt arena = new Arena2026Rebuilt(false);
         arena.setEfficiencyMode(false);
         SimulatedArena.overrideInstance(arena);
         SimulatedArena.getInstance().addDriveTrainSimulation(mapleSimDrive);
     }
 
+    public static class TalonFXMotorControllerWithRemoteCanCoderSim
+            extends TalonFXMotorControllerSim {
+        private final CANcoderSimState mRemoteCancoderSimState;
+
+        public TalonFXMotorControllerWithRemoteCanCoderSim(TalonFX talonFX, CANcoder cancoder) {
+            super(talonFX);
+            this.mRemoteCancoderSimState = cancoder.getSimState();
+        }
+
+        @Override
+        public Voltage updateControlSignal(
+                Angle mechanismAngle,
+                AngularVelocity mechanismVelocity,
+                Angle encoderAngle,
+                AngularVelocity encoderVelocity) {
+            mRemoteCancoderSimState.setSupplyVoltage(SimulatedBattery.getBatteryVoltage());
+            mRemoteCancoderSimState.setRawPosition(mechanismAngle);
+            mRemoteCancoderSimState.setVelocity(mechanismVelocity);
+
+            return super.updateControlSignal(
+                    mechanismAngle, mechanismVelocity, encoderAngle, encoderVelocity);
+        }
+    }
+
+    // Static utils classes
+    public static class TalonFXMotorControllerSim implements SimulatedMotorController {
+        public final int id;
+
+        private final TalonFXSimState mTalonFXSimState;
+
+        public TalonFXMotorControllerSim(TalonFX talonFX) {
+            this.id = talonFX.getDeviceID();
+            this.mTalonFXSimState = talonFX.getSimState();
+        }
+
+        @Override
+        public Voltage updateControlSignal(
+                Angle mechanismAngle,
+                AngularVelocity mechanismVelocity,
+                Angle encoderAngle,
+                AngularVelocity encoderVelocity) {
+            mTalonFXSimState.setRawRotorPosition(encoderAngle);
+            mTalonFXSimState.setRotorVelocity(encoderVelocity);
+            mTalonFXSimState.setSupplyVoltage(SimulatedBattery.getBatteryVoltage());
+
+            return mTalonFXSimState.getMotorVoltageMeasure();
+        }
+    }
+
     /**
-     *
-     *
-     * <h2>Update the simulation.</h2>
-     *
-     * <p>Updates the Maple-Sim simulation and injects the results into the simulated CTRE devices,
+     * Updates the Maple-Sim simulation and injects the results into the simulated CTRE devices,
      * including motors and the IMU.
      */
     public void update() {
         SimulatedArena.getInstance().simulationPeriodic();
-        pigeonSim.setRawYaw(mapleSimDrive.getSimulatedDriveTrainPose().getRotation().getMeasure());
-        pigeonSim.setAngularVelocityZ(
+        mPigeonSim.setRawYaw(mapleSimDrive.getSimulatedDriveTrainPose().getRotation().getMeasure());
+        mPigeonSim.setAngularVelocityZ(
                 RadiansPerSecond.of(
                         mapleSimDrive.getDriveTrainSimulatedChassisSpeedsRobotRelative()
                                 .omegaRadiansPerSecond));
     }
 
     /**
+     * Regulates all {@link SwerveModuleConstants} for a drivetrain simulation.
      *
+     * <p>This method processes an array of {@link SwerveModuleConstants} to apply necessary
+     * adjustments for simulation purposes, ensuring compatibility and avoiding known bugs.
      *
-     * <h1>Represents the simulation of a single {@link SwerveModule}.</h1>
+     * @see #regulateModuleConstantForSimulation(SwerveModuleConstants)
      */
+    public static SwerveModuleConstants<?, ?, ?>[] regulateModuleConstantsForSimulation(
+            SwerveModuleConstants<?, ?, ?>[] moduleConstants) {
+        for (SwerveModuleConstants<?, ?, ?> moduleConstant : moduleConstants) {
+            regulateModuleConstantForSimulation(moduleConstant);
+        }
+        return moduleConstants;
+    }
+
+    /** The {@code SimSwerveModule} represents the simulation of a single SwerveModule. */
     protected static class SimSwerveModule {
         public final SwerveModuleConstants<
                         TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration>
@@ -165,93 +215,12 @@ public class MapleSimSwerveDrivetrain {
         }
     }
 
-    // Static utils classes
-    public static class TalonFXMotorControllerSim implements SimulatedMotorController {
-        public final int id;
-
-        private final TalonFXSimState talonFXSimState;
-
-        public TalonFXMotorControllerSim(TalonFX talonFX) {
-            this.id = talonFX.getDeviceID();
-            this.talonFXSimState = talonFX.getSimState();
-        }
-
-        @Override
-        public Voltage updateControlSignal(
-                Angle mechanismAngle,
-                AngularVelocity mechanismVelocity,
-                Angle encoderAngle,
-                AngularVelocity encoderVelocity) {
-            talonFXSimState.setRawRotorPosition(encoderAngle);
-            talonFXSimState.setRotorVelocity(encoderVelocity);
-            talonFXSimState.setSupplyVoltage(SimulatedBattery.getBatteryVoltage());
-
-            return talonFXSimState.getMotorVoltageMeasure();
-        }
-    }
-
-    public static class TalonFXMotorControllerWithRemoteCanCoderSim
-            extends TalonFXMotorControllerSim {
-        private final CANcoderSimState remoteCancoderSimState;
-
-        public TalonFXMotorControllerWithRemoteCanCoderSim(TalonFX talonFX, CANcoder cancoder) {
-            super(talonFX);
-            this.remoteCancoderSimState = cancoder.getSimState();
-        }
-
-        @Override
-        public Voltage updateControlSignal(
-                Angle mechanismAngle,
-                AngularVelocity mechanismVelocity,
-                Angle encoderAngle,
-                AngularVelocity encoderVelocity) {
-            remoteCancoderSimState.setSupplyVoltage(SimulatedBattery.getBatteryVoltage());
-            remoteCancoderSimState.setRawPosition(mechanismAngle);
-            remoteCancoderSimState.setVelocity(mechanismVelocity);
-
-            return super.updateControlSignal(
-                    mechanismAngle, mechanismVelocity, encoderAngle, encoderVelocity);
-        }
-    }
-
     /**
-     *
-     *
-     * <h2>Regulates all {@link SwerveModuleConstants} for a drivetrain simulation.</h2>
-     *
-     * <p>This method processes an array of {@link SwerveModuleConstants} to apply necessary
-     * adjustments for simulation purposes, ensuring compatibility and avoiding known bugs.
-     *
-     * @see #regulateModuleConstantForSimulation(SwerveModuleConstants)
-     */
-    public static SwerveModuleConstants<?, ?, ?>[] regulateModuleConstantsForSimulation(
-            SwerveModuleConstants<?, ?, ?>[] moduleConstants) {
-        for (SwerveModuleConstants<?, ?, ?> moduleConstant : moduleConstants)
-            regulateModuleConstantForSimulation(moduleConstant);
-
-        return moduleConstants;
-    }
-
-    /**
-     *
-     *
-     * <h2>Regulates the {@link SwerveModuleConstants} for a single module.</h2>
+     * Regulates the {@link SwerveModuleConstants} for a single module.
      *
      * <p>This method applies specific adjustments to the {@link SwerveModuleConstants} for
      * simulation purposes. These changes have no effect on real robot operations and address known
-     * simulation bugs:
-     *
-     * <ul>
-     *   <li><strong>Inverted Drive Motors:</strong> Prevents drive PID issues caused by inverted
-     *       configurations.
-     *   <li><strong>Non-zero CanCoder Offsets:</strong> Fixes potential module state optimization
-     *       issues.
-     *   <li><strong>Steer Motor PID:</strong> Adjusts PID values tuned for real robots to improve
-     *       simulation performance.
-     * </ul>
-     *
-     * <h4>Note:This function is skipped when running on a real robot, ensuring no impact on
-     * constants used on real robot hardware.</h4>
+     * simulation bugs.
      */
     private static void regulateModuleConstantForSimulation(
             SwerveModuleConstants<?, ?, ?> moduleConstants) {

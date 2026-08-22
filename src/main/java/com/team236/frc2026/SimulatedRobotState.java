@@ -6,14 +6,14 @@ import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 
 /**
- * The {@code SimulatedRobotState} tracks the simulated physical truth data 
- * of the robot over time using a time-interpolatable pose buffer.
+ * The {@code SimulatedRobotState} tracks the simulated physical truth data of the robot over time
+ * using a time-interpolatable pose buffer.
  */
 public class SimulatedRobotState {
 
     private final TimeInterpolatableBuffer<Pose2d> mFieldToRobotSimulatedTruth =
             TimeInterpolatableBuffer.createBuffer(RobotState.kLogBackTime);
-    
+
     private SwerveDriveSimulation mSimDrive;
     private final RobotContainer mContainer;
 
