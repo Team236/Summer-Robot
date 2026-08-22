@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  */
 public final class Constants {
 
-    public static final boolean kUseMapleSim = true;
     public static final Mode kSimMode = Mode.SIM;
     public static final Mode kCurrentMode = RobotBase.isReal() ? Mode.REAL : kSimMode;
 
@@ -32,6 +31,8 @@ public final class Constants {
     }
 
     public static final boolean kIsConnectedViaWifi = true;
+    public static final boolean kUseMapleSim = true;
+    public static final boolean kUseMapleSimFuel = true;
 
     private static final String kPracticeBotMacAddress = "00:80:2F:40:FC:4A";
     public static boolean kIsPracticeBot = NetworkHelpers.hasMacAddress(kPracticeBotMacAddress);
@@ -41,13 +42,14 @@ public final class Constants {
         public static final byte kMainController = 0;
     }
 
-    /** The {@code SimulationConstants} contains physical properties for the physics simulator. */
-    public static final class SimulationConstants {
+    /** The {@code TestbedConstants} contains physical properties of the testbed. */
+    public static final class TestbedConstants {
         public static final double kRobotWeightPounds = 50.0;
         public static final double kBumperLengthInches = 36.0;
         public static final double kBumperWidthInches = 36.0;
+        public static final double kBumperHeightInches = 5.0;
         public static final double kWheelCoefficientOfFriction = 1.2;
-        public static final int kDriveMotorCount = 4;
+        public static final int kDriveMotorCount = 1;
     }
 
     /** The {@code DriveConstants} holds tuning and configuration values for the drivetrain. */
