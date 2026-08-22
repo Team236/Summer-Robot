@@ -7,6 +7,7 @@ import com.team236.frc2026.subsystems.drive.DriveSim;
 import com.team236.frc2026.subsystems.drive.DriveSubsystem;
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.frc2026.subsystems.vision.VisionHardwareLimelight;
+import com.team236.frc2026.subsystems.vision.VisionSimPhoton;
 import com.team236.frc2026.subsystems.vision.VisionSubsystem;
 import com.team236.lib.math.GeometryHelpers;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -36,8 +37,7 @@ public class RobotContainer {
 
     private final SimulatedRobotState mSimulatedRobotState = new SimulatedRobotState(this);
     private final DriveSubsystem mDriveSubsystem = buildDriveSubsystem();
-    private final VisionSubsystem mVisionSubsystem =
-            new VisionSubsystem(new VisionHardwareLimelight(mRobotState), mRobotState);
+    private final VisionSubsystem mVisionSubsystem = buildVisionSubsystem();
 
     private final TeleopSwerveDrive mDriveCommand =
             new TeleopSwerveDrive(
@@ -90,6 +90,14 @@ public class RobotContainer {
                             mRobotState,
                             Constants.DriveConstants.kDrivetrain.getDrivetrainConstants(),
                             Constants.DriveConstants.kDrivetrain.getModuleConstants()));
+        }
+    }
+
+    private VisionSubsystem buildVisionSubsystem() {
+        if (Constants.kCurrentMode == Constants.Mode.SIM) {
+            return new VisionSubsystem(new VisionSimPhoton(mRobotState, mSimulatedRobotState), mRobotState);
+        } else {
+            return new VisionSubsystem(new VisionHardwareLimelight(mRobotState), mRobotState);
         }
     }
 
