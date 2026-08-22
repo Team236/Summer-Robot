@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -234,6 +235,27 @@ public class VisionSubsystem extends SubsystemBase {
 
         if (camera.fiducialObservations != null) {
             Logger.recordOutput(logPrefix + "/FiducialCount", camera.fiducialObservations.length);
+        }
+
+        if (Constants.kCurrentMode == Constants.Mode.SIM) {
+            if (camera.fiducialObservations != null && camera.pose3d != null) {
+                java.util.List<Pose3d> linePoses = new java.util.ArrayList<>();
+
+                Pose3d cameraPose =
+                        camera.pose3d.transformBy(
+                                Constants.VisionConstants.CameraA.kRobotToCameraA);
+
+                for (FiducialObservation obs : camera.fiducialObservations) {
+                    var tagPose = Constants.kRebuiltAprilTagLayout.getTagPose(obs.id());
+                    if (tagPose.isPresent()) {
+                        linePoses.add(cameraPose);
+                        linePoses.add(tagPose.get());
+                    }
+                }
+                Logger.recordOutput(logPrefix + "/TargetLines", linePoses.toArray(new Pose3d[0]));
+            } else {
+                Logger.recordOutput(logPrefix + "/TargetLines", new Pose3d[0]);
+            }
         }
     }
 

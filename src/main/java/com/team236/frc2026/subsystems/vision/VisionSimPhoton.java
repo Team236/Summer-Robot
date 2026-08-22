@@ -51,7 +51,7 @@ public class VisionSimPhoton extends VisionHardwareLimelight {
 
         mCameraASim = new PhotonCameraSim(mCameraA, camAProp);
 
-        mVisionSim.addCamera(mCameraASim, Constants.VisionConstants.CameraA.kCameraAToRobot);
+        mVisionSim.addCamera(mCameraASim, Constants.VisionConstants.CameraA.kRobotToCameraA);
 
         mCameraASim.enableRawStream(true);
         mCameraASim.enableProcessedStream(true);

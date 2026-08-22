@@ -101,7 +101,7 @@ public final class Constants {
             public static final double kCameraPitch = -30.0;
             public static final double kCameraYawOffset = 0.0;
 
-            public static final Transform3d kCameraAToRobot =
+            public static final Transform3d kRobotToCameraA =
                     new Transform3d(
                             new Translation3d(
                                     Units.inchesToMeters(kRobotToCameraX),
