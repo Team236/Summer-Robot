@@ -21,12 +21,12 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     }
 
     @Override
-    public Trigger resetGyro() {
+    public Trigger getResetGyro() {
         return controller.y();
     }
 
     @Override
-    public Trigger toggleMode() {
+    public Trigger getToggleMode() {
         return controller.b();
     }
 }
