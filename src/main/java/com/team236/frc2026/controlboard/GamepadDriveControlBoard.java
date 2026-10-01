@@ -2,7 +2,6 @@ package com.team236.frc2026.controlboard;
 
 import com.team236.frc2026.Constants;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class GamepadDriveControlBoard implements IDriveControlBoard {
     private static GamepadDriveControlBoard instance = null;
