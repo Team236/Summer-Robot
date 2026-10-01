@@ -41,12 +41,12 @@ public class ControlBoard implements IDriveControlBoard, IButtonControlBoard {
     }
 
     @Override
-    public Trigger resetGyro() {
+    public Trigger getResetGyro() {
         return buttonControlBoard.getResetGyro();
     }
 
     @Override
-    public Trigger toggleMode() {
+    public Trigger getToggleMode() {
         return buttonControlBoard.getToggleMode();
     }
 }
