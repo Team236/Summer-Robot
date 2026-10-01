@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.Optional;
 import java.util.function.Consumer;
+import org.littletonrobotics.junction.Logger;
 
 public class ModalControls {
     private static Optional<ModalControls> instance = Optional.empty();
@@ -29,6 +30,7 @@ public class ModalControls {
 
     public void setMode(Mode mode) {
         this.currentMode = mode;
+        Logger.recordOutput("/Controls/CurrentMode", mode.toString());
     }
 
     public void setStateChangeConsumer(Consumer<Mode> consumer) {
@@ -55,14 +57,15 @@ public class ModalControls {
                 .getToggleMode()
                 .onTrue(
                         Commands.runOnce(
-                                () -> {
-                                    Mode newMode =
-                                            (currentMode == Mode.INTAKE)
-                                                    ? Mode.SCORING
-                                                    : Mode.INTAKE;
-                                    maybeTriggerStateChangeConsumer(newMode);
-                                    setMode(newMode);
-                                }));
+                                        () -> {
+                                            Mode newMode =
+                                                    (currentMode == Mode.INTAKE)
+                                                            ? Mode.SCORING
+                                                            : Mode.INTAKE;
+                                            maybeTriggerStateChangeConsumer(newMode);
+                                            setMode(newMode);
+                                        })
+                                .ignoringDisable(true));
     }
 
     public Trigger resetGyro() {

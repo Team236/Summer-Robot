@@ -17,7 +17,7 @@ public class GamepadButtonControlBoard implements IButtonControlBoard {
     private final CommandXboxController controller;
 
     private GamepadButtonControlBoard() {
-        controller = new CommandXboxController(Constants.Controller.kOperatorController);
+        controller = new CommandXboxController(Constants.Controller.kMainController);
     }
 
     @Override
