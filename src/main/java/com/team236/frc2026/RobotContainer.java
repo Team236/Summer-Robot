@@ -104,6 +104,8 @@ public class RobotContainer {
 
         ModalControls.getInstance().configureBindings();
 
-        ControlBoard.getInstance().getResetGyro().onTrue(Commands.runOnce(() -> this.resetHeading()));
+        ControlBoard.getInstance()
+                .getResetGyro()
+                .onTrue(Commands.runOnce(() -> this.resetHeading()));
     }
 }
