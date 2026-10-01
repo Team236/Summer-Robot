@@ -52,7 +52,7 @@ public class ModalControls {
 
     public void configureBindings() {
         ControlBoard.getInstance()
-                .toggleMode()
+                .getToggleMode()
                 .onTrue(
                         Commands.runOnce(
                                 () -> {
@@ -66,7 +66,7 @@ public class ModalControls {
     }
 
     public Trigger resetGyro() {
-        return ControlBoard.getInstance().resetGyro();
+        return ControlBoard.getInstance().getResetGyro();
     }
 
     public Trigger intakeMode() {

@@ -1,6 +1,8 @@
 package com.team236.frc2026;
 
 import com.team236.frc2026.commands.TeleopSwerveDrive;
+import com.team236.frc2026.controlboard.ControlBoard;
+import com.team236.frc2026.controlboard.ModalControls;
 import com.team236.frc2026.simulation.SimulatedRobotState;
 import com.team236.frc2026.subsystems.drive.DriveHardware;
 import com.team236.frc2026.subsystems.drive.DriveSim;
@@ -14,8 +16,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import java.util.function.Consumer;
-import com.team236.frc2026.controlboard.ControlBoard;
-import com.team236.frc2026.controlboard.ModalControls;
 
 /**
  * The {@code RobotContainer} class holds robot subsystems, commands, and operator interface
@@ -104,7 +104,6 @@ public class RobotContainer {
 
         ModalControls.getInstance().configureBindings();
 
-        ControlBoard.getInstance().resetGyro()
-                .onTrue(Commands.runOnce(() -> this.resetHeading()));
+        ControlBoard.getInstance().getResetGyro().onTrue(Commands.runOnce(() -> this.resetHeading()));
     }
 }
