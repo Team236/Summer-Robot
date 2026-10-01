@@ -17,6 +17,10 @@ public class ModalControls {
     private Mode currentMode = Mode.INTAKE;
     private Consumer<Mode> stateChangeConsumer;
 
+    private ModalControls() {
+        Logger.recordOutput("Controls/CurrentMode", currentMode.toString());
+    }
+
     public static ModalControls getInstance() {
         if (instance.isEmpty()) {
             instance = Optional.of(new ModalControls());
@@ -30,7 +34,7 @@ public class ModalControls {
 
     public void setMode(Mode mode) {
         this.currentMode = mode;
-        Logger.recordOutput("/Controls/CurrentMode", mode.toString());
+        Logger.recordOutput("Controls/CurrentMode", mode.toString());
     }
 
     public void setStateChangeConsumer(Consumer<Mode> consumer) {
