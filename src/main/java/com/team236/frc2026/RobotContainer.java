@@ -12,10 +12,10 @@ import com.team236.frc2026.subsystems.vision.VisionSubsystem;
 import com.team236.lib.math.GeometryHelpers;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.function.Consumer;
+import com.team236.frc2026.controlboard.ControlBoard;
+import com.team236.frc2026.controlboard.ModalControls;
 
 /**
  * The {@code RobotContainer} class holds robot subsystems, commands, and operator interface
@@ -32,9 +32,6 @@ public class RobotContainer {
             };
 
     private final RobotState mRobotState = new RobotState(mVisionEstimateConsumer);
-    private final XboxController mDriverController =
-            new XboxController(Constants.Controller.kMainController);
-
     private final SimulatedRobotState mSimulatedRobotState = new SimulatedRobotState(this);
     private final DriveSubsystem mDriveSubsystem = buildDriveSubsystem();
     private final VisionSubsystem mVisionSubsystem = buildVisionSubsystem();
@@ -44,9 +41,9 @@ public class RobotContainer {
                     mDriveSubsystem,
                     mRobotState,
                     this,
-                    () -> -mDriverController.getLeftY(),
-                    () -> -mDriverController.getLeftX(),
-                    () -> -mDriverController.getRightX());
+                    () -> ControlBoard.getInstance().getThrottle(),
+                    () -> ControlBoard.getInstance().getStrafe(),
+                    () -> ControlBoard.getInstance().getRotation());
 
     public RobotContainer() {
         configureBindings();
@@ -105,7 +102,9 @@ public class RobotContainer {
     private void configureBindings() {
         mDriveSubsystem.setDefaultCommand(mDriveCommand);
 
-        new JoystickButton(mDriverController, XboxController.Button.kY.value)
+        ModalControls.getInstance().configureBindings();
+
+        ControlBoard.getInstance().resetGyro()
                 .onTrue(Commands.runOnce(() -> this.resetHeading()));
     }
 }
