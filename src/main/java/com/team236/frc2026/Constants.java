@@ -47,6 +47,7 @@ public final class Constants {
     /** The {@code Controller} holds constants for driver input devices. */
     public static final class Controller {
         public static final byte kMainController = 0;
+        public static final byte kOperatorController = 1;
     }
 
     /** The {@code TestbedConstants} contains physical properties of the testbed. */
