@@ -80,26 +80,27 @@ public class VisionSimPhoton extends VisionHardwareLimelight {
 
         Optional<Transform3d> optRobotToCamera =
                 mVisionSim.getRobotToCamera(cameraSim, Timer.getFPGATimestamp());
-        Pose3d fieldToRobot;
+        Pose3d fieldToRobotCam;
         if (optRobotToCamera.isPresent()) {
             Transform3d cameraToRobot = optRobotToCamera.get().inverse();
             Pose3d robotPose3d =
                     new Pose3d(fieldToCamera.getTranslation(), fieldToCamera.getRotation())
                             .transformBy(cameraToRobot);
-            fieldToRobot = robotPose3d;
+            fieldToRobotCam = robotPose3d;
         } else {
-            fieldToRobot = new Pose3d(fieldToCamera.getTranslation(), fieldToCamera.getRotation());
+            fieldToRobotCam =
+                    new Pose3d(fieldToCamera.getTranslation(), fieldToCamera.getRotation());
         }
 
         List<Double> pose_data =
                 new ArrayList<>(
                         Arrays.asList(
-                                fieldToRobot.getX(),
-                                fieldToRobot.getY(),
-                                fieldToRobot.getZ(),
+                                fieldToRobotCam.getX(),
+                                fieldToRobotCam.getY(),
+                                fieldToRobotCam.getZ(),
                                 0.0,
                                 0.0,
-                                fieldToRobot.getRotation().getMeasureZ().in(Units.Degree),
+                                fieldToRobotCam.getRotation().getMeasureZ().in(Units.Degree),
                                 result.metadata.getLatencyMillis(),
                                 (double) numTags,
                                 0.0,
