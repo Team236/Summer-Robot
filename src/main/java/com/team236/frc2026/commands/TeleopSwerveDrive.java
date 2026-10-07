@@ -9,6 +9,10 @@ import com.team236.frc2026.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.DoubleSupplier;
 
+/**
+ * The {@code TeleopSwerveDrive} commands the swerve drivetrain to drive based on joystick inputs in
+ * a field-centric manner, dynamically adjusting for alliance color.
+ */
 public class TeleopSwerveDrive extends Command {
     private final RobotState mRobotState;
     private final RobotContainer mRobotContainer;
@@ -16,7 +20,8 @@ public class TeleopSwerveDrive extends Command {
     private final DoubleSupplier mThrottleSupplier;
     private final DoubleSupplier mStrafeSupplier;
     private final DoubleSupplier mTurnSupplier;
-    private final SwerveRequest.FieldCentric driveOpenLoop =
+
+    private final SwerveRequest.FieldCentric mDriveOpenLoop =
             new SwerveRequest.FieldCentric()
                     .withDeadband(DriveConstants.kMaxDriveSpeed * DriveConstants.kOpenLoopDeadband)
                     .withRotationalDeadband(
@@ -54,7 +59,7 @@ public class TeleopSwerveDrive extends Command {
         double strafeFieldRelative = mRobotState.isRedAlliance() ? -strafe : strafe;
 
         mDrivetrain.setControl(
-                driveOpenLoop
+                mDriveOpenLoop
                         .withVelocityX(throttleFieldRelative)
                         .withVelocityY(strafeFieldRelative)
                         .withRotationalRate(turnRate * DriveConstants.kMaxRotationalRate));
