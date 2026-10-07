@@ -4,12 +4,12 @@ import com.team236.frc2026.Constants;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
- * The {@code XboxDriveControlBoard} reads joystick inputs from an Xbox controller 
- * and applies scaling to feed drivetrain translation and rotation.
+ * The {@code XboxDriveControlBoard} reads joystick inputs from an Xbox controller and applies
+ * scaling to feed drivetrain translation and rotation.
  */
 public class XboxDriveControlBoard implements IDriveControlBoard {
     private static XboxDriveControlBoard mInstance = null;
-    
+
     private final CommandXboxController mController;
 
     private XboxDriveControlBoard() {

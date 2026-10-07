@@ -3,8 +3,8 @@ package com.team236.frc2026.controlboard;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
- * The {@code ControlBoard} acts as a centralized singleton that combines both
- * drive and button control interfaces into a single access point.
+ * The {@code ControlBoard} acts as a centralized singleton that combines both drive and button
+ * control interfaces into a single access point.
  */
 public class ControlBoard implements IDriveControlBoard, IButtonControlBoard {
     private static ControlBoard mInstance = null;

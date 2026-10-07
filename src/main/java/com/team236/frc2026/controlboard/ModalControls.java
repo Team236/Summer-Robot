@@ -7,8 +7,8 @@ import java.util.function.Consumer;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * The {@code ModalControls} manages the robot's active control mode (e.g., INTAKE vs. SCORING) 
- * and handles the execution of mode-specific state change callbacks and bindings.
+ * The {@code ModalControls} manages the robot's active control mode (e.g., INTAKE vs. SCORING) and
+ * handles the execution of mode-specific state change callbacks and bindings.
  */
 public class ModalControls {
     private static Optional<ModalControls> mInstance = Optional.empty();
