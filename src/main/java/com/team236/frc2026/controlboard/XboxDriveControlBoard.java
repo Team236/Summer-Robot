@@ -10,7 +10,6 @@ public class XboxDriveControlBoard implements IDriveControlBoard {
         if (instance == null) {
             instance = new XboxDriveControlBoard();
         }
-
         return instance;
     }
 
