@@ -4,19 +4,19 @@ import com.team236.frc2026.Constants;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class GamepadButtonControlBoard implements IButtonControlBoard {
-    private static GamepadButtonControlBoard instance = null;
+public class XboxButtonControlBoard implements IButtonControlBoard {
+    private static XboxButtonControlBoard instance = null;
 
-    public static GamepadButtonControlBoard getInstance() {
+    public static XboxButtonControlBoard getInstance() {
         if (instance == null) {
-            instance = new GamepadButtonControlBoard();
+            instance = new XboxButtonControlBoard();
         }
         return instance;
     }
 
     private final CommandXboxController controller;
 
-    private GamepadButtonControlBoard() {
+    private XboxButtonControlBoard() {
         controller = new CommandXboxController(Constants.Controller.kMainController);
     }
 

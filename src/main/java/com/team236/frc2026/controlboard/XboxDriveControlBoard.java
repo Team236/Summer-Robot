@@ -3,12 +3,12 @@ package com.team236.frc2026.controlboard;
 import com.team236.frc2026.Constants;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-public class GamepadDriveControlBoard implements IDriveControlBoard {
-    private static GamepadDriveControlBoard instance = null;
+public class XboxDriveControlBoard implements IDriveControlBoard {
+    private static XboxDriveControlBoard instance = null;
 
-    public static GamepadDriveControlBoard getInstance() {
+    public static XboxDriveControlBoard getInstance() {
         if (instance == null) {
-            instance = new GamepadDriveControlBoard();
+            instance = new XboxDriveControlBoard();
         }
 
         return instance;
@@ -16,7 +16,7 @@ public class GamepadDriveControlBoard implements IDriveControlBoard {
 
     private final CommandXboxController controller;
 
-    private GamepadDriveControlBoard() {
+    private XboxDriveControlBoard() {
         controller = new CommandXboxController(Constants.Controller.kMainController);
     }
 
