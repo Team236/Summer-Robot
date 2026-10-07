@@ -23,8 +23,10 @@ public class SimulatedRobotState {
     }
 
     public void init() {
-        this.mSimDrive =
-                this.mRobotContainer.getDriveSubsystem().getMapleSimDrivetrain().mapleSimDrive;
+        if (Constants.kUseMapleSim) {
+            this.mSimDrive =
+                    this.mRobotContainer.getDriveSubsystem().getMapleSimDrivetrain().mapleSimDrive;
+        }
     }
 
     public synchronized void addFieldToRobot(Pose2d pose) {

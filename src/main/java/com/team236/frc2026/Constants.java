@@ -33,7 +33,7 @@ public final class Constants {
     }
 
     public static final boolean kIsConnectedViaWifi = true;
-    public static final boolean kUseMapleSim = true;
+    public static final boolean kUseMapleSim = false;
     public static final boolean kUseMapleSimFuel = false;
 
     private static final String kPracticeBotMacAddress = "00:80:2F:40:FC:4A";
