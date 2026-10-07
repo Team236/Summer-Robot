@@ -2,51 +2,55 @@ package com.team236.frc2026.controlboard;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+/**
+ * The {@code ControlBoard} acts as a centralized singleton that combines both
+ * drive and button control interfaces into a single access point.
+ */
 public class ControlBoard implements IDriveControlBoard, IButtonControlBoard {
-    private static ControlBoard instance = null;
+    private static ControlBoard mInstance = null;
 
-    public static ControlBoard getInstance() {
-        if (instance == null) {
-            instance = new ControlBoard();
-        }
-        return instance;
-    }
-
-    private final IDriveControlBoard driveControlBoard;
-    private final IButtonControlBoard buttonControlBoard;
+    private final IDriveControlBoard mDriveControlBoard;
+    private final IButtonControlBoard mButtonControlBoard;
 
     private ControlBoard() {
-        driveControlBoard = XboxDriveControlBoard.getInstance();
-        buttonControlBoard = XboxButtonControlBoard.getInstance();
+        mDriveControlBoard = XboxDriveControlBoard.getInstance();
+        mButtonControlBoard = XboxButtonControlBoard.getInstance();
+    }
+
+    public static ControlBoard getInstance() {
+        if (mInstance == null) {
+            mInstance = new ControlBoard();
+        }
+        return mInstance;
     }
 
     @Override
     public double getThrottle() {
-        return driveControlBoard.getThrottle();
+        return mDriveControlBoard.getThrottle();
     }
 
     @Override
     public double getStrafe() {
-        return driveControlBoard.getStrafe();
+        return mDriveControlBoard.getStrafe();
     }
 
     @Override
     public double getRotation() {
-        return driveControlBoard.getRotation();
+        return mDriveControlBoard.getRotation();
     }
 
     @Override
     public double getRotationY() {
-        return driveControlBoard.getRotationY();
+        return mDriveControlBoard.getRotationY();
     }
 
     @Override
     public Trigger getResetGyro() {
-        return buttonControlBoard.getResetGyro();
+        return mButtonControlBoard.getResetGyro();
     }
 
     @Override
     public Trigger getToggleMode() {
-        return buttonControlBoard.getToggleMode();
+        return mButtonControlBoard.getToggleMode();
     }
 }
