@@ -13,7 +13,8 @@ public class ControlBoard implements IDriveControlBoard, IButtonControlBoard {
     private final IButtonControlBoard mButtonControlBoard;
 
     private ControlBoard() {
-        mDriveControlBoard = XboxDriveControlBoard.getInstance();
+        // mDriveControlBoard = XboxDriveControlBoard.getInstance();
+        mDriveControlBoard = KeyboardDriveControlBoard.getInstance();
         mButtonControlBoard = XboxButtonControlBoard.getInstance();
     }
 
