@@ -6,49 +6,43 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import org.littletonrobotics.junction.Logger;
 
+/**
+ * The {@code ModalControls} manages the robot's active control mode (e.g., INTAKE vs. SCORING) 
+ * and handles the execution of mode-specific state change callbacks and bindings.
+ */
 public class ModalControls {
-    private static Optional<ModalControls> instance = Optional.empty();
+    private static Optional<ModalControls> mInstance = Optional.empty();
 
     public enum Mode {
         INTAKE,
         SCORING
     }
 
-    private Mode currentMode = Mode.INTAKE;
-    private Consumer<Mode> stateChangeConsumer;
+    private Mode mCurrentMode = Mode.INTAKE;
+    private Consumer<Mode> mStateChangeConsumer;
 
     private ModalControls() {
-        Logger.recordOutput("Controls/CurrentMode", currentMode.toString());
+        Logger.recordOutput("Controls/CurrentMode", mCurrentMode.toString());
     }
 
     public static ModalControls getInstance() {
-        if (instance.isEmpty()) {
-            instance = Optional.of(new ModalControls());
+        if (mInstance.isEmpty()) {
+            mInstance = Optional.of(new ModalControls());
         }
-        return instance.get();
+        return mInstance.get();
     }
 
     public Mode getMode() {
-        return currentMode;
+        return mCurrentMode;
     }
 
     public void setMode(Mode mode) {
-        this.currentMode = mode;
+        this.mCurrentMode = mode;
         Logger.recordOutput("Controls/CurrentMode", mode.toString());
     }
 
     public void setStateChangeConsumer(Consumer<Mode> consumer) {
-        this.stateChangeConsumer = consumer;
-    }
-
-    private void maybeTriggerStateChangeConsumer(Mode newMode) {
-        if (this.currentMode != newMode && this.stateChangeConsumer != null) {
-            this.stateChangeConsumer.accept(newMode);
-        }
-    }
-
-    private Trigger modeSpecific(Trigger trigger, Mode mode) {
-        return trigger.and(new Trigger(() -> this.currentMode == mode));
+        this.mStateChangeConsumer = consumer;
     }
 
     public void forceSetMode(Mode mode) {
@@ -63,7 +57,7 @@ public class ModalControls {
                         Commands.runOnce(
                                         () -> {
                                             Mode newMode =
-                                                    (currentMode == Mode.INTAKE)
+                                                    (mCurrentMode == Mode.INTAKE)
                                                             ? Mode.SCORING
                                                             : Mode.INTAKE;
                                             maybeTriggerStateChangeConsumer(newMode);
@@ -77,10 +71,20 @@ public class ModalControls {
     }
 
     public Trigger intakeMode() {
-        return new Trigger(() -> this.currentMode == Mode.INTAKE);
+        return new Trigger(() -> this.mCurrentMode == Mode.INTAKE);
     }
 
     public Trigger scoringMode() {
-        return new Trigger(() -> this.currentMode == Mode.SCORING);
+        return new Trigger(() -> this.mCurrentMode == Mode.SCORING);
+    }
+
+    private void maybeTriggerStateChangeConsumer(Mode newMode) {
+        if (this.mCurrentMode != newMode && this.mStateChangeConsumer != null) {
+            this.mStateChangeConsumer.accept(newMode);
+        }
+    }
+
+    private Trigger modeSpecific(Trigger trigger, Mode mode) {
+        return trigger.and(new Trigger(() -> this.mCurrentMode == mode));
     }
 }
