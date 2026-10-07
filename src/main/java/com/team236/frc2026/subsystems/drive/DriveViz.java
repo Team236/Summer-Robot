@@ -16,11 +16,15 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
 
+/**
+ * The {@code DriveViz} manages telemetry visualization, formats drivetrain state data, and outputs
+ * module diagnostics to the SmartDashboard. (Needs to be reviewed, Code from team 254).
+ */
 public class DriveViz {
     private final double MaxSpeed;
 
     /**
-     * Construct a telemetry object, with the specified max speed of the robot
+     * Construct a telemetry object, with the specified max speed of the robot.
      *
      * @param maxSpeed Maximum speed in meters per second
      */

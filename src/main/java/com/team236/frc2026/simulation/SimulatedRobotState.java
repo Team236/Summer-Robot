@@ -12,7 +12,6 @@ import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
  * using a time-interpolatable pose buffer.
  */
 public class SimulatedRobotState {
-
     private final ConcurrentTimeInterpolatableBuffer<Pose2d> mFieldToRobotSimulatedTruth =
             ConcurrentTimeInterpolatableBuffer.createBuffer(Constants.kLogBackTime);
 

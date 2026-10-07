@@ -1,9 +1,8 @@
 package com.team236.frc2026.subsystems.drive;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.team236.frc2026.subsystems.drive.DriveIO.DriveIOInputs;
 import com.team236.frc2026.Constants;
-import com.team236.frc2026.subsystems.drive.DriveViz;
+import com.team236.frc2026.subsystems.drive.DriveIO.DriveIOInputs;
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.lib.limelight.LimelightHelpers;
 import com.team236.lib.simulation.MapleSimSwerveDrivetrain;

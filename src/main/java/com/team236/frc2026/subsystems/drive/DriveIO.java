@@ -29,11 +29,11 @@ public interface DriveIO {
         public double pitch;
         public double roll;
 
-        DriveIOInputs() {
+        public DriveIOInputs() {
             this.Pose = GeometryHelpers.kPose2dZero;
         }
 
-        // Update current DriveIOInputs's variables with new data
+        // Updates current DriveIOInputs's variables with new data (called in hardware)
         public void updateFromState(SwerveDriveState currentState) {
             this.Pose = currentState.Pose;
             this.SuccessfulDaqs = currentState.SuccessfulDaqs;

@@ -17,11 +17,10 @@ import java.util.function.Consumer;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * The {@code DriveSim} class extends {@link DriveHardware} to provide simulation-specific
- * functionality for the swerve drive system.
+ * The {@code DriveSim} extends {@code DriveHardware} and simulates the swerve drivetrain hardware,
+ * tracks the simulated field pose, and manages the execution of the physics engine loop.
  */
 public class DriveSim extends DriveHardware {
-
     private static final double kSimLoopPeriod = 0.005; // 5 ms
 
     private SimulatedRobotState mSimRobotState = null;
@@ -30,9 +29,8 @@ public class DriveSim extends DriveHardware {
     private MapleSimSwerveDrivetrain mMapleSimSwerveDrivetrain = null;
     private Pose2d mLastConsumedPose = null;
 
-    private Consumer<SwerveDriveState> mSimTelemetryConsumer =
+    private final Consumer<SwerveDriveState> mSimTelemetryConsumer =
             swerveDriveState -> {
-                // Protect at init
                 if (mSimRobotState == null) {
                     return;
                 }
@@ -59,7 +57,6 @@ public class DriveSim extends DriveHardware {
                         : modules);
         this.mSimRobotState = simRobotState;
 
-        // Rewrite the telemetry consumer with a consumer for sim
         registerTelemetry(mSimTelemetryConsumer);
         startSimThread();
     }
@@ -111,7 +108,6 @@ public class DriveSim extends DriveHardware {
     public void readInputs(DriveIOInputs inputs) {
         super.readInputs(inputs);
 
-        // Handle the viz
         var pose = mSimRobotState.getLatestFieldToRobot();
         if (pose != null) {
             Logger.recordOutput("Drive/Viz/SimPose", mSimRobotState.getLatestFieldToRobot());

@@ -25,12 +25,12 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * The {@code DriveHardware} class controls the drivetrain at the hardware level. It implements
- * {@code DriveIO} and uses CTRE's SwerveDrivetrain.
+ * The {@code DriveHardware} controls the drivetrain at the hardware level, implements {@code
+ * DriveIO} for hardware abstraction, and integrates CTRE's SwerveDrivetrain for kinematics.
  */
 public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements DriveIO {
 
-    RobotState mRobotState;
+    private RobotState mRobotState;
 
     // Constants & Tuning gains
     private static final double kOdometryFrequencyHz = 250.0;
@@ -41,7 +41,7 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
     private static final String[] kModuleNames = {"Drive/FR", "Drive/FL", "Drive/BL", "Drive/BR"};
 
     // Thread-safe cache for telemetry data
-    private AtomicReference<SwerveDriveState> mTelemetryCache = new AtomicReference<>();
+    private final AtomicReference<SwerveDriveState> mTelemetryCache = new AtomicReference<>();
 
     private final StatusSignal<AngularVelocity> mAngularPitchVelocity;
     private final StatusSignal<AngularVelocity> mAngularRollVelocity;
@@ -50,6 +50,15 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
     private final StatusSignal<Angle> mPitch;
     private final StatusSignal<LinearAcceleration> mAccelerationX;
     private final StatusSignal<LinearAcceleration> mAccelerationY;
+
+    final Consumer<SwerveDriveState> telemetryConsumer =
+            swerveDriveState -> {
+                mTelemetryCache.set(swerveDriveState.clone());
+                mRobotState.addOdometryMeasurement(
+                        (RobotTime.getTimestampSeconds() - Utils.getCurrentTimeSeconds())
+                                + swerveDriveState.Timestamp,
+                        swerveDriveState.Pose);
+            };
 
     // Creation of drivetrain
     public DriveHardware(
@@ -79,15 +88,6 @@ public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> 
         this.getOdometryThread().setThreadPriority(kOdometryThreadPriority);
         registerTelemetry(telemetryConsumer);
     }
-
-    final Consumer<SwerveDriveState> telemetryConsumer =
-            swerveDriveState -> {
-                mTelemetryCache.set(swerveDriveState.clone());
-                mRobotState.addOdometryMeasurement(
-                        (RobotTime.getTimestampSeconds() - Utils.getCurrentTimeSeconds())
-                                + swerveDriveState.Timestamp,
-                        swerveDriveState.Pose);
-            };
 
     // Interface methods
     @Override
