@@ -133,13 +133,8 @@ public class Robot extends LoggedRobot {
                             Constants.TestbedConstants.kBumperWidthInches,
                             Constants.TestbedConstants.kBumperLengthInches,
                             Constants.TestbedConstants.kBumperHeightInches,
-                            () ->
-                                    mRobotContainer
-                                            .getSimulatedRobotState().getLatestFieldToRobot(),
-                            () ->
-                                    mRobotContainer
-                                            .getSimulatedRobotState()
-                                            .getSimChassisSpeeds());
+                            () -> mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot(),
+                            () -> mRobotContainer.getSimulatedRobotState().getSimChassisSpeeds());
 
         } else if (Constants.kUseMapleSim) {
             SimulatedArena.getInstance().placeGamePiecesOnField();
