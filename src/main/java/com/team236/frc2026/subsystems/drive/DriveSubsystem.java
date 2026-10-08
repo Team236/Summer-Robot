@@ -65,6 +65,10 @@ public class DriveSubsystem extends SubsystemBase {
         return null;
     }
 
+    public DriveIOInputsAutoLogged getInputs() {
+        return mInputs;
+    }
+
     private void updateLimelightGyroData(DriveIOInputs ioInputs) {
         LimelightHelpers.SetRobotOrientation(
                 "limelight",

@@ -127,27 +127,22 @@ public class Robot extends LoggedRobot {
     /** This function is called once when the robot is first started up. */
     @Override
     public void simulationInit() {
-        if (Constants.kUseMapleSim) {
-            if (!Constants.kUseMapleSimFuel) {
-                mFuelSim =
-                        FuelPhysicsSim.configureFuelSim(
-                                Constants.TestbedConstants.kBumperWidthInches,
-                                Constants.TestbedConstants.kBumperLengthInches,
-                                Constants.TestbedConstants.kBumperHeightInches,
-                                () ->
-                                        mRobotContainer
-                                                .getSimulatedRobotState()
-                                                .getSimDrive()
-                                                .getSimulatedDriveTrainPose(),
-                                () ->
-                                        mRobotContainer
-                                                .getSimulatedRobotState()
-                                                .getSimDrive()
-                                                .getDriveTrainSimulatedChassisSpeedsFieldRelative());
+        if (!Constants.kUseMapleSimFuel) {
+            mFuelSim =
+                    FuelPhysicsSim.configureFuelSim(
+                            Constants.TestbedConstants.kBumperWidthInches,
+                            Constants.TestbedConstants.kBumperLengthInches,
+                            Constants.TestbedConstants.kBumperHeightInches,
+                            () ->
+                                    mRobotContainer
+                                            .getSimulatedRobotState().getLatestFieldToRobot(),
+                            () ->
+                                    mRobotContainer
+                                            .getSimulatedRobotState()
+                                            .getSimChassisSpeeds());
 
-            } else {
-                SimulatedArena.getInstance().placeGamePiecesOnField();
-            }
+        } else if (Constants.kUseMapleSim) {
+            SimulatedArena.getInstance().placeGamePiecesOnField();
         }
     }
 
