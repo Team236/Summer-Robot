@@ -3,7 +3,8 @@ package com.team236.frc2026;
 import com.team236.frc2026.subsystems.drive.CompTunerConstants;
 import com.team236.frc2026.subsystems.drive.DrivetrainProfile;
 import com.team236.frc2026.subsystems.drive.PracTunerConstants;
-import com.team236.lib.robot.NetworkHelpers;
+import com.team236.lib.roborio.NetworkHelpers;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;

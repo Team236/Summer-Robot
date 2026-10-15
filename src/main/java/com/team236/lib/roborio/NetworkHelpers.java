@@ -1,4 +1,4 @@
-package com.team236.lib.robot;
+package com.team236.lib.roborio;
 
 import java.net.NetworkInterface;
 import java.net.SocketException;
