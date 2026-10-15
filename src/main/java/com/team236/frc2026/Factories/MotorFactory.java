@@ -8,16 +8,17 @@ import com.team236.frc2026.Constants;
 
 public class MotorFactory {
 
-    public static TalonFX createArmMotor (int id, String network) {
+    public static TalonFX createArmMotor(int id, String network) {
         TalonFX armMotor = new TalonFX(id, network);
         TalonFXConfiguration armMotorConfig = new TalonFXConfiguration();
 
         armMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         armMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        armMotorConfig.CurrentLimits.SupplyCurrentLimit = Constants.ArmConstants.kSupplyCurrentLimit; // Needs Update
+        armMotorConfig.CurrentLimits.SupplyCurrentLimit =
+                Constants.ArmConstants.kSupplyCurrentLimit; // Needs Update
         armMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        var slot0Config = armMotorConfig.Slot0;  
+        var slot0Config = armMotorConfig.Slot0;
         slot0Config.kV = Constants.ArmConstants.kSlot0Kv;
         slot0Config.kP = Constants.ArmConstants.kSlot0Kp;
         slot0Config.kI = Constants.ArmConstants.kSlot0Ki;

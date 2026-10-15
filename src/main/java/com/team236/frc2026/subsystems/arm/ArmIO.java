@@ -2,7 +2,6 @@ package com.team236.frc2026.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ArmIO {

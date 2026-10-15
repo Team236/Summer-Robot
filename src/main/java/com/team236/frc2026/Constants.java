@@ -117,6 +117,7 @@ public final class Constants {
 
     public static final class ArmConstants {
         public static final int kMotorId = 1;
+        public static final String kMotorNetwork = "rio";
         public static final double kSupplyCurrentLimit = 35.0;
         public static final double kSlot0Kv = 0.0;
         public static final double kSlot0Kp = 0.0;
