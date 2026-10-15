@@ -15,4 +15,6 @@ public class MotorSubsystemConfig {
     public double unitToRotorRatio = 1.0;
     public double kMinPositionUnits = Double.NEGATIVE_INFINITY;
     public double kMaxPositionUnits = Double.POSITIVE_INFINITY;
+
+    public double kMomentOfInertia = 0.5;
 }

@@ -32,8 +32,8 @@ import edu.wpi.first.units.measure.Voltage;
  * The {@code TalonFXIO} manages the hardware interactions and telemetry logic for a TalonFX motor.
  */
 public class TalonFXIO implements MotorIO {
-    private final TalonFX mTalon;
-    private final MotorSubsystemConfig mConfig;
+    protected final TalonFX talon;
+    protected final MotorSubsystemConfig config;
 
     private final DutyCycleOut mDutyCycleControl = new DutyCycleOut(0.0);
     private final VelocityVoltage mVelocityVoltageControl = new VelocityVoltage(0.0);
@@ -55,41 +55,41 @@ public class TalonFXIO implements MotorIO {
     private final BaseStatusSignal[] mSignals;
 
     public TalonFXIO(MotorSubsystemConfig config) {
-        this.mConfig = config;
-        mTalon =
+        this.config = config;
+        talon =
                 new TalonFX(
-                        mConfig.talonCANId.getDeviceId(), mConfig.talonCANId.getDeviceNetwork());
+                        config.talonCANId.getDeviceId(), config.talonCANId.getDeviceNetwork());
 
         if (Robot.isSimulation()) {
-            this.mConfig.talonConfig.CurrentLimits = new CurrentLimitsConfigs();
-            this.mConfig.talonConfig.ClosedLoopRamps = new ClosedLoopRampsConfigs();
-            this.mConfig.talonConfig.OpenLoopRamps = new OpenLoopRampsConfigs();
+            this.config.talonConfig.CurrentLimits = new CurrentLimitsConfigs();
+            this.config.talonConfig.ClosedLoopRamps = new ClosedLoopRampsConfigs();
+            this.config.talonConfig.OpenLoopRamps = new OpenLoopRampsConfigs();
         }
 
-        CTREUtil.applyConfiguration(mTalon, this.mConfig.talonConfig);
+        CTREUtil.applyConfiguration(talon, this.config.talonConfig);
 
-        mPositionSignal = mTalon.getPosition();
-        mVelocitySignal = mTalon.getVelocity();
-        mVoltageSignal = mTalon.getMotorVoltage();
-        mCurrentStatorSignal = mTalon.getStatorCurrent();
-        mCurrentSupplySignal = mTalon.getSupplyCurrent();
-        mRawRotorPositionSignal = mTalon.getRotorPosition();
+        mPositionSignal = talon.getPosition();
+        mVelocitySignal = talon.getVelocity();
+        mVoltageSignal = talon.getMotorVoltage();
+        mCurrentStatorSignal = talon.getStatorCurrent();
+        mCurrentSupplySignal = talon.getSupplyCurrent();
+        mRawRotorPositionSignal = talon.getRotorPosition();
 
         mSignals =
                 new BaseStatusSignal[] {
                     mPositionSignal, mVelocitySignal, mVoltageSignal,
                     mCurrentStatorSignal, mCurrentSupplySignal, mRawRotorPositionSignal
                 };
-        CanStatusLogger.getInstance().registerTalonFX(mConfig.name, mTalon, mConfig.talonCANId);
+        CanStatusLogger.getInstance().registerTalonFX(config.name, talon, config.talonCANId);
 
         CTREUtil.tryUntilOK(
                 () -> BaseStatusSignal.setUpdateFrequencyForAll(50.0, mSignals),
-                mTalon.getDeviceID());
-        CTREUtil.tryUntilOK(() -> mTalon.optimizeBusUtilization(), mTalon.getDeviceID());
+                talon.getDeviceID());
+        CTREUtil.tryUntilOK(() -> talon.optimizeBusUtilization(), talon.getDeviceID());
     }
 
     public double unitsToRotor(double units) {
-        return units / mConfig.unitToRotorRatio;
+        return units / config.unitToRotorRatio;
     }
 
     @Override
@@ -106,23 +106,23 @@ public class TalonFXIO implements MotorIO {
 
     @Override
     public void setOpenLoopDutyCycle(double dutyCycle) {
-        mTalon.setControl(mDutyCycleControl.withOutput(dutyCycle));
+        talon.setControl(mDutyCycleControl.withOutput(dutyCycle));
     }
 
     @Override
     public void setPositionSetpoint(double units) {
-        mTalon.setControl(mPositionVoltageControl.withPosition(clampPosition(units)));
+        talon.setControl(mPositionVoltageControl.withPosition(clampPosition(units)));
     }
 
     @Override
     public void setMotionMagicConfig(MotionMagicConfigs config) {
-        this.mConfig.talonConfig.MotionMagic = config;
-        CTREUtil.applyConfiguration(mTalon, this.mConfig.talonConfig.MotionMagic);
+        this.config.talonConfig.MotionMagic = config;
+        CTREUtil.applyConfiguration(talon, this.config.talonConfig.MotionMagic);
     }
 
     @Override
     public void setMotionMagicSetpoint(double units, int slot) {
-        mTalon.setControl(
+        talon.setControl(
                 mMotionMagicPositionControl.withPosition(clampPosition(units)).withSlot(slot));
     }
 
@@ -134,7 +134,7 @@ public class TalonFXIO implements MotorIO {
             double jerk,
             int slot,
             double feedfowards) {
-        mTalon.setControl(
+        talon.setControl(
                 mDynamicMotionMagicVoltage
                         .withPosition(clampPosition(units))
                         .withAcceleration(acceleration)
@@ -146,36 +146,36 @@ public class TalonFXIO implements MotorIO {
 
     @Override
     public void setNeutralMode(NeutralModeValue mode) {
-        mConfig.talonConfig.MotorOutput.NeutralMode = mode;
-        CTREUtil.applyConfiguration(mTalon, mConfig.talonConfig);
+        config.talonConfig.MotorOutput.NeutralMode = mode;
+        CTREUtil.applyConfiguration(talon, config.talonConfig);
     }
 
     @Override
     public void setEnableSoftLimits(boolean fwd, boolean rev) {
-        mConfig.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = fwd;
-        mConfig.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = rev;
-        CTREUtil.applyConfiguration(mTalon, mConfig.talonConfig);
+        config.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = fwd;
+        config.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = rev;
+        CTREUtil.applyConfiguration(talon, config.talonConfig);
     }
 
     @Override
     public void setEnableHardLimits(boolean fwd, boolean rev) {
-        mConfig.talonConfig.HardwareLimitSwitch.ForwardLimitEnable = fwd;
-        mConfig.talonConfig.HardwareLimitSwitch.ReverseLimitEnable = rev;
-        CTREUtil.applyConfiguration(mTalon, mConfig.talonConfig.HardwareLimitSwitch);
+        config.talonConfig.HardwareLimitSwitch.ForwardLimitEnable = fwd;
+        config.talonConfig.HardwareLimitSwitch.ReverseLimitEnable = rev;
+        CTREUtil.applyConfiguration(talon, config.talonConfig.HardwareLimitSwitch);
     }
 
     @Override
     public void setEnableAutosetPositionValue(boolean fwd, boolean rev) {
-        mConfig.talonConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = fwd;
-        mConfig.talonConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = rev;
-        mConfig.talonConfig.HardwareLimitSwitch.ForwardLimitEnable = fwd;
-        mConfig.talonConfig.HardwareLimitSwitch.ReverseLimitEnable = rev;
-        CTREUtil.applyConfiguration(mTalon, mConfig.talonConfig.HardwareLimitSwitch);
+        config.talonConfig.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = fwd;
+        config.talonConfig.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = rev;
+        config.talonConfig.HardwareLimitSwitch.ForwardLimitEnable = fwd;
+        config.talonConfig.HardwareLimitSwitch.ReverseLimitEnable = rev;
+        CTREUtil.applyConfiguration(talon, config.talonConfig.HardwareLimitSwitch);
     }
 
     @Override
     public void setVelocitySetpoint(double unitsPerSecond, int slot) {
-        mTalon.setControl(
+        talon.setControl(
                 mVelocityVoltageControl.withVelocity(unitsToRotor(unitsPerSecond)).withSlot(slot));
     }
 
@@ -186,41 +186,41 @@ public class TalonFXIO implements MotorIO {
 
     @Override
     public void setCurrentPosition(double positionUnits) {
-        mTalon.setPosition(unitsToRotor(positionUnits));
+        talon.setPosition(unitsToRotor(positionUnits));
     }
 
     @Override
     public void setVoltageOutput(double voltage) {
-        mTalon.setControl(mVoltageControl.withOutput(voltage));
+        talon.setControl(mVoltageControl.withOutput(voltage));
     }
 
     @Override
     public void follow(CanDeviceId leaderId, MotorAlignmentValue direction) {
         CTREUtil.tryUntilOK(
                 () ->
-                        mTalon.setControl(
+                        talon.setControl(
                                 mFollowerControl
                                         .withLeaderID(leaderId.getDeviceId())
                                         .withMotorAlignment(direction)),
-                this.mConfig.talonCANId.getDeviceId());
+                this.config.talonCANId.getDeviceId());
     }
 
     @Override
     public void setTorqueCurrentFOC(double current) {
-        mTalon.setControl(mTorqueCurrentFOC.withOutput(current));
+        talon.setControl(mTorqueCurrentFOC.withOutput(current));
     }
 
     @Override
     public void setVoltageConfig(VoltageConfigs inputConfig) {
-        CTREUtil.applyConfigurationNonBlocking(mTalon, inputConfig);
+        CTREUtil.applyConfigurationNonBlocking(talon, inputConfig);
     }
 
     private double rotorToUnits(double rotor) {
-        return rotor * mConfig.unitToRotorRatio;
+        return rotor * config.unitToRotorRatio;
     }
 
     private double clampPosition(double units) {
         return unitsToRotor(
-                MathUtil.clamp(units, mConfig.kMinPositionUnits, mConfig.kMaxPositionUnits));
+                MathUtil.clamp(units, config.kMinPositionUnits, config.kMaxPositionUnits));
     }
 }
