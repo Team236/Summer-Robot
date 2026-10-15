@@ -4,6 +4,9 @@ import com.team236.frc2026.subsystems.drive.CompTunerConstants;
 import com.team236.frc2026.subsystems.drive.DrivetrainProfile;
 import com.team236.frc2026.subsystems.drive.PracTunerConstants;
 import com.team236.lib.roborio.NetworkHelpers;
+import com.team236.lib.subsystems.cancoder.CanDeviceId;
+import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoderConfig;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -43,6 +46,8 @@ public final class Constants {
 
     public static final AprilTagFieldLayout kRebuiltAprilTagLayout =
             AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark);
+
+    public static final String kCanBusDrivebase = "drivebase";
 
     /** The {@code Controller} holds constants for driver input devices. */
     public static final class Controller {
@@ -117,7 +122,15 @@ public final class Constants {
 
     /** The {@code FieldDimensions} defines the arm subsystem. */
     public static final class ArmConstants {
-        public static final int kMotorId = 1;
+        public static final int kARmPivotMotorId = 1;
+        public static final MotorSubsystemWithCanCoderConfig kArmPivotConfig = 
+            new MotorSubsystemWithCanCoderConfig();
+
+        static {
+            kArmPivotConfig.canCoderConfig.canId = new CanDeviceId(Constants.ArmConstants.kARmPivotMotorId, kCanBusDrivebase);
+        }
+
+        // Motor Configs (In static):
         public static final String kMotorNetwork = "rio";
         public static final double kSupplyCurrentLimit = 35.0;
         public static final double kSlot0Kv = 0.0;
@@ -127,6 +140,9 @@ public final class Constants {
 
         public static final double kArmPivotStowPositionUnits = 0.0;
         public static final double kArmPivotIntakePositionUnits = 1.0;
+
+        // Manual open-loop duty cycle for arm pivot (tune this value).
+        public static final double kArmPivotManualDutyCycle = 0.2;
     }
 
     /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */
