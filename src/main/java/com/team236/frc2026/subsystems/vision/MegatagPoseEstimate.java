@@ -1,7 +1,7 @@
 package com.team236.frc2026.subsystems.vision;
 
 import com.team236.lib.limelight.LimelightHelpers;
-import com.team236.lib.math.GeometryHelpers;
+import com.team236.lib.math.MathHelpers;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.util.struct.StructSerializable;
@@ -27,7 +27,7 @@ public record MegatagPoseEstimate(
 
     public MegatagPoseEstimate {
         if (fieldToRobot == null) {
-            fieldToRobot = GeometryHelpers.kPose2dZero;
+            fieldToRobot = MathHelpers.kPose2dZero;
         }
     }
 
@@ -35,7 +35,7 @@ public record MegatagPoseEstimate(
     public static MegatagPoseEstimate fromLimelight(LimelightHelpers.PoseEstimate poseEstimate) {
         Pose2d fieldToRobot = poseEstimate.pose;
         if (fieldToRobot == null) {
-            fieldToRobot = GeometryHelpers.kPose2dZero;
+            fieldToRobot = MathHelpers.kPose2dZero;
         }
         return new MegatagPoseEstimate(
                 fieldToRobot,
