@@ -2,7 +2,6 @@ package com.team236.frc2026;
 
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.lib.roborio.ConcurrentTimeInterpolatableBuffer;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
