@@ -21,7 +21,7 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
 
     protected U io;
     protected T mInputs;
-    protected double mPositionSetpointUnits = 0.0;
+    protected double positionSetpointUnits = 0.0;
     protected MotorSubsystemConfig mConfig;
 
     public MotorSubsystem(MotorSubsystemConfig config, T inputs, U io) {
@@ -57,7 +57,7 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
     }
 
     public double getPositionSetpointUnits() {
-        return mPositionSetpointUnits;
+        return positionSetpointUnits;
     }
 
     public void setCurrentPosition(double positionUnits) {
@@ -256,7 +256,7 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
     }
 
     protected void setPositionSetpointImpl(double units) {
-        mPositionSetpointUnits = units;
+        positionSetpointUnits = units;
         Logger.recordOutput(getName() + "/API/setPositionSetpointImp/Units", units);
         io.setPositionSetpoint(units);
     }
@@ -267,14 +267,14 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
     }
 
     protected void setMotionMagicSetpointImpl(double units, int slot) {
-        mPositionSetpointUnits = units;
+        positionSetpointUnits = units;
         Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImp/Units", units);
         Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImp/Slot", slot);
         io.setMotionMagicSetpoint(units, slot);
     }
 
     protected void setMotionMagicSetpointImpl(double units, MotionMagicConfigs config, int slot) {
-        mPositionSetpointUnits = units;
+        positionSetpointUnits = units;
         double velocity = config.MotionMagicCruiseVelocity;
         double acceleration = config.MotionMagicAcceleration;
         double jerk = config.MotionMagicJerk;
@@ -290,7 +290,7 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
 
     protected void setMotionMagicSetpointImpl(
             double units, MotionMagicConfigs config, double feedfowards, int slot) {
-        mPositionSetpointUnits = units;
+        positionSetpointUnits = units;
         double velocity = config.MotionMagicCruiseVelocity;
         double acceleration = config.MotionMagicAcceleration;
         double jerk = config.MotionMagicJerk;

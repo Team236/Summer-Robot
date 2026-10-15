@@ -1,6 +1,7 @@
 package com.team236.frc2026.subsystems.arm;
 
 import com.team236.frc2026.Constants;
+import com.team236.frc2026.RobotState;
 import com.team236.lib.subsystems.cancoder.CanCoderIO;
 import com.team236.lib.subsystems.cancoder.CanCoderInputsAutoLogged;
 import com.team236.lib.subsystems.motor.MotorIO;
@@ -31,8 +32,8 @@ public class ArmPivot
                 new CanCoderInputsAutoLogged(),
                 canCoderIO);
 
-        this.setCurrentPosition(Constants.ArmConstants.kArmPivotDownPositionUnits);
-        this.positionSetpointUnits = Constants.ArmConstants.kArmPivotDownPositionUnits;
+        this.setCurrentPosition(Constants.ArmConstants.kArmPivotStowPositionUnits);
+        this.positionSetpointUnits = Constants.ArmConstants.kArmPivotStowPositionUnits;
         this.state = state;
     }
 
@@ -42,6 +43,10 @@ public class ArmPivot
                 motionMagicSetpointCommand(this::getPositionSetpointUnits)
                         .withName("Arm Pivot Maintain Setpoint (default)")
                         .ignoringDisable(true));
+    }
+
+    public boolean getFullyExtended() {
+        return fullyDeployed;
     }
 
     @Override
