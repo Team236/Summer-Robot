@@ -4,8 +4,6 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team236.lib.math.MathHelpers;
 import com.team236.lib.roborio.RobotTime;
-import com.team236.lib.subsystems.motors.MotorInputsAutoLogged;
-
 import edu.wpi.first.wpilibj2.command.*;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;

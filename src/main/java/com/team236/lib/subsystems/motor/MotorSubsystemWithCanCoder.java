@@ -2,8 +2,6 @@ package com.team236.lib.subsystems.motor;
 
 import com.team236.lib.subsystems.cancoder.CanCoderIO;
 import com.team236.lib.subsystems.cancoder.CanCoderInputsAutoLogged;
-import com.team236.lib.subsystems.motors.MotorInputsAutoLogged;
-
 import org.littletonrobotics.junction.Logger;
 
 /**

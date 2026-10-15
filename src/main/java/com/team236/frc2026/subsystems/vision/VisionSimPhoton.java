@@ -24,8 +24,8 @@ import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 /**
- * The {@code VisionSimPhoton} manages the simulated PhotonVision environment,
- * converting virtual AprilTag targets into estimated robot poses for telemetry.
+ * The {@code VisionSimPhoton} manages the simulated PhotonVision environment, converting virtual
+ * AprilTag targets into estimated robot poses for telemetry.
  */
 public class VisionSimPhoton extends VisionHardwareLimelight {
     private final NetworkTable mTableA =
