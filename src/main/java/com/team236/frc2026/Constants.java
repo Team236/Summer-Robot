@@ -128,9 +128,9 @@ public final class Constants {
     /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */
     public static final class FieldDimensions {
         private static final double kFieldMinX = 0.0;
-        private static final double kFieldMaxX = 16.540988;
+        private static final double kFieldMaxX = kRebuiltAprilTagLayout.getFieldLength();
         private static final double kFieldMinY = 0.0;
-        private static final double kFieldMaxY = 8.069326;
+        private static final double kFieldMaxY = kRebuiltAprilTagLayout.getFieldWidth();
         private static final double kFieldMinZ = 0.0;
         private static final double kFieldMaxZ = 1.0;
 
