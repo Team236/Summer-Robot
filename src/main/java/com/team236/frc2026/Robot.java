@@ -4,7 +4,9 @@ import com.ctre.phoenix6.SignalLogger;
 import com.team236.lib.limelight.Limelight3GConfig;
 import com.team236.lib.simulation.FuelPhysicsSim;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.ironmaple.simulation.SimulatedArena;
@@ -152,5 +154,7 @@ public class Robot extends LoggedRobot {
             Logger.recordOutput(
                     "Sim/Fuel", SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel"));
         }
+
+        Logger.recordOutput("Components", new Pose3d[] {new Pose3d(0, 0, 0, new Rotation3d())});
     }
 }
