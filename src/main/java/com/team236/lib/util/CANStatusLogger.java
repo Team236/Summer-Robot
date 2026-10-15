@@ -11,41 +11,26 @@ import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
+/**
+ * The {@code CanStatusLogger} tracks and logs the connection status of CAN devices across the robot
+ * network to AdvantageKit and SmartDashboard.
+ */
 public class CanStatusLogger {
-    private static CanStatusLogger instance;
-    private final List<DeviceStatusInfo> devices = new ArrayList<>();
-
-    private static class DeviceStatusInfo {
-        private final String name;
-        private final TalonFX talon;
-        private final int deviceId;
-        private final String canBus;
-        private final StatusSignal<?> supplyVoltage;
-
-        public DeviceStatusInfo(String name, TalonFX talon, int deviceId, String canBus) {
-            this.name = name;
-            this.talon = talon;
-            this.deviceId = deviceId;
-            this.canBus = canBus;
-            this.supplyVoltage = talon.getSupplyVoltage();
-
-            if (this.supplyVoltage != null) {
-                this.supplyVoltage.setUpdateFrequency(100);
-            }
-        }
-    }
+    private static CanStatusLogger mInstance;
+    private final List<DeviceStatusInfo> mDevices = new ArrayList<>();
+    private BaseStatusSignal[] mSignals;
 
     private CanStatusLogger() {}
 
     public static synchronized CanStatusLogger getInstance() {
-        if (instance == null) {
-            instance = new CanStatusLogger();
+        if (mInstance == null) {
+            mInstance = new CanStatusLogger();
         }
-        return instance;
+        return mInstance;
     }
 
     public void registerTalonFX(String name, TalonFX talon, int deviceId, String canBus) {
-        devices.add(new DeviceStatusInfo(name, talon, deviceId, canBus));
+        mDevices.add(new DeviceStatusInfo(name, talon, deviceId, canBus));
     }
 
     public void registerTalonFX(String name, TalonFX talon, CanDeviceId deviceId) {
@@ -56,48 +41,70 @@ public class CanStatusLogger {
         // This method is kept for compatibility but doesn't need to track CANcoders
     }
 
-    private BaseStatusSignal[] signals;
+    public void updateCanStatus() {
+        if (mSignals == null) {
+            initializeSignalArray();
+        }
+        try {
+            BaseStatusSignal.refreshAll(mSignals);
+        } catch (Exception e) {
+        }
+
+        // Check each device status
+        for (int i = 0; i < mDevices.size(); i++) {
+            DeviceStatusInfo device = mDevices.get(i);
+            String deviceName = device.mName + "ID" + device.mDeviceId;
+            boolean isConnected = false;
+
+            if (device.mTalon != null && device.mSupplyVoltage != null) {
+                isConnected = (device.mSupplyVoltage.getStatus() == StatusCode.OK);
+            }
+
+            Logger.recordOutput("CANstatus/" + deviceName, isConnected);
+            SmartDashboard.putBoolean("CAN/" + device.mCanBus + "/" + deviceName, isConnected);
+        }
+    }
 
     private void initializeSignalArray() {
         int validSignalCount = 0;
-        for (DeviceStatusInfo device : devices) {
-            if (device.supplyVoltage != null) {
+        for (DeviceStatusInfo device : mDevices) {
+            if (device.mSupplyVoltage != null) {
                 validSignalCount++;
             }
         }
 
-        if (signals == null || signals.length != validSignalCount) {
-            signals = new BaseStatusSignal[validSignalCount];
+        if (mSignals == null || mSignals.length != validSignalCount) {
+            mSignals = new BaseStatusSignal[validSignalCount];
             int index = 0;
-            for (DeviceStatusInfo device : devices) {
-                if (device.supplyVoltage != null) {
-                    signals[index++] = device.supplyVoltage;
+            for (DeviceStatusInfo device : mDevices) {
+                if (device.mSupplyVoltage != null) {
+                    mSignals[index++] = device.mSupplyVoltage;
                 }
             }
         }
     }
 
-    public void updateCanStatus() {
-        if (signals == null) {
-            initializeSignalArray();
-        }
-        try {
-            BaseStatusSignal.refreshAll(signals);
-        } catch (Exception e) {
-        }
+    /**
+     * The {@code DeviceStatusInfo} holds hardware references and network telemetry signals for a
+     * specific CAN device.
+     */
+    private static class DeviceStatusInfo {
+        private final String mName;
+        private final TalonFX mTalon;
+        private final int mDeviceId;
+        private final String mCanBus;
+        private final StatusSignal<?> mSupplyVoltage;
 
-        // Check each device status
-        for (int i = 0; i < devices.size(); i++) {
-            DeviceStatusInfo device = devices.get(i);
-            String deviceName = device.name + "ID" + device.deviceId;
-            boolean isConnected = false;
+        public DeviceStatusInfo(String name, TalonFX talon, int deviceId, String canBus) {
+            this.mName = name;
+            this.mTalon = talon;
+            this.mDeviceId = deviceId;
+            this.mCanBus = canBus;
+            this.mSupplyVoltage = talon.getSupplyVoltage();
 
-            if (device.talon != null && device.supplyVoltage != null) {
-                isConnected = (device.supplyVoltage.getStatus() == StatusCode.OK);
+            if (this.mSupplyVoltage != null) {
+                this.mSupplyVoltage.setUpdateFrequency(100);
             }
-
-            Logger.recordOutput("CANstatus/" + deviceName, isConnected);
-            SmartDashboard.putBoolean("CAN/" + device.canBus + "/" + deviceName, isConnected);
         }
     }
 }

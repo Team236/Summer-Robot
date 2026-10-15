@@ -11,13 +11,21 @@ import com.ctre.phoenix6.signals.S2FloatStateValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import java.util.function.Supplier;
 
+/**
+ * The {@code CTREUtil} class provides utility methods for interacting with CTRE hardware, including
+ * applying and verifying device configurations with built-in retry logic.
+ */
 public class CTREUtil {
-    public static final int MAX_RETRIES = 10;
+
+    public static final int kMaxRetries = 10;
+
+    private CTREUtil() {
+        // Utility class should not be instantiated
+    }
 
     public static StatusCode tryUntilOK(Supplier<StatusCode> function, int deviceId) {
-        final int max_num_retries = 10;
         StatusCode statusCode = StatusCode.OK;
-        for (int i = 0; i < max_num_retries; ++i) {
+        for (int i = 0; i < kMaxRetries; ++i) {
             statusCode = function.get();
             if (statusCode == StatusCode.OK) break;
         }
