@@ -5,7 +5,8 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.team236.lib.subsystems.CANDeviceId;
+import com.team236.lib.subsystems.cancoder.CanDeviceId;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class CANStatusLogger {
         devices.add(new DeviceStatusInfo(name, talon, deviceId, canBus));
     }
 
-    public void registerTalonFX(String name, TalonFX talon, CANDeviceId deviceId) {
+    public void registerTalonFX(String name, TalonFX talon, CanDeviceId deviceId) {
         registerTalonFX(name, talon, deviceId.getDeviceId(), deviceId.getDeviceNetwork());
     }
 
