@@ -1,4 +1,4 @@
-package com.team236.lib.subsystems.motors;
+package com.team236.lib.subsystems.motor;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;

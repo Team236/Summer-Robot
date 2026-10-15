@@ -1,4 +1,4 @@
-package com.team236.lib.subsystems.motors;
+package com.team236.lib.subsystems.motor;
 
 import com.team236.lib.subsystems.cancoder.CanCoderConfig;
 

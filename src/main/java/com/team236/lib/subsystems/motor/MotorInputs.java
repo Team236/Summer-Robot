@@ -1,4 +1,4 @@
-package com.team236.lib.subsystems.motors;
+package com.team236.lib.subsystems.motor;
 
 import org.littletonrobotics.junction.AutoLog;
 
