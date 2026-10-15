@@ -1,11 +1,10 @@
 package com.team236.lib.subsystems.motor;
 
+import com.team236.lib.subsystems.cancoder.SimCanCoderIO;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import java.util.function.Supplier;
-
-import com.team236.lib.subsystems.cancoder.SimCanCoderIO;
 
 public class SimTalonFXWithCancoder extends SimTalonFXIO {
     MotorSubsystemWithCanCoderConfig canCoderConfig;

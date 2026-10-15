@@ -56,9 +56,7 @@ public class TalonFXIO implements MotorIO {
 
     public TalonFXIO(MotorSubsystemConfig config) {
         this.config = config;
-        talon =
-                new TalonFX(
-                        config.talonCANId.getDeviceId(), config.talonCANId.getDeviceNetwork());
+        talon = new TalonFX(config.talonCANId.getDeviceId(), config.talonCANId.getDeviceNetwork());
 
         if (Robot.isSimulation()) {
             this.config.talonConfig.CurrentLimits = new CurrentLimitsConfigs();

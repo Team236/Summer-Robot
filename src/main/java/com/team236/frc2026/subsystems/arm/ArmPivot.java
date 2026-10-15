@@ -17,8 +17,8 @@ import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoderConfig;
 public class ArmPivot
         extends MotorSubsystemWithCanCoder<
                 MotorInputsAutoLogged, MotorIO, CanCoderInputsAutoLogged, CanCoderIO> {
-        private RobotState state;
-        private boolean fullyDeployed = false;
+    private RobotState state;
+    private boolean fullyDeployed = false;
 
     public ArmPivot(
             final MotorSubsystemWithCanCoderConfig motorConfig,
