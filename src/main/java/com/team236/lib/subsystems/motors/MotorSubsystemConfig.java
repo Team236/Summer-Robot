@@ -3,6 +3,10 @@ package com.team236.lib.subsystems.motors;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.team236.lib.subsystems.cancoder.CanDeviceId;
 
+/**
+ * The {@code MotorSubsystemConfig} stores hardware identifiers, tuning gains, and configuration
+ * profiles required to initialize a motor subsystem.
+ */
 public class MotorSubsystemConfig {
     public String name = "UNNAMED";
     public CanDeviceId talonCANId;

@@ -10,23 +10,25 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * RollerMotorSubsystem
+ * The {@code MotorSubsystem} serves as a generic base class for all motor-based subsystems. It
+ * encapsulates hardware interaction, telemetry logging, and provides standard command factories.
  *
- * @param <T>
+ * @param <T> The auto-logged inputs class for the motor.
+ * @param <U> The hardware IO interface for the motor.
  */
 public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
         extends SubsystemBase {
-    protected U io;
-    protected T inputs;
-    protected double positionSetpointUnits = 0.0;
 
-    protected MotorSubsystemConfig conf;
+    protected U io;
+    protected T mInputs;
+    protected double mPositionSetpointUnits = 0.0;
+    protected MotorSubsystemConfig mConfig;
 
     public MotorSubsystem(MotorSubsystemConfig config, T inputs, U io) {
         super(config.name);
-        this.conf = config;
+        this.mConfig = config;
         this.io = io;
-        this.inputs = inputs;
+        this.mInputs = inputs;
 
         setDefaultCommand(
                 dutyCycleCommand(() -> 0.0)
@@ -37,8 +39,8 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
     @Override
     public void periodic() {
         double timestamp = RobotTime.getTimestampSeconds();
-        io.readInputs(inputs);
-        Logger.processInputs(getName(), inputs);
+        io.readInputs(mInputs);
+        Logger.processInputs(getName(), mInputs);
         Logger.recordOutput(
                 getName() + "/latencyPeriodicSec", RobotTime.getTimestampSeconds() - timestamp);
         Logger.recordOutput(
@@ -46,90 +48,23 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
                 (getCurrentCommand() == null) ? "Default" : getCurrentCommand().getName());
     }
 
-    protected void setMotionMagicConfig(MotionMagicConfigs config) {
-        io.setMotionMagicConfig(config);
-    }
-
-    protected void setOpenLoopDutyCycleImpl(double dutyCycle) {
-        Logger.recordOutput(getName() + "/API/setOpenLoopDutyCycle/dutyCycle", dutyCycle);
-        io.setOpenLoopDutyCycle(dutyCycle);
-    }
-
-    protected void setVoltageImpl(double voltage) {
-        Logger.recordOutput(getName() + "/API/setVoltageImpl/voltage", voltage);
-        io.setVoltageOutput(voltage);
-    }
-
-    protected void setPositionSetpointImpl(double units) {
-        positionSetpointUnits = units;
-        Logger.recordOutput(getName() + "/API/setPositionSetpointImp/Units", units);
-        io.setPositionSetpoint(units);
-    }
-
-    protected void setNeutralModeImpl(NeutralModeValue mode) {
-        Logger.recordOutput(getName() + "/API/setNeutralModeImpl/Mode", mode);
-        io.setNeutralMode(mode);
-    }
-
-    protected void setMotionMagicSetpointImpl(double units, int slot) {
-        positionSetpointUnits = units;
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImp/Units", units);
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImp/Slot", slot);
-        io.setMotionMagicSetpoint(units, slot);
-    }
-
-    protected void setMotionMagicSetpointImpl(double units, MotionMagicConfigs config, int slot) {
-        positionSetpointUnits = units;
-        double velocity = config.MotionMagicCruiseVelocity;
-        double acceleration = config.MotionMagicAcceleration;
-        double jerk = config.MotionMagicJerk;
-
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Units", units);
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Velocity", velocity);
-        Logger.recordOutput(
-                getName() + "/API/setMotionMagicSetpointImpDynamic/Accel", acceleration);
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Jerk", jerk);
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Slot", slot);
-        io.setMotionMagicSetpoint(units, velocity, acceleration, jerk, slot);
-    }
-
-    protected void setMotionMagicSetpointImpl(
-            double units, MotionMagicConfigs config, double feedfowards, int slot) {
-        positionSetpointUnits = units;
-        double velocity = config.MotionMagicCruiseVelocity;
-        double acceleration = config.MotionMagicAcceleration;
-        double jerk = config.MotionMagicJerk;
-
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Units", units);
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Velocity", velocity);
-        Logger.recordOutput(
-                getName() + "/API/setMotionMagicSetpointImpDynamic/Accel", acceleration);
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Jerk", jerk);
-        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Slot", slot);
-        Logger.recordOutput(
-                getName() + "/API/setMotionMagicSetpointImpDynamic/Feedforwards", feedfowards);
-        io.setMotionMagicSetpoint(units, velocity, acceleration, jerk, slot, feedfowards);
-    }
-
-    protected void setVelocitySetpointImpl(double unitsPerSecond, int slot) {
-        Logger.recordOutput(getName() + "/API/setVelocitySetpointImpl/UnitsPerS", unitsPerSecond);
-        io.setVelocitySetpoint(unitsPerSecond, slot);
-    }
-
     public double getCurrentPosition() {
-        return inputs.unitPosition;
+        return mInputs.unitPosition;
     }
 
     public double getCurrentVelocity() {
-        return inputs.velocityUnitsPerSecond;
+        return mInputs.velocityUnitsPerSecond;
     }
 
     public double getPositionSetpointUnits() {
-        return positionSetpointUnits;
+        return mPositionSetpointUnits;
+    }
+
+    public void setCurrentPosition(double positionUnits) {
+        io.setCurrentPosition(positionUnits);
     }
 
     public Command setMotionMagicConfigCommand(MotionMagicConfigs configs) {
-        // Not taking requirements is intentional here.
         return new InstantCommand(() -> setMotionMagicConfig(configs));
     }
 
@@ -201,9 +136,13 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
                         () ->
                                 MathHelpers.epsilonEquals(
                                         unitSupplier.getAsDouble(),
-                                        inputs.unitPosition,
+                                        mInputs.unitPosition,
                                         epsilon.getAsDouble())),
                 positionSetpointCommand(unitSupplier));
+    }
+
+    public Command motionMagicSetpointCommand(DoubleSupplier unitSupplier) {
+        return motionMagicSetpointCommand(unitSupplier, 0);
     }
 
     public Command motionMagicSetpointCommand(DoubleSupplier unitSupplier, int slot) {
@@ -213,6 +152,11 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
                         },
                         () -> {})
                 .withName(getName() + " motionMagicSetpointCommand");
+    }
+
+    public Command motionMagicSetpointCommand(
+            DoubleSupplier unitSupplier, Supplier<MotionMagicConfigs> configSupplier) {
+        return motionMagicSetpointCommand(unitSupplier, configSupplier, 0);
     }
 
     public Command motionMagicSetpointCommand(
@@ -243,6 +187,10 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
                 .withName(getName() + " dynamicMotionMagicSetpointCommand");
     }
 
+    public Command motionMagicSetpointCommandBlocking(DoubleSupplier setpoint, double tolerance) {
+        return motionMagicSetpointCommandBlocking(setpoint, tolerance, 0);
+    }
+
     public Command motionMagicSetpointCommandBlocking(
             DoubleSupplier setpoint, double tolerance, int slot) {
         return motionMagicSetpointCommand(() -> setpoint.getAsDouble(), slot)
@@ -250,6 +198,13 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
                         () ->
                                 MathHelpers.epsilonEquals(
                                         getCurrentPosition(), setpoint.getAsDouble(), tolerance));
+    }
+
+    public Command motionMagicSetpointCommandBlocking(
+            DoubleSupplier setpoint,
+            Supplier<MotionMagicConfigs> configSupplier,
+            double tolerance) {
+        return motionMagicSetpointCommandBlocking(setpoint, configSupplier, tolerance, 0);
     }
 
     public Command motionMagicSetpointCommandBlocking(
@@ -277,31 +232,6 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
                                         getCurrentPosition(), setpoint.getAsDouble(), tolerance));
     }
 
-    public Command motionMagicSetpointCommand(DoubleSupplier unitSupplier) {
-        return motionMagicSetpointCommand(unitSupplier, 0);
-    }
-
-    public Command motionMagicSetpointCommand(
-            DoubleSupplier unitSupplier, Supplier<MotionMagicConfigs> configSupplier) {
-        return motionMagicSetpointCommand(unitSupplier, configSupplier, 0);
-    }
-
-    public Command motionMagicSetpointCommandBlocking(DoubleSupplier setpoint, double tolerance) {
-        return motionMagicSetpointCommandBlocking(setpoint, tolerance, 0);
-    }
-
-    public Command motionMagicSetpointCommandBlocking(
-            DoubleSupplier setpoint,
-            Supplier<MotionMagicConfigs> configSupplier,
-            double tolerance) {
-        return motionMagicSetpointCommandBlocking(setpoint, configSupplier, tolerance, 0);
-    }
-
-    public void setTorqueCurrentFOCImpl(double current) {
-        Logger.recordOutput(getName() + "/API/setTorqueCurrentFoC/Current", current);
-        io.setTorqueCurrentFOC(current);
-    }
-
     public Command setTorqueCurrentFOC(DoubleSupplier current) {
         return runEnd(
                         () -> {
@@ -311,12 +241,83 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
                 .withName(getName() + " torqueCurrentFOCCommand");
     }
 
-    protected void setCurrentPositionAsZero() {
-        io.setCurrentPositionAsZero();
+    protected void setMotionMagicConfig(MotionMagicConfigs config) {
+        io.setMotionMagicConfig(config);
     }
 
-    public void setCurrentPosition(double positionUnits) {
-        io.setCurrentPosition(positionUnits);
+    protected void setOpenLoopDutyCycleImpl(double dutyCycle) {
+        Logger.recordOutput(getName() + "/API/setOpenLoopDutyCycle/dutyCycle", dutyCycle);
+        io.setOpenLoopDutyCycle(dutyCycle);
+    }
+
+    protected void setVoltageImpl(double voltage) {
+        Logger.recordOutput(getName() + "/API/setVoltageImpl/voltage", voltage);
+        io.setVoltageOutput(voltage);
+    }
+
+    protected void setPositionSetpointImpl(double units) {
+        mPositionSetpointUnits = units;
+        Logger.recordOutput(getName() + "/API/setPositionSetpointImp/Units", units);
+        io.setPositionSetpoint(units);
+    }
+
+    protected void setNeutralModeImpl(NeutralModeValue mode) {
+        Logger.recordOutput(getName() + "/API/setNeutralModeImpl/Mode", mode);
+        io.setNeutralMode(mode);
+    }
+
+    protected void setMotionMagicSetpointImpl(double units, int slot) {
+        mPositionSetpointUnits = units;
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImp/Units", units);
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImp/Slot", slot);
+        io.setMotionMagicSetpoint(units, slot);
+    }
+
+    protected void setMotionMagicSetpointImpl(double units, MotionMagicConfigs config, int slot) {
+        mPositionSetpointUnits = units;
+        double velocity = config.MotionMagicCruiseVelocity;
+        double acceleration = config.MotionMagicAcceleration;
+        double jerk = config.MotionMagicJerk;
+
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Units", units);
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Velocity", velocity);
+        Logger.recordOutput(
+                getName() + "/API/setMotionMagicSetpointImpDynamic/Accel", acceleration);
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Jerk", jerk);
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Slot", slot);
+        io.setMotionMagicSetpoint(units, velocity, acceleration, jerk, slot);
+    }
+
+    protected void setMotionMagicSetpointImpl(
+            double units, MotionMagicConfigs config, double feedfowards, int slot) {
+        mPositionSetpointUnits = units;
+        double velocity = config.MotionMagicCruiseVelocity;
+        double acceleration = config.MotionMagicAcceleration;
+        double jerk = config.MotionMagicJerk;
+
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Units", units);
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Velocity", velocity);
+        Logger.recordOutput(
+                getName() + "/API/setMotionMagicSetpointImpDynamic/Accel", acceleration);
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Jerk", jerk);
+        Logger.recordOutput(getName() + "/API/setMotionMagicSetpointImpDynamic/Slot", slot);
+        Logger.recordOutput(
+                getName() + "/API/setMotionMagicSetpointImpDynamic/Feedforwards", feedfowards);
+        io.setMotionMagicSetpoint(units, velocity, acceleration, jerk, slot, feedfowards);
+    }
+
+    protected void setVelocitySetpointImpl(double unitsPerSecond, int slot) {
+        Logger.recordOutput(getName() + "/API/setVelocitySetpointImpl/UnitsPerS", unitsPerSecond);
+        io.setVelocitySetpoint(unitsPerSecond, slot);
+    }
+
+    protected void setTorqueCurrentFOCImpl(double current) {
+        Logger.recordOutput(getName() + "/API/setTorqueCurrentFoC/Current", current);
+        io.setTorqueCurrentFOC(current);
+    }
+
+    protected void setCurrentPositionAsZero() {
+        io.setCurrentPositionAsZero();
     }
 
     protected Command withoutLimitsTemporarily() {
@@ -327,8 +328,8 @@ public class MotorSubsystem<T extends MotorInputsAutoLogged, U extends MotorIO>
                 };
         return Commands.startEnd(
                 () -> {
-                    prev.fwd = conf.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable;
-                    prev.rev = conf.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable;
+                    prev.fwd = mConfig.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable;
+                    prev.rev = mConfig.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable;
                     io.setEnableSoftLimits(false, false);
                 },
                 () -> {

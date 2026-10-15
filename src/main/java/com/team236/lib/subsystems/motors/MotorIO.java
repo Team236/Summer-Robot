@@ -6,6 +6,11 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team236.lib.subsystems.cancoder.CanDeviceId;
 
+/**
+ * The {@code MotorIO} interface defines the standard hardware abstraction layer for motor
+ * subsystems. It provides standard method signatures for reading inputs, setting closed-loop and
+ * open-loop targets, and configuring motor behavior.
+ */
 public interface MotorIO {
     void readInputs(MotorInputs inputs);
 
