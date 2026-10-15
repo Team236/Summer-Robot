@@ -115,6 +115,7 @@ public final class Constants {
         }
     }
 
+    /** The {@code FieldDimensions} defines the arm subsystem. */
     public static final class ArmConstants {
         public static final int kMotorId = 1;
         public static final String kMotorNetwork = "rio";
