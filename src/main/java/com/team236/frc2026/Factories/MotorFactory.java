@@ -1,4 +1,4 @@
-package com.team236.frc2026.Factories;
+package com.team236.frc2026.factories;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
