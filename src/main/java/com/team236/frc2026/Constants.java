@@ -115,6 +115,15 @@ public final class Constants {
         }
     }
 
+    public static final class ArmConstants {
+        public static final int kMotorId = 1;
+        public static final double kSupplyCurrentLimit = 35.0;
+        public static final double kSlot0Kv = 0.0;
+        public static final double kSlot0Kp = 0.0;
+        public static final double kSlot0Ki = 0.0;
+        public static final double kSlot0Kd = 0.0;
+    }
+
     /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */
     public static final class FieldDimensions {
         private static final double kFieldMinX = 0.0;
