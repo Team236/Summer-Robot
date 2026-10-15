@@ -1,6 +1,13 @@
 package com.team236.lib.subsystems.cancoder;
 
+import java.util.Objects;
+
+/**
+ * The {@code CanDeviceId} class encapsulates a CAN device's ID and network name
+ * to uniquely identify it on the robot's CAN bus system.
+ */
 public class CanDeviceId {
+    
     private final int mDeviceId;
     private final String mNetwork;
 
@@ -22,7 +29,10 @@ public class CanDeviceId {
     }
 
     public boolean equals(CanDeviceId otherDevice) {
+        if (otherDevice == null) {
+            return false;
+        }
         return (otherDevice.getDeviceId() == mDeviceId
-                && otherDevice.getDeviceNetwork() == mNetwork);
+                && Objects.equals(otherDevice.getDeviceNetwork(), mNetwork));
     }
 }
