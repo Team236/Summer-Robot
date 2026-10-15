@@ -17,8 +17,8 @@ import java.util.function.Consumer;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * The {@code DriveSim} extends {@code DriveHardware} and simulates the swerve drivetrain hardware,
- * tracks the simulated field pose, and manages the execution of the physics engine loop.
+ * The {@code DriveSim} simulates the swerve drivetrain hardware, tracks the simulated field pose,
+ * and manages the execution of the physics engine loop.
  */
 public class DriveSim extends DriveHardware {
     private static final double kSimLoopPeriod = 0.005; // 5 ms

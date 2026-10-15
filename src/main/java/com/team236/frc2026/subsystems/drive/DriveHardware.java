@@ -25,8 +25,8 @@ import java.util.function.Supplier;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * The {@code DriveHardware} controls the drivetrain at the hardware level, implements {@code
- * DriveIO} for hardware abstraction, and integrates CTRE's SwerveDrivetrain for kinematics.
+ * The {@code DriveHardware} controls the drivetrain at the hardware level, using hardware
+ * abstraction, and integrates CTRE's SwerveDrivetrain for kinematics.
  */
 public class DriveHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> implements DriveIO {
 
