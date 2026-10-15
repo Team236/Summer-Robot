@@ -22,6 +22,7 @@ public class CanDeviceId {
     }
 
     public boolean equals(CanDeviceId otherDevice) {
-        return (otherDevice.getDeviceId() == mDeviceId && otherDevice.getDeviceNetwork() == mNetwork);
+        return (otherDevice.getDeviceId() == mDeviceId
+                && otherDevice.getDeviceNetwork() == mNetwork);
     }
 }

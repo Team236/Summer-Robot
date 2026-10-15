@@ -6,14 +6,13 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.team236.lib.subsystems.cancoder.CanDeviceId;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.Logger;
 
-public class CANStatusLogger {
-    private static CANStatusLogger instance;
+public class CanStatusLogger {
+    private static CanStatusLogger instance;
     private final List<DeviceStatusInfo> devices = new ArrayList<>();
 
     private static class DeviceStatusInfo {
@@ -36,11 +35,11 @@ public class CANStatusLogger {
         }
     }
 
-    private CANStatusLogger() {}
+    private CanStatusLogger() {}
 
-    public static synchronized CANStatusLogger getInstance() {
+    public static synchronized CanStatusLogger getInstance() {
         if (instance == null) {
-            instance = new CANStatusLogger();
+            instance = new CanStatusLogger();
         }
         return instance;
     }

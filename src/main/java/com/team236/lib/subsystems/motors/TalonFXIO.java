@@ -20,9 +20,8 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.team236.frc2026.Robot;
 import com.team236.lib.subsystems.cancoder.CanDeviceId;
-import com.team236.lib.util.CANStatusLogger;
+import com.team236.lib.util.CanStatusLogger;
 import com.team236.lib.util.CTREUtil;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -30,7 +29,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 
 public class TalonFXIO implements MotorIO {
-protected final TalonFX talon;
+    protected final TalonFX talon;
     protected final MotorSubsystemConfig config;
 
     protected final DutyCycleOut dutyCycleControl = new DutyCycleOut(0.0);
@@ -76,7 +75,7 @@ protected final TalonFX talon;
                     positionSignal, velocitySignal, voltageSignal,
                     currentStatorSignal, currentSupplySignal, rawRotorPositionSignal
                 };
-        CANStatusLogger.getInstance().registerTalonFX(config.name, talon, config.talonCANId);
+        CanStatusLogger.getInstance().registerTalonFX(config.name, talon, config.talonCANId);
 
         CTREUtil.tryUntilOK(
                 () -> BaseStatusSignal.setUpdateFrequencyForAll(50.0, signals),
