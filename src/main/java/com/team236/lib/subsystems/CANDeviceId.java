@@ -1,12 +1,12 @@
 package com.team236.lib.subsystems;
 
 public class CANDeviceId {
-    private final int deviceId;
-    private final String network;
+    private final int mDeviceId;
+    private final String mNetwork;
 
     public CANDeviceId(int deviceId, String network) {
-        this.deviceId = deviceId;
-        this.network = network;
+        this.mDeviceId = deviceId;
+        this.mNetwork = network;
     }
 
     public CANDeviceId(int deviceId) {
@@ -14,14 +14,14 @@ public class CANDeviceId {
     }
 
     public int getDeviceId() {
-        return deviceId;
+        return mDeviceId;
     }
 
     public String getDeviceNetwork() {
-        return network;
+        return mNetwork;
     }
 
     public boolean equals(CANDeviceId otherDevice) {
-        return (otherDevice.deviceId == deviceId && otherDevice.network == network);
+        return (otherDevice.getDeviceId() == mDeviceId && otherDevice.getDeviceNetwork() == mNetwork);
     }
 }
