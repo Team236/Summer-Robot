@@ -124,6 +124,9 @@ public final class Constants {
         public static final double kSlot0Kp = 0.0;
         public static final double kSlot0Ki = 0.0;
         public static final double kSlot0Kd = 0.0;
+
+        public static final double kArmPivotStowPositionUnits = 0.0;
+        public static final double kArmPivotIntakePositionUnits = 1.0;
     }
 
     /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */

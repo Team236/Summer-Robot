@@ -1,0 +1,51 @@
+package com.team236.frc2026.subsystems.arm;
+
+import com.team236.frc2026.Constants;
+import com.team236.lib.subsystems.cancoder.CanCoderIO;
+import com.team236.lib.subsystems.cancoder.CanCoderInputsAutoLogged;
+import com.team236.lib.subsystems.motor.MotorIO;
+import com.team236.lib.subsystems.motor.MotorInputsAutoLogged;
+import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoder;
+import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoderConfig;
+
+/**
+ * The {@code ArmPivot} controls the pivoting mechanism of the robot's arm. It manages the up and
+ * down positions of the arm using a motor with an integrated CANcoder for precise position control
+ * and feedback.
+ */
+public class ArmPivot
+        extends MotorSubsystemWithCanCoder<
+                MotorInputsAutoLogged, MotorIO, CanCoderInputsAutoLogged, CanCoderIO> {
+        private RobotState state;
+        private boolean fullyDeployed = false;
+
+    public ArmPivot(
+            final MotorSubsystemWithCanCoderConfig motorConfig,
+            final MotorIO motorIO,
+            final CanCoderIO canCoderIO,
+            RobotState state) {
+        super(
+                motorConfig,
+                new MotorInputsAutoLogged(),
+                motorIO,
+                new CanCoderInputsAutoLogged(),
+                canCoderIO);
+
+        this.setCurrentPosition(Constants.ArmConstants.kArmPivotDownPositionUnits);
+        this.positionSetpointUnits = Constants.ArmConstants.kArmPivotDownPositionUnits;
+        this.state = state;
+    }
+
+    public void setTeleopDefaultCommand() {
+        this.getDefaultCommand().cancel();
+        this.setDefaultCommand(
+                motionMagicSetpointCommand(this::getPositionSetpointUnits)
+                        .withName("Arm Pivot Maintain Setpoint (default)")
+                        .ignoringDisable(true));
+    }
+
+    @Override
+    public void periodic() {
+        super.periodic();
+    }
+}
