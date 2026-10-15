@@ -2,6 +2,7 @@ package com.team236.lib.subsystems;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.VoltageConfigs;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public interface MotorIO {
@@ -55,7 +56,7 @@ public interface MotorIO {
 
     void setEnableAutosetPositionValue(boolean forward, boolean reverse);
 
-    void follow(CANDeviceId masterId, boolean opposeMasterDirection);
+    void follow(CANDeviceId leaderId, MotorAlignmentValue direction);
 
     void setTorqueCurrentFOC(double current);
 
