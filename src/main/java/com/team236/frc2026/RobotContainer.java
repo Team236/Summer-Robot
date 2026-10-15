@@ -17,7 +17,6 @@ import com.team236.lib.subsystems.cancoder.CanCoderHardware;
 import com.team236.lib.subsystems.cancoder.SimCanCoderIO;
 import com.team236.lib.subsystems.motor.SimTalonFXIO;
 import com.team236.lib.subsystems.motor.TalonFXIO;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -119,7 +118,8 @@ public class RobotContainer {
                     simTalon,
                     new SimCanCoderIO(
                             Constants.ArmConstants.kArmPivotConfig.canCoderConfig,
-                            simTalon.getSupplierForCancoder(Constants.ArmConstants.kArmPivotConfig)),
+                            simTalon.getSupplierForCancoder(
+                                    Constants.ArmConstants.kArmPivotConfig)),
                     mRobotState);
         } else {
             return new ArmPivotSubsystem(

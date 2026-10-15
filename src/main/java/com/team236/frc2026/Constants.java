@@ -6,7 +6,6 @@ import com.team236.frc2026.subsystems.drive.PracTunerConstants;
 import com.team236.lib.roborio.NetworkHelpers;
 import com.team236.lib.subsystems.cancoder.CanDeviceId;
 import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoderConfig;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -123,11 +122,12 @@ public final class Constants {
     /** The {@code FieldDimensions} defines the arm subsystem. */
     public static final class ArmConstants {
         public static final int kARmPivotMotorId = 1;
-        public static final MotorSubsystemWithCanCoderConfig kArmPivotConfig = 
-            new MotorSubsystemWithCanCoderConfig();
+        public static final MotorSubsystemWithCanCoderConfig kArmPivotConfig =
+                new MotorSubsystemWithCanCoderConfig();
 
         static {
-            kArmPivotConfig.canCoderConfig.canId = new CanDeviceId(Constants.ArmConstants.kARmPivotMotorId, kCanBusDrivebase);
+            kArmPivotConfig.canCoderConfig.canId =
+                    new CanDeviceId(Constants.ArmConstants.kARmPivotMotorId, kCanBusDrivebase);
         }
 
         // Motor Configs (In static):
