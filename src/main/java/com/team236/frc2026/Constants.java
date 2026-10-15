@@ -127,20 +127,21 @@ public final class Constants {
 
     /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */
     public static final class FieldDimensions {
-        private static final double kFieldMinX = 0.0;
-        private static final double kFieldMaxX = kRebuiltAprilTagLayout.getFieldLength();
-        private static final double kFieldMinY = 0.0;
-        private static final double kFieldMaxY = kRebuiltAprilTagLayout.getFieldWidth();
-        private static final double kFieldMinZ = 0.0;
-        private static final double kFieldMaxZ = 1.0;
+        public static final double kFieldLengthMeters = kRebuiltAprilTagLayout.getFieldLength();
+        public static final double kFieldWidthMeters = kRebuiltAprilTagLayout.getFieldWidth();
+        public static final double kFieldHeightMeters = 0;
+
+        public static final double kFieldMinX = 0.0;
+        public static final double kFieldMinY = 0.0;
+        public static final double kFieldMinZ = 0.0;
 
         private static final double kFieldBoarderMargin = 0.254;
 
         public static final double kMargMinX = kFieldMinX - kFieldBoarderMargin;
-        public static final double kMargMaxX = kFieldMaxX + kFieldBoarderMargin;
+        public static final double kMargMaxX = kFieldLengthMeters + kFieldBoarderMargin;
         public static final double kMargMinY = kFieldMinY - kFieldBoarderMargin;
-        public static final double kMargMaxY = kFieldMaxY + kFieldBoarderMargin;
+        public static final double kMargMaxY = kFieldWidthMeters + kFieldBoarderMargin;
         public static final double kMargMinZ = kFieldMinZ - kFieldBoarderMargin;
-        public static final double kMargMaxZ = kFieldMaxZ;
+        public static final double kMargMaxZ = kFieldHeightMeters + kFieldBoarderMargin;
     }
 }

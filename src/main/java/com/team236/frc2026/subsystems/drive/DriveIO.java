@@ -3,7 +3,7 @@ package com.team236.frc2026.subsystems.drive;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
-import com.team236.lib.math.GeometryHelpers;
+import com.team236.lib.math.MathHelpers;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -30,7 +30,7 @@ public interface DriveIO {
         public double roll;
 
         public DriveIOInputs() {
-            this.Pose = GeometryHelpers.kPose2dZero;
+            this.Pose = MathHelpers.kPose2dZero;
         }
 
         // Updates current DriveIOInputs's variables with new data (called in hardware)

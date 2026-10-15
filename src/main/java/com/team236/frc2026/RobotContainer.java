@@ -11,7 +11,7 @@ import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.frc2026.subsystems.vision.VisionHardwareLimelight;
 import com.team236.frc2026.subsystems.vision.VisionSimPhoton;
 import com.team236.frc2026.subsystems.vision.VisionSubsystem;
-import com.team236.lib.math.GeometryHelpers;
+import com.team236.lib.math.MathHelpers;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -61,8 +61,8 @@ public class RobotContainer {
                                 mRobotState.getLatestFieldToRobot().getValue().getX(),
                                 mRobotState.getLatestFieldToRobot().getValue().getY()),
                         mRobotState.isRedAlliance()
-                                ? GeometryHelpers.kRotation2dPi
-                                : GeometryHelpers.kRotation2dZero));
+                                ? MathHelpers.kRotation2dPi
+                                : MathHelpers.kRotation2dZero));
     }
 
     public DriveSubsystem getDriveSubsystem() {
