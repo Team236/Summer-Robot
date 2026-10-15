@@ -4,6 +4,7 @@ import com.team236.frc2026.commands.TeleopSwerveDrive;
 import com.team236.frc2026.controlboard.ControlBoard;
 import com.team236.frc2026.controlboard.ModalControls;
 import com.team236.frc2026.simulation.SimulatedRobotState;
+import com.team236.frc2026.subsystems.arm.ArmPivotSubsystem;
 import com.team236.frc2026.subsystems.drive.DriveHardware;
 import com.team236.frc2026.subsystems.drive.DriveSim;
 import com.team236.frc2026.subsystems.drive.DriveSubsystem;
@@ -12,8 +13,14 @@ import com.team236.frc2026.subsystems.vision.VisionHardwareLimelight;
 import com.team236.frc2026.subsystems.vision.VisionSimPhoton;
 import com.team236.frc2026.subsystems.vision.VisionSubsystem;
 import com.team236.lib.math.MathHelpers;
+import com.team236.lib.subsystems.cancoder.CanCoderHardware;
+import com.team236.lib.subsystems.cancoder.SimCanCoderIO;
+import com.team236.lib.subsystems.motor.SimTalonFXIO;
+import com.team236.lib.subsystems.motor.TalonFXIO;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import java.util.function.Consumer;
 
@@ -35,6 +42,7 @@ public class RobotContainer {
     private final SimulatedRobotState mSimulatedRobotState = new SimulatedRobotState(this);
     private final DriveSubsystem mDriveSubsystem = buildDriveSubsystem();
     private final VisionSubsystem mVisionSubsystem = buildVisionSubsystem();
+    private final ArmPivotSubsystem mArmPivotSubsystem = buildArmPivotSubsystem();
 
     private final TeleopSwerveDrive mDriveCommand =
             new TeleopSwerveDrive(
@@ -69,6 +77,10 @@ public class RobotContainer {
         return mDriveSubsystem;
     }
 
+    public ArmPivotSubsystem getArmPivot() {
+        return mArmPivotSubsystem;
+    }
+
     public SimulatedRobotState getSimulatedRobotState() {
         return mSimulatedRobotState;
     }
@@ -96,6 +108,25 @@ public class RobotContainer {
                     new VisionSimPhoton(mRobotState, mSimulatedRobotState), mRobotState);
         } else {
             return new VisionSubsystem(new VisionHardwareLimelight(mRobotState), mRobotState);
+        }
+    }
+
+    private ArmPivotSubsystem buildArmPivotSubsystem() {
+        if (RobotBase.isSimulation()) {
+            var simTalon = new SimTalonFXIO(Constants.ArmConstants.kArmPivotConfig);
+            return new ArmPivotSubsystem(
+                    Constants.ArmConstants.kArmPivotConfig,
+                    simTalon,
+                    new SimCanCoderIO(
+                            Constants.ArmConstants.kArmPivotConfig.canCoderConfig,
+                            simTalon.getSupplierForCancoder(Constants.ArmConstants.kArmPivotConfig)),
+                    mRobotState);
+        } else {
+            return new ArmPivotSubsystem(
+                    Constants.ArmConstants.kArmPivotConfig,
+                    new TalonFXIO(Constants.ArmConstants.kArmPivotConfig),
+                    new CanCoderHardware(Constants.ArmConstants.kArmPivotConfig.canCoderConfig),
+                    mRobotState);
         }
     }
 
