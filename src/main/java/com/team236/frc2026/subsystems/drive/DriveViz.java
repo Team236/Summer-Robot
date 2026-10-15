@@ -2,7 +2,7 @@ package com.team236.frc2026.subsystems.drive;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 import com.team236.frc2026.Robot;
-import com.team236.lib.math.GeometryHelpers;
+import com.team236.lib.math.MathHelpers;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -36,7 +36,7 @@ public class DriveViz {
     }
 
     /* Keep a reference of the last pose to calculate the speeds */
-    private Pose2d lastPose = GeometryHelpers.kPose2dZero;
+    private Pose2d lastPose = MathHelpers.kPose2dZero;
     private double lastTime = Logger.getTimestamp();
 
     /* Mechanisms to represent the swerve module states */
