@@ -17,7 +17,7 @@ import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoderConfig;
 public class ArmPivotSubsystem
         extends MotorSubsystemWithCanCoder<
                 MotorInputsAutoLogged, MotorIO, CanCoderInputsAutoLogged, CanCoderIO> {
-    private RobotState state;
+    private RobotState mRobotState;
     private boolean fullyDeployed = false;
 
     public ArmPivotSubsystem(
@@ -34,7 +34,7 @@ public class ArmPivotSubsystem
 
         this.setCurrentPosition(Constants.ArmConstants.kArmPivotStowPositionUnits);
         this.positionSetpointUnits = Constants.ArmConstants.kArmPivotStowPositionUnits;
-        this.state = state;
+        this.mRobotState = state;
     }
 
     public void setTeleopDefaultCommand() {

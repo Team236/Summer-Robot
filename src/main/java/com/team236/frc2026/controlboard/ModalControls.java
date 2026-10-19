@@ -15,7 +15,8 @@ public class ModalControls {
 
     public enum Mode {
         INTAKE,
-        SCORING
+        SCORING,
+        MANUAL
     }
 
     private Mode mCurrentMode = Mode.INTAKE;
@@ -52,22 +53,32 @@ public class ModalControls {
 
     public void configureBindings() {
         ControlBoard.getInstance()
-                .getToggleMode()
+                .getIntakeMode()
                 .onTrue(
                         Commands.runOnce(
                                         () -> {
-                                            Mode newMode =
-                                                    (mCurrentMode == Mode.INTAKE)
-                                                            ? Mode.SCORING
-                                                            : Mode.INTAKE;
-                                            maybeTriggerStateChangeConsumer(newMode);
-                                            setMode(newMode);
+                                            maybeTriggerStateChangeConsumer(Mode.INTAKE);
+                                            setMode(Mode.INTAKE);
                                         })
                                 .ignoringDisable(true));
-    }
-
-    public Trigger resetGyro() {
-        return ControlBoard.getInstance().getResetGyro();
+        ControlBoard.getInstance()
+                .getScoringMode()
+                .onTrue(
+                        Commands.runOnce(
+                                        () -> {
+                                            maybeTriggerStateChangeConsumer(Mode.SCORING);
+                                            setMode(Mode.SCORING);
+                                        })
+                                .ignoringDisable(true));
+        ControlBoard.getInstance()
+                .getIntakeMode()
+                .onTrue(
+                        Commands.runOnce(
+                                        () -> {
+                                            maybeTriggerStateChangeConsumer(Mode.MANUAL);
+                                            setMode(Mode.MANUAL);
+                                        })
+                                .ignoringDisable(true));
     }
 
     public Trigger intakeMode() {
@@ -78,6 +89,10 @@ public class ModalControls {
         return new Trigger(() -> this.mCurrentMode == Mode.SCORING);
     }
 
+    public Trigger manualMode() {
+        return new Trigger(() -> this.mCurrentMode == Mode.MANUAL);
+    }
+
     private void maybeTriggerStateChangeConsumer(Mode newMode) {
         if (this.mCurrentMode != newMode && this.mStateChangeConsumer != null) {
             this.mStateChangeConsumer.accept(newMode);
@@ -86,5 +101,21 @@ public class ModalControls {
 
     private Trigger modeSpecific(Trigger trigger, Mode mode) {
         return trigger.and(new Trigger(() -> this.mCurrentMode == mode));
+    }
+
+
+    // Controls //
+    
+    public Trigger resetGyro() {
+        return ControlBoard.getInstance().getResetGyro();
+    }
+
+    // Intake Mode //
+    public Trigger manualArmPivotExtend() {
+        return modeSpecific(ControlBoard.getInstance().getManualArmPivotExtend(), Mode.MANUAL);
+    }
+
+    public Trigger manualArmPivotRetract() {
+        return modeSpecific(ControlBoard.getInstance().getManualArmPivotRetract(), Mode.MANUAL);
     }
 }

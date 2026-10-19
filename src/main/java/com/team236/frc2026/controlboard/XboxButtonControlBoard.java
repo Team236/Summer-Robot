@@ -30,7 +30,27 @@ public class XboxButtonControlBoard implements IButtonControlBoard {
     }
 
     @Override
-    public Trigger getToggleMode() {
+    public Trigger getIntakeMode() {
         return mController.b();
+    }
+
+    @Override
+    public Trigger getScoringMode() {
+        return mController.a();
+    }
+
+    @Override
+    public Trigger getManualMode() {
+        return mController.x();
+    }
+
+    @Override
+    public Trigger getManualArmPivotExtend() {
+        return mController.povUp();
+    }
+
+    @Override
+    public Trigger getManualArmPivotRetract() {
+        return mController.povDown();
     }
 }
