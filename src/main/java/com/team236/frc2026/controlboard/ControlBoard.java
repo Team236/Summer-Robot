@@ -51,7 +51,26 @@ public class ControlBoard implements IDriveControlBoard, IButtonControlBoard {
     }
 
     @Override
-    public Trigger getToggleMode() {
-        return mButtonControlBoard.getToggleMode();
+    public Trigger getIntakeMode() {
+        return mButtonControlBoard.getIntakeMode();
+    }
+
+    @Override
+    public Trigger getScoringMode() {
+        return mButtonControlBoard.getIntakeMode();
+    }
+
+    @Override
+    public Trigger getManualMode() {
+        return mButtonControlBoard.getIntakeMode();
+    }
+
+    @Override
+    public Trigger getManualArmPivotExtend() {
+        return mButtonControlBoard.getManualArmPivotExtend();
+    }
+
+    public Trigger getManualArmPivotRetract() {
+        return mButtonControlBoard.getManualArmPivotRetract();
     }
 }

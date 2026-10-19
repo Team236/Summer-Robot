@@ -9,5 +9,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public interface IButtonControlBoard {
     Trigger getResetGyro();
 
-    Trigger getToggleMode();
+    Trigger getIntakeMode();
+
+    Trigger getScoringMode();
+
+    Trigger getManualMode();
+
+    Trigger getManualArmPivotExtend();
+
+    Trigger getManualArmPivotRetract();
 }
