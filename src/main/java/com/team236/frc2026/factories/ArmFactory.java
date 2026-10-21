@@ -41,7 +41,7 @@ public class ArmFactory {
      *
      * @return A command that applies positive duty cycle while held, stops on release.
      */
-    public static Command manualUp(RobotContainer container) {
+    public static Command manualRetract(RobotContainer container) {
         return container
                 .getArmPivot()
                 .dutyCycleCommand(() -> Constants.ArmConstants.kArmPivotManualDutyCycle)
@@ -53,7 +53,7 @@ public class ArmFactory {
      *
      * @return A command that applies negative duty cycle while held, stops on release.
      */
-    public static Command manualDown(RobotContainer container) {
+    public static Command manualExtend(RobotContainer container) {
         return container
                 .getArmPivot()
                 .dutyCycleCommand(() -> -Constants.ArmConstants.kArmPivotManualDutyCycle)
