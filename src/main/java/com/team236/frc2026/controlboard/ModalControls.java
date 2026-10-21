@@ -103,9 +103,8 @@ public class ModalControls {
         return trigger.and(new Trigger(() -> this.mCurrentMode == mode));
     }
 
-
     // Controls //
-    
+
     public Trigger resetGyro() {
         return ControlBoard.getInstance().getResetGyro();
     }
