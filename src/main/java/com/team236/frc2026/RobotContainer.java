@@ -63,6 +63,17 @@ public class RobotContainer {
         }
     }
 
+    private void configureBindings() {
+        mModalControls.configureBindings(); 
+        mDriveSubsystem.setDefaultCommand(mDriveCommand);
+
+        ModalControls.getInstance().configureBindings();
+
+        ControlBoard.getInstance()
+                .getResetGyro()
+                .onTrue(Commands.runOnce(() -> this.resetHeading()));
+    }
+
     public void resetHeading() {
         mDriveSubsystem.resetOdometry(
                 new Pose2d(
@@ -134,15 +145,5 @@ public class RobotContainer {
                     new CanCoderHardware(Constants.ArmConstants.kArmPivotConfig.canCoderConfig),
                     mRobotState);
         }
-    }
-
-    private void configureBindings() {
-        mDriveSubsystem.setDefaultCommand(mDriveCommand);
-
-        ModalControls.getInstance().configureBindings();
-
-        ControlBoard.getInstance()
-                .getResetGyro()
-                .onTrue(Commands.runOnce(() -> this.resetHeading()));
     }
 }
