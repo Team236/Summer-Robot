@@ -43,6 +43,8 @@ public class RobotContainer {
     private final VisionSubsystem mVisionSubsystem = buildVisionSubsystem();
     private final ArmPivotSubsystem mArmPivotSubsystem = buildArmPivotSubsystem();
 
+    private final ModalControls mModalControls = ModalControls.getInstance();
+
     private final TeleopSwerveDrive mDriveCommand =
             new TeleopSwerveDrive(
                     mDriveSubsystem,
@@ -82,6 +84,10 @@ public class RobotContainer {
 
     public SimulatedRobotState getSimulatedRobotState() {
         return mSimulatedRobotState;
+    }
+
+    public ModalControls getModalControls() {
+        return mModalControls;
     }
 
     private DriveSubsystem buildDriveSubsystem() {
