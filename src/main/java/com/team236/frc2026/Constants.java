@@ -48,6 +48,8 @@ public final class Constants {
 
     public static final String kCanBusDrivebase = "drivebase";
 
+    public static final double kEpsilonMotorTolerance = 0.005;
+
     /** The {@code Controller} holds constants for driver input devices. */
     public static final class Controller {
         public static final byte kMainController = 0;
@@ -141,8 +143,8 @@ public final class Constants {
         public static final double kArmPivotStowPositionUnits = 0.0;
         public static final double kArmPivotIntakePositionUnits = 1.0;
 
-        public static final double kArmPivotRetractLimit = 0.0;
-        public static final double kArmPivotExtendLimit = 50.0;
+        public static final double kArmPivotRetractRadians = 0.0;
+        public static final double kArmPivotExtendRadians = 3.14;
 
         // Manual open-loop duty cycle for arm pivot (tune this value).
         public static final double kArmPivotManualDutyCycle = 0.2;

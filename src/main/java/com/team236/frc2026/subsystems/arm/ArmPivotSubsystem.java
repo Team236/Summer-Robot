@@ -2,6 +2,7 @@ package com.team236.frc2026.subsystems.arm;
 
 import com.team236.frc2026.Constants;
 import com.team236.frc2026.RobotState;
+import com.team236.lib.math.MathHelpers;
 import com.team236.lib.subsystems.cancoder.CanCoderIO;
 import com.team236.lib.subsystems.cancoder.CanCoderInputsAutoLogged;
 import com.team236.lib.subsystems.motor.MotorIO;
@@ -18,6 +19,8 @@ public class ArmPivotSubsystem
         extends MotorSubsystemWithCanCoder<
                 MotorInputsAutoLogged, MotorIO, CanCoderInputsAutoLogged, CanCoderIO> {
     private RobotState mRobotState;
+    private double mIsFullyDeployed;
+    private double mIsFullyRetracted;
 
     public ArmPivotSubsystem(
             final MotorSubsystemWithCanCoderConfig motorConfig,
@@ -44,16 +47,24 @@ public class ArmPivotSubsystem
                         .ignoringDisable(true));
     }
 
-    public boolean isFullyExtended() {
-        return (this.mInputs.rawRotorPosition < Constants.ArmConstants.kArmPivotExtendLimit);
+    public boolean isFullyDeployed() {
+        return (this.mInputs.rawRotorPosition <= Constants.ArmConstants.kArmPivotRetractRadians || MathHelpers.epsilonEquals(
+                                    Constants.ArmConstants.kArmPivotRetractRadians,
+                                    mInputs.unitPosition,
+                                    Constants.kEpsilonMotorTolerance)
+);
     }
 
     public boolean isFullyRetract() {
-        return (this.mInputs.rawRotorPosition > Constants.ArmConstants.kArmPivotRetractLimit);
+        return (this.mInputs.rawRotorPosition >= Constants.ArmConstants.kArmPivotExtendRadians || MathHelpers.epsilonEquals(
+                                    Constants.ArmConstants.kArmPivotExtendRadians,
+                                    mInputs.unitPosition,
+                                    Constants.kEpsilonMotorTolerance));
     }
 
     @Override
     public void periodic() {
         super.periodic();
+        mRobotState.setArmPivotAngleRadians(mInputs.unitPosition);
     }
 }

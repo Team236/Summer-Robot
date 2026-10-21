@@ -11,11 +11,12 @@ public class ModalSuperstructureTriggers {
     }
 
     private void configureBindings() {
+        // Later can add limits in motor config
         mRobotContainer
                 .getModalControls()
                 .manualMode()
                 .and(mRobotContainer.getModalControls().manualArmPivotExtend())
-                .and(() -> !mRobotContainer.getArmPivot().isFullyExtended())
+                .and(() -> !mRobotContainer.getArmPivot().isFullyDeployed())
                 .onTrue(
                         ArmFactory.manualExtend(mRobotContainer)
                                 .withName("ManualArmPivotExtendCommand"));

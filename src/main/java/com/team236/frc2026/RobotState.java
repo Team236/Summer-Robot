@@ -7,7 +7,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * The {@code RobotState} manages the global tracking of the robot's pose on the field, integrating
@@ -21,9 +23,15 @@ public class RobotState {
     private double mLastUsedMegatagTimestamp = 0;
     private Pose2d mLastUsedMegatagPose = Pose2d.kZero;
 
+    private final AtomicReference<Double> armPivotRadians = new AtomicReference<>(0.0);
+
     public RobotState(Consumer<VisionFieldPoseEstimate> visionEstimateConsumer) {
         this.mVisionEstimateConsumer = visionEstimateConsumer;
+
+        // Initialize component positions
+        armPivotRadians.set(0.0);
     }
+
 
     public boolean isRedAlliance() {
         return DriverStation.getAlliance().isPresent()
@@ -50,5 +58,17 @@ public class RobotState {
         mLastUsedMegatagTimestamp = megatagEstimate.getTimestampSeconds();
         mLastUsedMegatagPose = megatagEstimate.getVisionRobotPose();
         mVisionEstimateConsumer.accept(megatagEstimate);
+    }
+
+    public void setArmPivotAngleRadians(double radians) {
+        armPivotRadians.set(radians);
+    }
+
+    public double getArmPivotAngleRadians() {
+        return armPivotRadians.get();
+    }
+
+    public void updateLogger() {
+        Logger.recordOutput("RobotState/ElevatorHeightMeters", getArmPivotAngleRadians());
     }
 }
