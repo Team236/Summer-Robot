@@ -16,6 +16,7 @@ import com.team236.lib.math.MathHelpers;
 import com.team236.lib.subsystems.cancoder.CanCoderHardware;
 import com.team236.lib.subsystems.cancoder.SimCanCoderIO;
 import com.team236.lib.subsystems.motor.SimTalonFXIO;
+import com.team236.lib.subsystems.motor.SimTalonFXWithCancoder;
 import com.team236.lib.subsystems.motor.TalonFXIO;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -129,7 +130,7 @@ public class RobotContainer {
 
     private ArmPivotSubsystem buildArmPivotSubsystem() {
         if (RobotBase.isSimulation()) {
-            var simTalon = new SimTalonFXIO(Constants.ArmConstants.kArmPivotConfig);
+            var simTalon = new SimTalonFXWithCancoder(Constants.ArmConstants.kArmPivotConfig);
             return new ArmPivotSubsystem(
                     Constants.ArmConstants.kArmPivotConfig,
                     simTalon,
