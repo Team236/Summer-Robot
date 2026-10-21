@@ -64,7 +64,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        mModalControls.configureBindings(); 
+        mModalControls.configureBindings();
         mDriveSubsystem.setDefaultCommand(mDriveCommand);
 
         ModalControls.getInstance().configureBindings();
