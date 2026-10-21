@@ -18,8 +18,6 @@ public class ArmPivotSubsystem
         extends MotorSubsystemWithCanCoder<
                 MotorInputsAutoLogged, MotorIO, CanCoderInputsAutoLogged, CanCoderIO> {
     private RobotState mRobotState;
-    private final double fullyRetractRevs = 0.0;
-    private final double fullyDeployedRevs = 25.0;
 
     public ArmPivotSubsystem(
             final MotorSubsystemWithCanCoderConfig motorConfig,
@@ -47,11 +45,11 @@ public class ArmPivotSubsystem
     }
 
     public boolean isFullyExtended() {
-        return (this.mInputs.rawRotorPosition < 0);
+        return (this.mInputs.rawRotorPosition < Constants.ArmConstants.kArmPivotExtendLimit);
     }
 
     public boolean isFullyRetract() {
-        return (this.mInputs.rawRotorPosition > 50);
+        return (this.mInputs.rawRotorPosition > Constants.ArmConstants.kArmPivotRetractLimit);
     }
 
     @Override

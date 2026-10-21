@@ -141,6 +141,9 @@ public final class Constants {
         public static final double kArmPivotStowPositionUnits = 0.0;
         public static final double kArmPivotIntakePositionUnits = 1.0;
 
+        public static final double kArmPivotRetractLimit = 0.0;
+        public static final double kArmPivotExtendLimit = 50.0;
+
         // Manual open-loop duty cycle for arm pivot (tune this value).
         public static final double kArmPivotManualDutyCycle = 0.2;
     }
