@@ -35,7 +35,7 @@ public final class Constants {
     }
 
     public static final boolean kIsConnectedViaWifi = true;
-    public static final boolean kUseMapleSim = true;
+    public static final boolean kUseMapleSim = false;
     public static final boolean kUseMapleSimFuel = false;
     public static final boolean kIsUsingKeyboard = false;
 
