@@ -15,7 +15,6 @@ import com.team236.frc2026.subsystems.vision.VisionSubsystem;
 import com.team236.lib.math.MathHelpers;
 import com.team236.lib.subsystems.cancoder.CanCoderHardware;
 import com.team236.lib.subsystems.cancoder.SimCanCoderIO;
-import com.team236.lib.subsystems.motor.SimTalonFXIO;
 import com.team236.lib.subsystems.motor.SimTalonFXWithCancoder;
 import com.team236.lib.subsystems.motor.TalonFXIO;
 import edu.wpi.first.math.geometry.Pose2d;

@@ -35,8 +35,8 @@ public class ArmPivotSubsystem
                 new CanCoderInputsAutoLogged(),
                 canCoderIO);
 
-        this.setCurrentPosition(Constants.ArmConstants.kArmPivotStowPositionUnits);
-        this.positionSetpointUnits = Constants.ArmConstants.kArmPivotStowPositionUnits;
+        this.setCurrentPosition(Constants.ArmConstants.kArmPivotRectractRadLim);
+        this.positionSetpointUnits = Constants.ArmConstants.kArmPivotExtendRadLim;
         this.mRobotState = state;
     }
 
@@ -49,17 +49,17 @@ public class ArmPivotSubsystem
     }
 
     public boolean isFullyDeployed() {
-        return (this.mInputs.rawRotorPosition <= Constants.ArmConstants.kArmPivotRetractRadians
+        return (this.mInputs.rawRotorPosition <= Constants.ArmConstants.kArmPivotRectractRadLim
                 || MathHelpers.epsilonEquals(
-                        Constants.ArmConstants.kArmPivotRetractRadians,
+                        Constants.ArmConstants.kArmPivotRectractRadLim,
                         mInputs.unitPosition,
                         Constants.kEpsilonMotorTolerance));
     }
 
     public boolean isFullyRetract() {
-        return (this.mInputs.rawRotorPosition >= Constants.ArmConstants.kArmPivotExtendRadians
+        return (this.mInputs.rawRotorPosition >= Constants.ArmConstants.kArmPivotExtendRadLim
                 || MathHelpers.epsilonEquals(
-                        Constants.ArmConstants.kArmPivotExtendRadians,
+                        Constants.ArmConstants.kArmPivotExtendRadLim,
                         mInputs.unitPosition,
                         Constants.kEpsilonMotorTolerance));
     }

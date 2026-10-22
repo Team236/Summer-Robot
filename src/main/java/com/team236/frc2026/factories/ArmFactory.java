@@ -19,7 +19,7 @@ public class ArmFactory {
     public static Command stowArm(RobotContainer container) {
         return container
                 .getArmPivot()
-                .motionMagicSetpointCommand(() -> Constants.ArmConstants.kArmPivotStowPositionUnits)
+                .motionMagicSetpointCommand(() -> Constants.ArmConstants.kArmPivotRectractRadLim)
                 .withName("Arm Stow");
     }
 
@@ -31,8 +31,7 @@ public class ArmFactory {
     public static Command intakeArm(RobotContainer container) {
         return container
                 .getArmPivot()
-                .motionMagicSetpointCommand(
-                        () -> Constants.ArmConstants.kArmPivotIntakePositionUnits)
+                .motionMagicSetpointCommand(() -> Constants.ArmConstants.kArmPivotExtendRadLim)
                 .withName("Arm Intake");
     }
 

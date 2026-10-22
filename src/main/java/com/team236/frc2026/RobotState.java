@@ -32,7 +32,6 @@ public class RobotState {
         armPivotRadians.set(0.0);
     }
 
-
     public boolean isRedAlliance() {
         return DriverStation.getAlliance().isPresent()
                 && DriverStation.getAlliance().equals(Optional.of(Alliance.Red));
@@ -69,6 +68,6 @@ public class RobotState {
     }
 
     public void updateLogger() {
-        Logger.recordOutput("RobotState/ElevatorHeightMeters", getArmPivotAngleRadians());
+        Logger.recordOutput("RobotState/ArmPivotRadians", getArmPivotAngleRadians());
     }
 }

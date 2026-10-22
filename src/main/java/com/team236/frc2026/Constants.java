@@ -127,6 +127,10 @@ public final class Constants {
         public static final int kArmPivotMotorId = 1;
         public static final int kArmPivotCanCoderId = 2;
 
+        public static final double kArmPivotGearRatio = 1.0;
+        public static final double kArmPivotRectractRadLim = Units.degreesToRadians(0);
+        public static final double kArmPivotExtendRadLim = Units.degreesToRadians(270);
+
         public static final MotorSubsystemWithCanCoderConfig kArmPivotConfig =
                 new MotorSubsystemWithCanCoderConfig();
 
@@ -140,10 +144,10 @@ public final class Constants {
                     new CanDeviceId(Constants.ArmConstants.kArmPivotCanCoderId, kCanBusDrivebase);
 
             kArmPivotConfig.kMomentOfInertia = 0.25;
-            kArmPivotConfig.unitToRotorRatio = 1.0 / 1.0; 
+            kArmPivotConfig.unitToRotorRatio = kArmPivotGearRatio;
 
-            kArmPivotConfig.kMinPositionUnits = Units.degreesToRadians(-90);
-            kArmPivotConfig.kMaxPositionUnits = Units.degreesToRadians(180);
+            kArmPivotConfig.kMinPositionUnits = kArmPivotRectractRadLim;
+            kArmPivotConfig.kMaxPositionUnits = kArmPivotExtendRadLim;
 
             kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
             kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
