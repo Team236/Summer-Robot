@@ -9,6 +9,7 @@ import com.team236.lib.subsystems.motor.MotorIO;
 import com.team236.lib.subsystems.motor.MotorInputsAutoLogged;
 import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoder;
 import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoderConfig;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * The {@code ArmPivot} controls the pivoting mechanism of the robot's arm. It manages the up and
@@ -48,23 +49,28 @@ public class ArmPivotSubsystem
     }
 
     public boolean isFullyDeployed() {
-        return (this.mInputs.rawRotorPosition <= Constants.ArmConstants.kArmPivotRetractRadians || MathHelpers.epsilonEquals(
-                                    Constants.ArmConstants.kArmPivotRetractRadians,
-                                    mInputs.unitPosition,
-                                    Constants.kEpsilonMotorTolerance)
-);
+        return (this.mInputs.rawRotorPosition <= Constants.ArmConstants.kArmPivotRetractRadians
+                || MathHelpers.epsilonEquals(
+                        Constants.ArmConstants.kArmPivotRetractRadians,
+                        mInputs.unitPosition,
+                        Constants.kEpsilonMotorTolerance));
     }
 
     public boolean isFullyRetract() {
-        return (this.mInputs.rawRotorPosition >= Constants.ArmConstants.kArmPivotExtendRadians || MathHelpers.epsilonEquals(
-                                    Constants.ArmConstants.kArmPivotExtendRadians,
-                                    mInputs.unitPosition,
-                                    Constants.kEpsilonMotorTolerance));
+        return (this.mInputs.rawRotorPosition >= Constants.ArmConstants.kArmPivotExtendRadians
+                || MathHelpers.epsilonEquals(
+                        Constants.ArmConstants.kArmPivotExtendRadians,
+                        mInputs.unitPosition,
+                        Constants.kEpsilonMotorTolerance));
     }
 
     @Override
     public void periodic() {
         super.periodic();
         mRobotState.setArmPivotAngleRadians(mInputs.unitPosition);
+
+        Logger.recordOutput(getName() + "/CurrentAngleRadians", mInputs.unitPosition);
+        Logger.recordOutput(
+                getName() + "/CurrentVelocityRadiansPerSec", mInputs.velocityUnitsPerSecond);
     }
 }
