@@ -1,5 +1,6 @@
 package com.team236.frc2026.controlboard;
 
+import com.team236.frc2026.Constants;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -13,8 +14,11 @@ public class ControlBoard implements IDriveControlBoard, IButtonControlBoard {
     private final IButtonControlBoard mButtonControlBoard;
 
     private ControlBoard() {
-        // mDriveControlBoard = XboxDriveControlBoard.getInstance();
-        mDriveControlBoard = KeyboardDriveControlBoard.getInstance();
+        if (Constants.kIsUsingKeyboard) {
+            mDriveControlBoard = KeyboardDriveControlBoard.getInstance();
+        } else {
+            mDriveControlBoard = XboxDriveControlBoard.getInstance();
+        }
         mButtonControlBoard = XboxButtonControlBoard.getInstance();
     }
 
