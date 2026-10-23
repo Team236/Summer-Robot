@@ -88,6 +88,8 @@ public class Robot extends LoggedRobot {
         if (Robot.isSimulation()) {
             mRobotContainer.getSimulatedRobotState().updateSim();
         }
+
+        mRobotContainer.getRobotViz().updateViz();
     }
 
     /** This function is called once when the robot is disabled. */
