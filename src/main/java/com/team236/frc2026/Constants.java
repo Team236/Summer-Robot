@@ -3,11 +3,14 @@ package com.team236.frc2026;
 import com.team236.frc2026.subsystems.drive.CompTunerConstants;
 import com.team236.frc2026.subsystems.drive.DrivetrainProfile;
 import com.team236.frc2026.subsystems.drive.PracTunerConstants;
+import com.team236.frc2026.subsystems.drive.SimTunerConstants;
 import com.team236.lib.roborio.NetworkHelpers;
 import com.team236.lib.subsystems.cancoder.CanDeviceId;
 import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoderConfig;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -37,7 +40,8 @@ public final class Constants {
     public static final boolean kIsConnectedViaWifi = true;
     public static final boolean kUseMapleSim = false;
     public static final boolean kUseMapleSimFuel = false;
-    public static final boolean kIsUsingKeyboard = false;
+    public static final boolean kIsUsingKeyboard = true;
+    public static final Pose2d kSimStartPose = new Pose2d(3, 3, new Rotation2d());
 
     private static final String kPracticeBotMacAddress = "00:80:2F:40:FC:4A";
     public static boolean kIsPracticeBot = NetworkHelpers.hasMacAddress(kPracticeBotMacAddress);
@@ -75,9 +79,11 @@ public final class Constants {
         public static final double kMaxRotationalRate = 3.0;
 
         public static final DrivetrainProfile kDrivetrain =
-                kIsPracticeBot
-                        ? PracTunerConstants.createDrivetrain()
-                        : CompTunerConstants.createDrivetrain();
+                Robot.isSimulation()
+                        ? SimTunerConstants.createDrivetrain()
+                        : (kIsPracticeBot
+                                ? PracTunerConstants.createDrivetrain()
+                                : CompTunerConstants.createDrivetrain());
     }
 
     /** The {@code VisionConstants} defines camera and AprilTag pipeline configurations. */
