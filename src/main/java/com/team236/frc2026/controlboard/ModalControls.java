@@ -71,7 +71,7 @@ public class ModalControls {
                                         })
                                 .ignoringDisable(true));
         ControlBoard.getInstance()
-                .getIntakeMode()
+                .getManualMode()
                 .onTrue(
                         Commands.runOnce(
                                         () -> {

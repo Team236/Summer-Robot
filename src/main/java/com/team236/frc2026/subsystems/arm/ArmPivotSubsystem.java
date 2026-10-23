@@ -49,17 +49,17 @@ public class ArmPivotSubsystem
     }
 
     public boolean isFullyDeployed() {
-        return (this.mInputs.rawRotorPosition <= Constants.ArmConstants.kArmPivotRectractRadLim
+        return (this.mInputs.rawRotorPosition >= Constants.ArmConstants.kArmPivotExtendRadLim
                 || MathHelpers.epsilonEquals(
-                        Constants.ArmConstants.kArmPivotRectractRadLim,
+                        Constants.ArmConstants.kArmPivotExtendRadLim,
                         mInputs.unitPosition,
                         Constants.kEpsilonMotorTolerance));
     }
 
     public boolean isFullyRetract() {
-        return (this.mInputs.rawRotorPosition >= Constants.ArmConstants.kArmPivotExtendRadLim
+        return (this.mInputs.rawRotorPosition <= Constants.ArmConstants.kArmPivotRectractRadLim
                 || MathHelpers.epsilonEquals(
-                        Constants.ArmConstants.kArmPivotExtendRadLim,
+                        Constants.ArmConstants.kArmPivotRectractRadLim,
                         mInputs.unitPosition,
                         Constants.kEpsilonMotorTolerance));
     }

@@ -67,7 +67,7 @@ public class RobotContainer {
         mModalControls.configureBindings();
         mDriveSubsystem.setDefaultCommand(mDriveCommand);
 
-        ModalControls.getInstance().configureBindings();
+        mModalControls.configureBindings();
 
         ControlBoard.getInstance()
                 .getResetGyro()
