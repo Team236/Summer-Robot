@@ -8,17 +8,18 @@ public class ModalSuperstructureTriggers {
 
     public ModalSuperstructureTriggers(RobotContainer container) {
         this.mRobotContainer = container;
+        configureTriggers();
     }
 
     @SuppressWarnings("unused")
-    private void configureBindings() {
+    private void configureTriggers() {
         // Later can add limits in motor config
         mRobotContainer
                 .getModalControls()
                 .manualMode()
                 .and(mRobotContainer.getModalControls().manualArmPivotExtend())
                 .and(() -> !mRobotContainer.getArmPivot().isFullyDeployed())
-                .onTrue(
+                .whileTrue(
                         ArmFactory.manualExtend(mRobotContainer)
                                 .withName("ManualArmPivotExtendCommand"));
 
@@ -27,7 +28,7 @@ public class ModalSuperstructureTriggers {
                 .manualMode()
                 .and(mRobotContainer.getModalControls().manualArmPivotRetract())
                 .and(() -> !mRobotContainer.getArmPivot().isFullyRetract())
-                .onTrue(
+                .whileTrue(
                         ArmFactory.manualRetract(mRobotContainer)
                                 .withName("ManualArmPivotRetractCommand"));
     }

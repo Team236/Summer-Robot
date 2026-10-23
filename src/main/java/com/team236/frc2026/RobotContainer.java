@@ -8,6 +8,7 @@ import com.team236.frc2026.subsystems.arm.ArmPivotSubsystem;
 import com.team236.frc2026.subsystems.drive.DriveHardware;
 import com.team236.frc2026.subsystems.drive.DriveSim;
 import com.team236.frc2026.subsystems.drive.DriveSubsystem;
+import com.team236.frc2026.subsystems.superstructure.ModalSuperstructureTriggers;
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.frc2026.subsystems.vision.VisionHardwareLimelight;
 import com.team236.frc2026.subsystems.vision.VisionSimPhoton;
@@ -44,6 +45,7 @@ public class RobotContainer {
     private final ArmPivotSubsystem mArmPivotSubsystem = buildArmPivotSubsystem();
 
     private final ModalControls mModalControls = ModalControls.getInstance();
+    private ModalSuperstructureTriggers mModalSuperstructureTriggers;
 
     private final TeleopSwerveDrive mDriveCommand =
             new TeleopSwerveDrive(
@@ -65,9 +67,8 @@ public class RobotContainer {
 
     private void configureBindings() {
         mModalControls.configureBindings();
+        mModalSuperstructureTriggers = new ModalSuperstructureTriggers(this);
         mDriveSubsystem.setDefaultCommand(mDriveCommand);
-
-        mModalControls.configureBindings();
 
         ControlBoard.getInstance()
                 .getResetGyro()
@@ -99,6 +100,10 @@ public class RobotContainer {
 
     public ModalControls getModalControls() {
         return mModalControls;
+    }
+
+    public ModalSuperstructureTriggers getModalSuperstructureTriggers() {
+        return mModalSuperstructureTriggers;
     }
 
     private DriveSubsystem buildDriveSubsystem() {
