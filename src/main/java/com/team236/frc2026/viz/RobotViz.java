@@ -31,8 +31,7 @@ public class RobotViz {
         armEndEffectorPose3d =
                 new Pose3d(
                         kArmPivotXOffset + endEffectorX_relativeToPivot,
-                        0, // Assuming arm movement is in the XZ plane relative to the robot's
-                        // coordinate system
+                        0,
                         kArmPivotZOffset + endEffectorZ_relativeToPivot,
                         new Rotation3d(0, -armAngleRadians, 0));
 

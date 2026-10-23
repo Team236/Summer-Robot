@@ -10,6 +10,7 @@ public class ModalSuperstructureTriggers {
         this.mRobotContainer = container;
     }
 
+    @SuppressWarnings("unused")
     private void configureBindings() {
         // Later can add limits in motor config
         mRobotContainer
