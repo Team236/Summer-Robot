@@ -13,6 +13,7 @@ import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.frc2026.subsystems.vision.VisionHardwareLimelight;
 import com.team236.frc2026.subsystems.vision.VisionSimPhoton;
 import com.team236.frc2026.subsystems.vision.VisionSubsystem;
+import com.team236.frc2026.viz.RobotViz;
 import com.team236.lib.math.MathHelpers;
 import com.team236.lib.subsystems.cancoder.CanCoderHardware;
 import com.team236.lib.subsystems.cancoder.SimCanCoderIO;
@@ -46,6 +47,8 @@ public class RobotContainer {
 
     private final ModalControls mModalControls = ModalControls.getInstance();
     private ModalSuperstructureTriggers mModalSuperstructureTriggers;
+
+    private final RobotViz mRobotViz = new RobotViz(mRobotState);
 
     private final TeleopSwerveDrive mDriveCommand =
             new TeleopSwerveDrive(
@@ -104,6 +107,10 @@ public class RobotContainer {
 
     public ModalSuperstructureTriggers getModalSuperstructureTriggers() {
         return mModalSuperstructureTriggers;
+    }
+
+    public RobotViz getRobotViz() {
+        return mRobotViz;
     }
 
     private DriveSubsystem buildDriveSubsystem() {

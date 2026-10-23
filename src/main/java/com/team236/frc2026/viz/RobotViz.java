@@ -8,12 +8,7 @@ import org.littletonrobotics.junction.Logger;
 public class RobotViz {
     private final RobotState state;
 
-    private Pose3d armPivotPose3d = new Pose3d();
-    private Pose3d armEndEffectorPose3d = new Pose3d();
-
-    private static final double kArmPivotXOffset = 0.2;
-    private static final double kArmPivotZOffset = 0.3;
-    private static final double kArmLength = 0.5;
+    private Pose3d mArmPose = new Pose3d();
 
     public RobotViz(RobotState state) {
         this.state = state;
@@ -23,19 +18,8 @@ public class RobotViz {
 
         double armAngleRadians = state.getArmPivotAngleRadians();
 
-        armPivotPose3d = new Pose3d(kArmPivotXOffset, 0, kArmPivotZOffset, new Rotation3d());
+        mArmPose = new Pose3d(0, 0, 0, new Rotation3d(0, -armAngleRadians, 0));
 
-        double endEffectorX_relativeToPivot = kArmLength * Math.cos(armAngleRadians);
-        double endEffectorZ_relativeToPivot = kArmLength * Math.sin(armAngleRadians);
-
-        armEndEffectorPose3d =
-                new Pose3d(
-                        kArmPivotXOffset + endEffectorX_relativeToPivot,
-                        0,
-                        kArmPivotZOffset + endEffectorZ_relativeToPivot,
-                        new Rotation3d(0, -armAngleRadians, 0));
-
-        Logger.recordOutput("Arm/ArmPivot", armPivotPose3d);
-        Logger.recordOutput("Arm/ArmEndEffector", armEndEffectorPose3d);
+        Logger.recordOutput("Arm-Pivot/ArmPose", mArmPose);
     }
 }
