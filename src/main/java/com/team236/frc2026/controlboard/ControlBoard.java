@@ -16,10 +16,11 @@ public class ControlBoard implements IDriveControlBoard, IButtonControlBoard {
     private ControlBoard() {
         if (Constants.kIsUsingKeyboard) {
             mDriveControlBoard = KeyboardDriveControlBoard.getInstance();
+            mButtonControlBoard = KeyboardButtonControlBoard.getInstance();
         } else {
             mDriveControlBoard = XboxDriveControlBoard.getInstance();
+            mButtonControlBoard = XboxButtonControlBoard.getInstance();
         }
-        mButtonControlBoard = XboxButtonControlBoard.getInstance();
     }
 
     public static ControlBoard getInstance() {
@@ -61,12 +62,12 @@ public class ControlBoard implements IDriveControlBoard, IButtonControlBoard {
 
     @Override
     public Trigger getScoringMode() {
-        return mButtonControlBoard.getIntakeMode();
+        return mButtonControlBoard.getScoringMode();
     }
 
     @Override
     public Trigger getManualMode() {
-        return mButtonControlBoard.getIntakeMode();
+        return mButtonControlBoard.getManualMode();
     }
 
     @Override

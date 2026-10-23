@@ -1,6 +1,6 @@
 package com.team236.frc2026.controlboard;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 
 /**
  * The {@code KeyboardDriveControlBoard} reads keyboard inputs from an computer and applies scaling
@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 public class KeyboardDriveControlBoard implements IDriveControlBoard {
     private static KeyboardDriveControlBoard mInstance = null;
 
-    private final GenericHID mController = new GenericHID(0);
+    private final CommandGenericHID mController = new CommandGenericHID(0);
 
     private KeyboardDriveControlBoard() {}
 
