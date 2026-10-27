@@ -109,7 +109,7 @@ public class ModalControls {
         return ControlBoard.getInstance().getResetGyro();
     }
 
-    // Intake Mode //
+    // Manual Mode //
     public Trigger manualArmPivotExtend() {
         return modeSpecific(ControlBoard.getInstance().getManualArmPivotExtend(), Mode.MANUAL);
     }
