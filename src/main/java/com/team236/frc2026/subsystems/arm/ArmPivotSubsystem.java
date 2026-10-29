@@ -20,8 +20,6 @@ public class ArmPivotSubsystem
         extends MotorSubsystemWithCanCoder<
                 MotorInputsAutoLogged, MotorIO, CanCoderInputsAutoLogged, CanCoderIO> {
     private RobotState mRobotState;
-    private double mIsFullyDeployed;
-    private double mIsFullyRetracted;
 
     public ArmPivotSubsystem(
             final MotorSubsystemWithCanCoderConfig motorConfig,
@@ -48,8 +46,12 @@ public class ArmPivotSubsystem
                         .ignoringDisable(true));
     }
 
+    public void setArmVoltage(double voltage) {
+        this.io.setVoltageOutput(voltage); // Same as: setVoltageImpl(voltage);
+    }
+
     public boolean isFullyDeployed() {
-        return (this.mInputs.rawRotorPosition >= Constants.ArmConstants.kArmPivotExtendRadLim
+        return (this.mInputs.unitPosition >= Constants.ArmConstants.kArmPivotExtendRadLim
                 || MathHelpers.epsilonEquals(
                         Constants.ArmConstants.kArmPivotExtendRadLim,
                         mInputs.unitPosition,
@@ -57,7 +59,7 @@ public class ArmPivotSubsystem
     }
 
     public boolean isFullyRetract() {
-        return (this.mInputs.rawRotorPosition <= Constants.ArmConstants.kArmPivotRectractRadLim
+        return (this.mInputs.unitPosition <= Constants.ArmConstants.kArmPivotRectractRadLim
                 || MathHelpers.epsilonEquals(
                         Constants.ArmConstants.kArmPivotRectractRadLim,
                         mInputs.unitPosition,
@@ -72,5 +74,6 @@ public class ArmPivotSubsystem
         Logger.recordOutput(getName() + "/CurrentAngleRadians", mInputs.unitPosition);
         Logger.recordOutput(
                 getName() + "/CurrentVelocityRadiansPerSec", mInputs.velocityUnitsPerSecond);
+        Logger.recordOutput(getName() + "/UnitPose", mInputs.unitPosition);
     }
 }
