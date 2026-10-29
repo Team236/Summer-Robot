@@ -47,7 +47,7 @@ public class VisionSimPhoton extends VisionHardwareLimelight {
 
         SimCameraProperties camAProp = new SimCameraProperties();
         camAProp.setCalibration(kResWidth, kResHeight, Rotation2d.fromDegrees(80));
-        camAProp.setCalibError(0.35, 0.1);
+        camAProp.setCalibError(0.0, 0.0);
         camAProp.setFPS(45);
         camAProp.setAvgLatencyMs(25);
         camAProp.setLatencyStdDevMs(5);
