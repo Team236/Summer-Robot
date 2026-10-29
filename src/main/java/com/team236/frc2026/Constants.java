@@ -192,6 +192,12 @@ public final class Constants {
         }
 
         public static final double kArmPivotManualVoltage = 2.0;
+
+        public static final Translation3d kArmSimPivotPoint =
+                new Translation3d(
+                        Units.inchesToMeters(14.00),
+                        Units.inchesToMeters(3.390625),
+                        Units.inchesToMeters(8.664724));
     }
 
     /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */
