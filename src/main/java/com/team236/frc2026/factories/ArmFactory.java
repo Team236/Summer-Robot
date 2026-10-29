@@ -43,8 +43,8 @@ public class ArmFactory {
     public static Command manualRetract(RobotContainer container) {
         return container
                 .getArmPivot()
-                .dutyCycleCommand(() -> -Constants.ArmConstants.kArmPivotManualDutyCycle)
-                .withName("Arm Manual Up");
+                .voltageCommand(() -> -Constants.ArmConstants.kArmPivotManualVoltage)
+                .withName("Arm Retract");
     }
 
     /**
@@ -55,7 +55,7 @@ public class ArmFactory {
     public static Command manualExtend(RobotContainer container) {
         return container
                 .getArmPivot()
-                .dutyCycleCommand(() -> Constants.ArmConstants.kArmPivotManualDutyCycle)
-                .withName("Arm Manual Down");
+                .voltageCommand(() -> Constants.ArmConstants.kArmPivotManualVoltage)
+                .withName("Arm Extend");
     }
 }
