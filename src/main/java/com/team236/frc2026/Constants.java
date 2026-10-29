@@ -1,5 +1,6 @@
 package com.team236.frc2026;
 
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.team236.frc2026.subsystems.drive.CompTunerConstants;
 import com.team236.frc2026.subsystems.drive.DrivetrainProfile;
 import com.team236.frc2026.subsystems.drive.PracTunerConstants;
@@ -131,11 +132,11 @@ public final class Constants {
     /** The {@code FieldDimensions} defines the arm subsystem. */
     public static final class ArmConstants {
         public static final int kArmPivotMotorId = 1;
-        public static final int kArmPivotCanCoderId = 2;
+        public static final int kArmPivotCanCoderId = 1;
 
-        public static final double kArmPivotGearRatio = 1.0;
-        public static final double kArmPivotRectractRadLim = Units.degreesToRadians(0);
-        public static final double kArmPivotExtendRadLim = Units.degreesToRadians(270);
+        public static final double kArmPivotGearRatio = 1.0 / 5.0;
+        public static final double kArmPivotRectractRadLim = Units.degreesToRadians(10);
+        public static final double kArmPivotExtendRadLim = Units.degreesToRadians(160);
 
         public static final MotorSubsystemWithCanCoderConfig kArmPivotConfig =
                 new MotorSubsystemWithCanCoderConfig();
@@ -149,7 +150,7 @@ public final class Constants {
             kArmPivotConfig.canCoderConfig.canId =
                     new CanDeviceId(Constants.ArmConstants.kArmPivotCanCoderId, kCanBusDrivebase);
 
-            kArmPivotConfig.kMomentOfInertia = 0.25;
+            kArmPivotConfig.kMomentOfInertia = 0.025;
             kArmPivotConfig.unitToRotorRatio = kArmPivotGearRatio;
 
             kArmPivotConfig.kMinPositionUnits = kArmPivotRectractRadLim;
@@ -162,20 +163,20 @@ public final class Constants {
             kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
                     kArmPivotConfig.kMinPositionUnits / kArmPivotConfig.unitToRotorRatio;
 
-            kArmPivotConfig.talonConfig.Slot0.kP = 100.0;
+            kArmPivotConfig.talonConfig.Slot0.kP = 50.0;
             kArmPivotConfig.talonConfig.Slot0.kI = 0.0;
-            kArmPivotConfig.talonConfig.Slot0.kD = 0.0;
-            kArmPivotConfig.talonConfig.Slot0.kS = 0.3;
+            kArmPivotConfig.talonConfig.Slot0.kD = 0.1;
+            kArmPivotConfig.talonConfig.Slot0.kS = 0.1;
             kArmPivotConfig.talonConfig.Slot0.kV = 0.05;
             kArmPivotConfig.talonConfig.Slot0.kG = 0.1;
             kArmPivotConfig.talonConfig.Slot0.GravityType =
                     com.ctre.phoenix6.signals.GravityTypeValue.Arm_Cosine;
 
             kArmPivotConfig.talonConfig.MotionMagic.MotionMagicCruiseVelocity =
-                    Units.degreesToRadians(90);
+                    Units.degreesToRadians(180);
             kArmPivotConfig.talonConfig.MotionMagic.MotionMagicAcceleration =
-                    Units.degreesToRadians(300);
-            kArmPivotConfig.talonConfig.MotionMagic.MotionMagicJerk = Units.degreesToRadians(1200);
+                    Units.degreesToRadians(90);
+            kArmPivotConfig.talonConfig.MotionMagic.MotionMagicJerk = Units.degreesToRadians(900);
 
             kArmPivotConfig.canCoderConfig.config.MagnetSensor.MagnetOffset = 0.0;
             kArmPivotConfig.cancoderToUnitsRatio = 1.0;
@@ -183,13 +184,14 @@ public final class Constants {
             kArmPivotConfig.ratioForSim = kArmPivotConfig.unitToRotorRatio;
             kArmPivotConfig.cancoderUnitsForSim = 1.0;
 
+            kArmPivotConfig.talonConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
             kArmPivotConfig.talonConfig.MotorOutput.NeutralMode =
                     com.ctre.phoenix6.signals.NeutralModeValue.Brake;
             kArmPivotConfig.talonConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
             kArmPivotConfig.talonConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
         }
 
-        public static final double kArmPivotManualDutyCycle = 0.2;
+        public static final double kArmPivotManualVoltage = 2.0;
     }
 
     /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */
