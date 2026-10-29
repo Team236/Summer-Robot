@@ -41,7 +41,7 @@ public final class Constants {
     public static final boolean kIsConnectedViaWifi = true;
     public static final boolean kUseMapleSim = true;
     public static final boolean kUseMapleSimFuel = false;
-    public static final boolean kIsUsingKeyboard = true;
+    public static final boolean kIsUsingKeyboard = false;
     public static final Pose2d kSimStartPose = new Pose2d(3, 3, new Rotation2d());
 
     private static final String kPracticeBotMacAddress = "00:80:2F:40:FC:4A";
