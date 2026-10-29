@@ -28,7 +28,7 @@ public class RobotViz {
         double armAngleRadians = state.getArmPivotAngleRadians();
 
         // Rotate around the pivot point rather than the CAD origin
-        Rotation3d rotation = new Rotation3d(0, -armAngleRadians, 0);
+        Rotation3d rotation = new Rotation3d(0, armAngleRadians, 0);
         mArmPose =
                 new Pose3d(kPivotPoint, rotation)
                         .transformBy(new Transform3d(kPivotPoint.unaryMinus(), new Rotation3d()));
