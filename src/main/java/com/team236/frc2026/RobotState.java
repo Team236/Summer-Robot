@@ -24,8 +24,9 @@ public class RobotState {
     private double mLastUsedMegatagTimestamp = 0;
     private Pose2d mLastUsedMegatagPose = Pose2d.kZero;
 
-    private final AtomicReference<Double> armPivotRadians = new AtomicReference<>(0.0);
-    private final AtomicReference<Pose3d> armPose = new AtomicReference<>(new Pose3d());
+    private final AtomicReference<Double> mArmPivotRadians = new AtomicReference<>(0.0);
+    private final AtomicReference<Pose3d> mArmPose = new AtomicReference<>(new Pose3d());
+    private final AtomicReference<Boolean> mIntakePossession = new AtomicReference<>(false);
 
     public RobotState(Consumer<VisionFieldPoseEstimate> visionEstimateConsumer) {
         this.mVisionEstimateConsumer = visionEstimateConsumer;
@@ -35,8 +36,8 @@ public class RobotState {
     }
 
     private void configureSubsystems() {
-        armPivotRadians.set(0.0);
-        armPose.set(new Pose3d());
+        mArmPivotRadians.set(0.0);
+        mArmPose.set(new Pose3d());
     }
 
     public boolean isRedAlliance() {
@@ -67,19 +68,27 @@ public class RobotState {
     }
 
     public void setArmPivotAngleRadians(double radians) {
-        armPivotRadians.set(radians);
+        mArmPivotRadians.set(radians);
     }
 
     public double getArmPivotAngleRadians() {
-        return armPivotRadians.get();
+        return mArmPivotRadians.get();
     }
 
     public void setArmPose(Pose3d pose) {
-        armPose.set(pose);
+        mArmPose.set(pose);
     }
 
     public Pose3d getArmPose() {
-        return armPose.get();
+        return mArmPose.get();
+    }
+
+    public void updateIntakePossession(boolean hasPiece) {
+        mIntakePossession.set(hasPiece);
+    }
+
+    public boolean updateIntakePossession() {
+        return mIntakePossession.get();
     }
 
     public void updateLogger() {
