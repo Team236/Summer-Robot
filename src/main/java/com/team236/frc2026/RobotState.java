@@ -3,6 +3,7 @@ package com.team236.frc2026;
 import com.team236.frc2026.subsystems.vision.VisionFieldPoseEstimate;
 import com.team236.lib.roborio.ConcurrentTimeInterpolatableBuffer;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import java.util.Map;
@@ -24,12 +25,18 @@ public class RobotState {
     private Pose2d mLastUsedMegatagPose = Pose2d.kZero;
 
     private final AtomicReference<Double> armPivotRadians = new AtomicReference<>(0.0);
+    private final AtomicReference<Pose3d> armPose = new AtomicReference<>(new Pose3d());
 
     public RobotState(Consumer<VisionFieldPoseEstimate> visionEstimateConsumer) {
         this.mVisionEstimateConsumer = visionEstimateConsumer;
 
-        // Initialize component positions
+        // Initialize subsystems
+        configureSubsystems();
+    }
+
+    private void configureSubsystems() {
         armPivotRadians.set(0.0);
+        armPose.set(new Pose3d());
     }
 
     public boolean isRedAlliance() {
@@ -65,6 +72,14 @@ public class RobotState {
 
     public double getArmPivotAngleRadians() {
         return armPivotRadians.get();
+    }
+
+    public void setArmPose(Pose3d pose) {
+        armPose.set(pose);
+    }
+
+    public Pose3d getArmPose() {
+        return armPose.get();
     }
 
     public void updateLogger() {
