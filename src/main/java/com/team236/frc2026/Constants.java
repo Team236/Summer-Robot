@@ -201,7 +201,10 @@ public final class Constants {
 
         public static final Transform3d kArmPivotToGrabber =
                 new Transform3d(
-                        new Translation3d(Units.inchesToMeters(5.833141), Units.inchesToMeters(-3.390625), Units.inchesToMeters(14.789487)),
+                        new Translation3d(
+                                Units.inchesToMeters(5.833141),
+                                Units.inchesToMeters(-3.390625),
+                                Units.inchesToMeters(14.789487)),
                         new Rotation3d());
     }
 
