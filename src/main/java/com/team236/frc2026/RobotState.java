@@ -83,11 +83,11 @@ public class RobotState {
         return mArmPose.get();
     }
 
-    public void updateIntakePossession(boolean hasPiece) {
+    public void setIntakePossession(boolean hasPiece) {
         mIntakePossession.set(hasPiece);
     }
 
-    public boolean updateIntakePossession() {
+    public boolean getIntakePossession() {
         return mIntakePossession.get();
     }
 
