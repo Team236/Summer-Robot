@@ -994,8 +994,8 @@ public class FuelPhysicsSim {
         // Neutral zone fuel
         double cx = FIELD_LENGTH / 2.0;
         double cy = FIELD_WIDTH / 2.0;
-        int nzCols = 1; // 12 * 5.91in = 70.9in, fits inside the 72.0in depth
-        int nzRows = 3; // 30 * 5.91in = 177.3in, fits inside the 206.0in width
+        int nzCols = 12; // 12 * 5.91in = 70.9in, fits inside the 72.0in depth
+        int nzRows = 30; // 30 * 5.91in = 177.3in, fits inside the 206.0in width
         double halfDivider = 0.0254; // half of the 2.0in center divider
 
         for (int col = 0; col < nzCols; col++) {
