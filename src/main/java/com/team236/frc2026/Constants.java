@@ -198,6 +198,11 @@ public final class Constants {
                         Units.inchesToMeters(14.00),
                         Units.inchesToMeters(3.390625),
                         Units.inchesToMeters(8.664724));
+
+        public static final Transform3d kArmPivotToGrabber =
+                new Transform3d(
+                        new Translation3d(Units.inchesToMeters(5.833141), Units.inchesToMeters(-3.390625), Units.inchesToMeters(14.789487)),
+                        new Rotation3d());
     }
 
     /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */
