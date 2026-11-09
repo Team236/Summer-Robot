@@ -9,6 +9,9 @@ import com.team236.lib.subsystems.motor.MotorIO;
 import com.team236.lib.subsystems.motor.MotorInputsAutoLogged;
 import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoder;
 import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoderConfig;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import org.littletonrobotics.junction.Logger;
 
 /**
@@ -50,6 +53,17 @@ public class ArmPivotSubsystem
         this.io.setVoltageOutput(voltage); // Same as: setVoltageImpl(voltage);
     }
 
+    // Move this out eventually to a better file
+    public Pose3d getArmPose3d() {
+        return new Pose3d(
+                        Constants.ArmConstants.kArmSimPivotPoint,
+                        new Rotation3d(0, mInputs.unitPosition, 0))
+                .transformBy(
+                        new Transform3d(
+                                Constants.ArmConstants.kArmSimPivotPoint.unaryMinus(),
+                                new Rotation3d()));
+    }
+
     public boolean isFullyDeployed() {
         return (this.mInputs.unitPosition >= Constants.ArmConstants.kArmPivotExtendRadLim
                 || MathHelpers.epsilonEquals(
@@ -69,7 +83,9 @@ public class ArmPivotSubsystem
     @Override
     public void periodic() {
         super.periodic();
-        mRobotState.setArmPivotAngleRadians(mInputs.unitPosition);
+        mRobotState.setArmPivotAngleRadians(
+                mInputs.unitPosition); // Make sure that unitPosition is correct
+        mRobotState.setArmPose(getArmPose3d());
 
         Logger.recordOutput(getName() + "/CurrentAngleRadians", mInputs.unitPosition);
         Logger.recordOutput(

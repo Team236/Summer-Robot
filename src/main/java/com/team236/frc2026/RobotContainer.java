@@ -97,6 +97,10 @@ public class RobotContainer {
         return mArmPivotSubsystem;
     }
 
+    public RobotState getRobotState() {
+        return mRobotState;
+    }
+
     public SimulatedRobotState getSimulatedRobotState() {
         return mSimulatedRobotState;
     }
