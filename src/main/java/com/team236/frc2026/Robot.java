@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.ironmaple.simulation.SimulatedArena;
@@ -139,6 +140,11 @@ public class Robot extends LoggedRobot {
                             Constants.TestbedConstants.kBumperHeightInches,
                             () -> mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot(),
                             () -> mRobotContainer.getSimulatedRobotState().getSimChassisSpeeds());
+            mFuelSim.addIntakeZone(
+                    () -> mRobotContainer.getRobotState().getArmPose(),
+                    Units.inchesToMeters(7.0),
+                    Units.inchesToMeters(7.0),
+                    () -> true);
 
         } else if (Constants.kUseMapleSim) {
             SimulatedArena.getInstance().placeGamePiecesOnField();
