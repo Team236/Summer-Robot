@@ -144,7 +144,13 @@ public class Robot extends LoggedRobot {
                     () -> mRobotContainer.getRobotState().getArmPose(),
                     Units.inchesToMeters(7.0),
                     Units.inchesToMeters(7.0),
-                    () -> true);
+                    () -> {
+                        if (mRobotContainer.getRobotState().getIntakePossession()) {
+                            return false;
+                        }
+                        return true;
+                    },
+                    () -> mRobotContainer.getRobotState().setIntakePossession(true));
 
         } else if (Constants.kUseMapleSim) {
             SimulatedArena.getInstance().placeGamePiecesOnField();

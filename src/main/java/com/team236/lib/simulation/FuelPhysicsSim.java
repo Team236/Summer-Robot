@@ -739,7 +739,6 @@ public class FuelPhysicsSim {
     }
 
     // State
-
     private final List<SimBall> balls = new ArrayList<>();
     private final List<Contact> contacts = new ArrayList<>();
     private final List<Contact> contactPool = new ArrayList<>(); // pre-allocated contact pool
@@ -914,7 +913,7 @@ public class FuelPhysicsSim {
      * @param yMin left edge in robot frame
      * @param yMax right edge in robot frame
      * @param active returns true when the intake is actually running
-     * @param callback fires when a ball gets picked up
+     * @param callback executes code after intaking
      */
     public void addIntakeZone(
             Supplier<Pose3d> intakePoseSupplier,
