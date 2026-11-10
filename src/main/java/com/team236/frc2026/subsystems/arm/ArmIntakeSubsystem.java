@@ -1,5 +1,7 @@
 package com.team236.frc2026.subsystems.arm;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.team236.frc2026.RobotState;
 import com.team236.lib.subsystems.cancoder.CanCoderIO;
 import com.team236.lib.subsystems.cancoder.CanCoderInputsAutoLogged;
@@ -31,5 +33,24 @@ public class ArmIntakeSubsystem
                 canCoderIO);
 
         this.mRobotState = state;
+    }
+
+    public void setTeleopDefaultCommand() {
+        this.getDefaultCommand().cancel();
+    }
+
+    public void setArmVoltage(double voltage) {
+        this.io.setVoltageOutput(voltage); // Same as: setVoltageImpl(voltage);
+    }
+
+    @Override
+    public void periodic() {
+        super.periodic();
+        mRobotState.setArmPivotAngleRadians(
+                mInputs.unitPosition);
+
+        Logger.recordOutput(
+                getName() + "/CurrentVelocityRadiansPerSec", mInputs.velocityUnitsPerSecond);
+        Logger.recordOutput(getName() + "/UnitPose", mInputs.unitPosition);
     }
 }
