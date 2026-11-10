@@ -15,9 +15,9 @@ import edu.wpi.first.math.geometry.Transform3d;
 import org.littletonrobotics.junction.Logger;
 
 /**
- * The {@code ArmPivot} controls the pivoting mechanism of the robot's arm. It manages the up and
- * down positions of the arm using a motor with an integrated CANcoder for precise position control
- * and feedback.
+ * The {@code ArmPivotSubsystem} controls the pivoting mechanism of the robot's arm. It manages the
+ * up and down positions of the arm using a motor with an integrated CANcoder for precise position
+ * control and feedback.
  */
 public class ArmPivotSubsystem
         extends MotorSubsystemWithCanCoder<
