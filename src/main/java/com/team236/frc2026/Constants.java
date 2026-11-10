@@ -131,68 +131,6 @@ public final class Constants {
 
     /** The {@code FieldDimensions} defines the arm subsystem. */
     public static final class ArmConstants {
-        public static final int kArmPivotMotorId = 1;
-        public static final int kArmPivotCanCoderId = 1;
-
-        public static final double kArmPivotGearRatio = 1.0 / 5.0;
-        public static final double kArmPivotRectractRadLim = Units.degreesToRadians(10);
-        public static final double kArmPivotExtendRadLim = Units.degreesToRadians(160);
-
-        public static final MotorSubsystemWithCanCoderConfig kArmPivotConfig =
-                new MotorSubsystemWithCanCoderConfig();
-
-        static {
-            kArmPivotConfig.name = "Arm-Pivot";
-
-            kArmPivotConfig.talonCANId =
-                    new CanDeviceId(Constants.ArmConstants.kArmPivotMotorId, kCanBusDrivebase);
-
-            kArmPivotConfig.canCoderConfig.canId =
-                    new CanDeviceId(Constants.ArmConstants.kArmPivotCanCoderId, kCanBusDrivebase);
-
-            kArmPivotConfig.kMomentOfInertia = 0.025;
-            kArmPivotConfig.unitToRotorRatio = kArmPivotGearRatio;
-
-            kArmPivotConfig.kMinPositionUnits = kArmPivotRectractRadLim;
-            kArmPivotConfig.kMaxPositionUnits = kArmPivotExtendRadLim;
-
-            kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-            kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
-                    kArmPivotConfig.kMaxPositionUnits / kArmPivotConfig.unitToRotorRatio;
-            kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-            kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
-                    kArmPivotConfig.kMinPositionUnits / kArmPivotConfig.unitToRotorRatio;
-
-            kArmPivotConfig.talonConfig.Slot0.kP = 50.0;
-            kArmPivotConfig.talonConfig.Slot0.kI = 0.0;
-            kArmPivotConfig.talonConfig.Slot0.kD = 0.1;
-            kArmPivotConfig.talonConfig.Slot0.kS = 0.1;
-            kArmPivotConfig.talonConfig.Slot0.kV = 0.05;
-            kArmPivotConfig.talonConfig.Slot0.kG = 0.1;
-            kArmPivotConfig.talonConfig.Slot0.GravityType =
-                    com.ctre.phoenix6.signals.GravityTypeValue.Arm_Cosine;
-
-            kArmPivotConfig.talonConfig.MotionMagic.MotionMagicCruiseVelocity =
-                    Units.degreesToRadians(180);
-            kArmPivotConfig.talonConfig.MotionMagic.MotionMagicAcceleration =
-                    Units.degreesToRadians(90);
-            kArmPivotConfig.talonConfig.MotionMagic.MotionMagicJerk = Units.degreesToRadians(900);
-
-            kArmPivotConfig.canCoderConfig.config.MagnetSensor.MagnetOffset = 0.0;
-            kArmPivotConfig.cancoderToUnitsRatio = 1.0;
-
-            kArmPivotConfig.ratioForSim = kArmPivotConfig.unitToRotorRatio;
-            kArmPivotConfig.cancoderUnitsForSim = 1.0;
-
-            kArmPivotConfig.talonConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-            kArmPivotConfig.talonConfig.MotorOutput.NeutralMode =
-                    com.ctre.phoenix6.signals.NeutralModeValue.Brake;
-            kArmPivotConfig.talonConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-            kArmPivotConfig.talonConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
-        }
-
-        public static final double kArmPivotManualVoltage = 2.0;
-
         public static final Translation3d kArmSimPivotPoint =
                 new Translation3d(
                         Units.inchesToMeters(14.00),
@@ -206,6 +144,125 @@ public final class Constants {
                                 Units.inchesToMeters(-3.390625),
                                 Units.inchesToMeters(14.789487)),
                         new Rotation3d());
+
+        public static final class ArmPivotConstants {
+            public static final int kArmPivotMotorId = 1;
+            public static final int kArmPivotCanCoderId = 1;
+
+            public static final double kArmPivotGearRatio = 1.0 / 5.0;
+            public static final double kArmPivotRectractRadLim = Units.degreesToRadians(10);
+            public static final double kArmPivotExtendRadLim = Units.degreesToRadians(160);
+
+            public static final MotorSubsystemWithCanCoderConfig kArmPivotConfig =
+                    new MotorSubsystemWithCanCoderConfig();
+
+            static {
+                kArmPivotConfig.name = "Arm-Pivot";
+
+                kArmPivotConfig.talonCANId =
+                        new CanDeviceId(
+                                Constants.ArmConstants.ArmPivotConstants.kArmPivotMotorId,
+                                kCanBusDrivebase);
+
+                kArmPivotConfig.canCoderConfig.canId =
+                        new CanDeviceId(
+                                Constants.ArmConstants.ArmPivotConstants.kArmPivotCanCoderId,
+                                kCanBusDrivebase);
+
+                kArmPivotConfig.kMomentOfInertia = 0.025;
+                kArmPivotConfig.unitToRotorRatio = kArmPivotGearRatio;
+
+                kArmPivotConfig.kMinPositionUnits = kArmPivotRectractRadLim;
+                kArmPivotConfig.kMaxPositionUnits = kArmPivotExtendRadLim;
+
+                kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+                kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
+                        kArmPivotConfig.kMaxPositionUnits / kArmPivotConfig.unitToRotorRatio;
+                kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+                kArmPivotConfig.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
+                        kArmPivotConfig.kMinPositionUnits / kArmPivotConfig.unitToRotorRatio;
+
+                kArmPivotConfig.talonConfig.Slot0.kP = 50.0;
+                kArmPivotConfig.talonConfig.Slot0.kI = 0.0;
+                kArmPivotConfig.talonConfig.Slot0.kD = 0.1;
+                kArmPivotConfig.talonConfig.Slot0.kS = 0.1;
+                kArmPivotConfig.talonConfig.Slot0.kV = 0.05;
+                kArmPivotConfig.talonConfig.Slot0.kG = 0.1;
+                kArmPivotConfig.talonConfig.Slot0.GravityType =
+                        com.ctre.phoenix6.signals.GravityTypeValue.Arm_Cosine;
+
+                kArmPivotConfig.talonConfig.MotionMagic.MotionMagicCruiseVelocity =
+                        Units.degreesToRadians(180);
+                kArmPivotConfig.talonConfig.MotionMagic.MotionMagicAcceleration =
+                        Units.degreesToRadians(90);
+                kArmPivotConfig.talonConfig.MotionMagic.MotionMagicJerk =
+                        Units.degreesToRadians(900);
+
+                kArmPivotConfig.canCoderConfig.config.MagnetSensor.MagnetOffset = 0.0;
+                kArmPivotConfig.cancoderToUnitsRatio = 1.0;
+
+                kArmPivotConfig.ratioForSim = kArmPivotConfig.unitToRotorRatio;
+                kArmPivotConfig.cancoderUnitsForSim = 1.0;
+
+                kArmPivotConfig.talonConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+                kArmPivotConfig.talonConfig.MotorOutput.NeutralMode =
+                        com.ctre.phoenix6.signals.NeutralModeValue.Brake;
+                kArmPivotConfig.talonConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+                kArmPivotConfig.talonConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
+            }
+
+            public static final double kArmPivotManualVoltage = 2.0;
+        }
+
+        public static final class ArmIntakeConstants {
+            public static final int kArmIntakeMotorId = 2;
+            public static final int kArmIntakeCanCoderId = 2;
+
+            public static final double kArmIntakeGearRatio = 1.0 / 2.0;
+
+            public static final MotorSubsystemWithCanCoderConfig kArmIntakeConfig =
+                    new MotorSubsystemWithCanCoderConfig();
+
+            static {
+                kArmIntakeConfig.name = "Arm-Pivot";
+
+                kArmIntakeConfig.talonCANId =
+                        new CanDeviceId(
+                                Constants.ArmConstants.ArmIntakeConstants.kArmIntakeMotorId,
+                                kCanBusDrivebase);
+
+                kArmIntakeConfig.canCoderConfig.canId =
+                        new CanDeviceId(
+                                Constants.ArmConstants.ArmIntakeConstants.kArmIntakeCanCoderId,
+                                kCanBusDrivebase);
+
+                kArmIntakeConfig.kMomentOfInertia = 0.01;
+                kArmIntakeConfig.unitToRotorRatio = kArmIntakeGearRatio;
+
+                kArmIntakeConfig.talonConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+                kArmIntakeConfig.talonConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
+
+                kArmIntakeConfig.talonConfig.Slot0.kP = 25.0;
+                kArmIntakeConfig.talonConfig.Slot0.kI = 0.0;
+                kArmIntakeConfig.talonConfig.Slot0.kD = 0.1;
+                kArmIntakeConfig.talonConfig.Slot0.kS = 0.1;
+                kArmIntakeConfig.talonConfig.Slot0.kV = 0.025;
+                kArmIntakeConfig.talonConfig.Slot0.kG = 0.1;
+
+                kArmIntakeConfig.canCoderConfig.config.MagnetSensor.MagnetOffset = 0.0;
+                kArmIntakeConfig.cancoderToUnitsRatio = 1.0;
+
+                kArmIntakeConfig.ratioForSim = kArmIntakeConfig.unitToRotorRatio;
+                kArmIntakeConfig.cancoderUnitsForSim = 1.0;
+
+                kArmIntakeConfig.talonConfig.MotorOutput.Inverted =
+                        InvertedValue.Clockwise_Positive;
+                kArmIntakeConfig.talonConfig.MotorOutput.NeutralMode =
+                        com.ctre.phoenix6.signals.NeutralModeValue.Brake;
+                kArmIntakeConfig.talonConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+                kArmIntakeConfig.talonConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
+            }
+        }
     }
 
     /** The {@code FieldDimensions} defines the spatial bounding box of the game field. */
