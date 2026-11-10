@@ -19,7 +19,8 @@ public class ArmFactory {
     public static Command stowArm(RobotContainer container) {
         return container
                 .getArmPivot()
-                .motionMagicSetpointCommand(() -> Constants.ArmConstants.kArmPivotRectractRadLim)
+                .motionMagicSetpointCommand(
+                        () -> Constants.ArmConstants.ArmPivotConstants.kArmPivotRectractRadLim)
                 .withName("Arm Stow");
     }
 
@@ -31,7 +32,8 @@ public class ArmFactory {
     public static Command intakeArm(RobotContainer container) {
         return container
                 .getArmPivot()
-                .motionMagicSetpointCommand(() -> Constants.ArmConstants.kArmPivotExtendRadLim)
+                .motionMagicSetpointCommand(
+                        () -> Constants.ArmConstants.ArmPivotConstants.kArmPivotExtendRadLim)
                 .withName("Arm Intake");
     }
 
@@ -43,7 +45,8 @@ public class ArmFactory {
     public static Command manualRetract(RobotContainer container) {
         return container
                 .getArmPivot()
-                .voltageCommand(() -> -Constants.ArmConstants.kArmPivotManualVoltage)
+                .voltageCommand(
+                        () -> -Constants.ArmConstants.ArmPivotConstants.kArmPivotManualVoltage)
                 .withName("Arm Retract");
     }
 
@@ -55,7 +58,8 @@ public class ArmFactory {
     public static Command manualExtend(RobotContainer container) {
         return container
                 .getArmPivot()
-                .voltageCommand(() -> Constants.ArmConstants.kArmPivotManualVoltage)
+                .voltageCommand(
+                        () -> Constants.ArmConstants.ArmPivotConstants.kArmPivotManualVoltage)
                 .withName("Arm Extend");
     }
 }
