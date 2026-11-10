@@ -4,6 +4,7 @@ import com.team236.frc2026.commands.TeleopSwerveDrive;
 import com.team236.frc2026.controlboard.ControlBoard;
 import com.team236.frc2026.controlboard.ModalControls;
 import com.team236.frc2026.simulation.SimulatedRobotState;
+import com.team236.frc2026.subsystems.arm.ArmIntakeSubsystem;
 import com.team236.frc2026.subsystems.arm.ArmPivotSubsystem;
 import com.team236.frc2026.subsystems.drive.DriveHardware;
 import com.team236.frc2026.subsystems.drive.DriveSim;
@@ -44,6 +45,7 @@ public class RobotContainer {
     private final DriveSubsystem mDriveSubsystem = buildDriveSubsystem();
     private final VisionSubsystem mVisionSubsystem = buildVisionSubsystem();
     private final ArmPivotSubsystem mArmPivotSubsystem = buildArmPivotSubsystem();
+    private final ArmIntakeSubsystem mArmIntakeSubsystem = buildArmIntakeSubsystem();
 
     private final ModalControls mModalControls = ModalControls.getInstance();
     private ModalSuperstructureTriggers mModalSuperstructureTriggers;
@@ -97,6 +99,10 @@ public class RobotContainer {
         return mArmPivotSubsystem;
     }
 
+    public ArmIntakeSubsystem getArmIntake() {
+        return mArmIntakeSubsystem;
+    }
+
     public RobotState getRobotState() {
         return mRobotState;
     }
@@ -145,20 +151,49 @@ public class RobotContainer {
 
     private ArmPivotSubsystem buildArmPivotSubsystem() {
         if (RobotBase.isSimulation()) {
-            var simTalon = new SimTalonFXWithCancoder(Constants.ArmConstants.kArmPivotConfig);
+            var simTalon =
+                    new SimTalonFXWithCancoder(
+                            Constants.ArmConstants.ArmPivotConstants.kArmPivotConfig);
             return new ArmPivotSubsystem(
-                    Constants.ArmConstants.kArmPivotConfig,
+                    Constants.ArmConstants.ArmPivotConstants.kArmPivotConfig,
                     simTalon,
                     new SimCanCoderIO(
-                            Constants.ArmConstants.kArmPivotConfig.canCoderConfig,
+                            Constants.ArmConstants.ArmPivotConstants.kArmPivotConfig.canCoderConfig,
                             simTalon.getSupplierForCancoder(
-                                    Constants.ArmConstants.kArmPivotConfig)),
+                                    Constants.ArmConstants.ArmPivotConstants.kArmPivotConfig)),
                     mRobotState);
         } else {
             return new ArmPivotSubsystem(
-                    Constants.ArmConstants.kArmPivotConfig,
-                    new TalonFXIO(Constants.ArmConstants.kArmPivotConfig),
-                    new CanCoderHardware(Constants.ArmConstants.kArmPivotConfig.canCoderConfig),
+                    Constants.ArmConstants.ArmPivotConstants.kArmPivotConfig,
+                    new TalonFXIO(Constants.ArmConstants.ArmPivotConstants.kArmPivotConfig),
+                    new CanCoderHardware(
+                            Constants.ArmConstants.ArmPivotConstants.kArmPivotConfig
+                                    .canCoderConfig),
+                    mRobotState);
+        }
+    }
+
+    private ArmIntakeSubsystem buildArmIntakeSubsystem() {
+        if (Robot.isSimulation()) {
+            var simTalon =
+                    new SimTalonFXWithCancoder(
+                            Constants.ArmConstants.ArmIntakeConstants.kArmIntakeConfig);
+            return new ArmIntakeSubsystem(
+                    Constants.ArmConstants.ArmIntakeConstants.kArmIntakeConfig,
+                    simTalon,
+                    new SimCanCoderIO(
+                            Constants.ArmConstants.ArmIntakeConstants.kArmIntakeConfig
+                                    .canCoderConfig,
+                            simTalon.getSupplierForCancoder(
+                                    Constants.ArmConstants.ArmIntakeConstants.kArmIntakeConfig)),
+                    mRobotState);
+        } else {
+            return new ArmIntakeSubsystem(
+                    Constants.ArmConstants.ArmIntakeConstants.kArmIntakeConfig,
+                    new TalonFXIO(Constants.ArmConstants.ArmIntakeConstants.kArmIntakeConfig),
+                    new CanCoderHardware(
+                            Constants.ArmConstants.ArmIntakeConstants.kArmIntakeConfig
+                                    .canCoderConfig),
                     mRobotState);
         }
     }
