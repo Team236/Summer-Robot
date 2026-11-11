@@ -1,6 +1,7 @@
 package com.team236.frc2026.subsystems.superstructure;
 
 import com.team236.frc2026.RobotContainer;
+import com.team236.frc2026.factories.ArmIntakeFactory;
 import com.team236.frc2026.factories.ArmPivotFactory;
 
 public class ModalSuperstructureTriggers {
@@ -31,5 +32,18 @@ public class ModalSuperstructureTriggers {
                 .whileTrue(
                         ArmPivotFactory.manualRetract(mRobotContainer)
                                 .withName("ManualArmPivotRetractCommand"));
+
+        mRobotContainer
+                .getModalControls()
+                .manualArmIntake()
+                .whileTrue(
+                        ArmIntakeFactory.manualIntake((mRobotContainer))
+                                .withName("ManualArmIntakeCommand"));
+        mRobotContainer
+                .getModalControls()
+                .manualArmOuttake()
+                .whileTrue(
+                        ArmIntakeFactory.manualOuttake((mRobotContainer))
+                                .withName("ManualArmOuttakeCommand"));
     }
 }
