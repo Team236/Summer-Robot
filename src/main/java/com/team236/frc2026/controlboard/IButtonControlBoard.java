@@ -18,4 +18,8 @@ public interface IButtonControlBoard {
     Trigger getManualArmPivotExtend();
 
     Trigger getManualArmPivotRetract();
+
+    Trigger getManualArmIntake();
+
+    Trigger getManualArmOuttake();
 }

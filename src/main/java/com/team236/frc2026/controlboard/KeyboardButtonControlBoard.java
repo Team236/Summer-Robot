@@ -46,4 +46,14 @@ public class KeyboardButtonControlBoard implements IButtonControlBoard {
     public Trigger getManualArmPivotRetract() {
         return mController.button(6);
     }
+
+    @Override
+    public Trigger getManualArmIntake() {
+        return mController.button(7);
+    }
+
+    @Override
+    public Trigger getManualArmOuttake() {
+        return mController.button(8);
+    }
 }

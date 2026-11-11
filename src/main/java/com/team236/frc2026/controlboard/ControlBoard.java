@@ -78,4 +78,12 @@ public class ControlBoard implements IDriveControlBoard, IButtonControlBoard {
     public Trigger getManualArmPivotRetract() {
         return mButtonControlBoard.getManualArmPivotRetract();
     }
+
+    public Trigger getManualArmIntake() {
+        return mButtonControlBoard.getManualArmIntake();
+    }
+
+    public Trigger getManualArmOuttake() {
+        return mButtonControlBoard.getManualArmOuttake();
+    }
 }
