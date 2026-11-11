@@ -1,7 +1,5 @@
 package com.team236.frc2026.subsystems.arm;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.team236.frc2026.RobotState;
 import com.team236.lib.subsystems.cancoder.CanCoderIO;
 import com.team236.lib.subsystems.cancoder.CanCoderInputsAutoLogged;
@@ -9,6 +7,7 @@ import com.team236.lib.subsystems.motor.MotorIO;
 import com.team236.lib.subsystems.motor.MotorInputsAutoLogged;
 import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoder;
 import com.team236.lib.subsystems.motor.MotorSubsystemWithCanCoderConfig;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * The {@code ArmIntakeSubsystem} controls the intake rollers of the robot's arm. It manages the
@@ -46,8 +45,7 @@ public class ArmIntakeSubsystem
     @Override
     public void periodic() {
         super.periodic();
-        mRobotState.setArmPivotAngleRadians(
-                mInputs.unitPosition);
+        mRobotState.setArmPivotAngleRadians(mInputs.unitPosition);
 
         Logger.recordOutput(
                 getName() + "/CurrentVelocityRadiansPerSec", mInputs.velocityUnitsPerSecond);
