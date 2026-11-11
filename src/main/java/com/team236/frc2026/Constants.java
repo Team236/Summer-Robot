@@ -224,7 +224,7 @@ public final class Constants {
                     new MotorSubsystemWithCanCoderConfig();
 
             static {
-                kArmIntakeConfig.name = "Arm-Pivot";
+                kArmIntakeConfig.name = "Arm-Intake";
 
                 kArmIntakeConfig.talonCANId =
                         new CanDeviceId(
@@ -262,6 +262,9 @@ public final class Constants {
                 kArmIntakeConfig.talonConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
                 kArmIntakeConfig.talonConfig.CurrentLimits.SupplyCurrentLimit = 40.0;
             }
+
+            public static final double kArmIntakeManualVoltage = 2.0;
+            public static final double kArmIntakeRevolutionThreshold = 5.0;
         }
     }
 
