@@ -51,10 +51,9 @@ public class ArmIntakeSubsystem
     @Override
     public void periodic() {
         super.periodic();
-        mRobotState.setArmPivotAngleRadians(mInputs.unitPosition);
 
         Logger.recordOutput(
-                getName() + "/CurrentVelocityRadiansPerSect", mInputs.velocityUnitsPerSecond);
+                getName() + "/CurrentVelocityRadiansPerSec", mInputs.velocityUnitsPerSecond);
         Logger.recordOutput(getName() + "/UnitPose", mInputs.unitPosition);
     }
 }
