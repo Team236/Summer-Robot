@@ -2,12 +2,11 @@ package com.team236.frc2026;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.team236.lib.limelight.Limelight3GConfig;
-import com.team236.lib.simulation.FuelPhysicsSim;
+import com.team236.lib.simulation.FuelPhysicsSimManager;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.ironmaple.simulation.SimulatedArena;
@@ -24,7 +23,6 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
     private RobotContainer mRobotContainer;
-    private FuelPhysicsSim mFuelSim;
 
     public Robot() {
         SignalLogger.enableAutoLogging(false);
@@ -133,26 +131,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void simulationInit() {
         if (!Constants.kUseMapleSimFuel) {
-            mFuelSim =
-                    FuelPhysicsSim.configureFuelSim(
-                            Constants.TestbedConstants.kBumperWidthInches,
-                            Constants.TestbedConstants.kBumperLengthInches,
-                            Constants.TestbedConstants.kBumperHeightInches,
-                            () -> mRobotContainer.getSimulatedRobotState().getLatestFieldToRobot(),
-                            () -> mRobotContainer.getSimulatedRobotState().getSimChassisSpeeds());
-            mFuelSim.addIntakeZone(
-                    () -> mRobotContainer.getRobotState().getArmPose(),
-                    Units.inchesToMeters(7.0),
-                    Units.inchesToMeters(7.0),
-                    () -> {
-                        if (mRobotContainer.getRobotState().getIntakePossession()
-                                || !mRobotContainer.getArmIntake().isIntaking()) {
-                            return false;
-                        }
-                        return true;
-                    },
-                    () -> mRobotContainer.getRobotState().setIntakePossession(true));
-
+            FuelPhysicsSimManager.configureFuelSim(mRobotContainer);
         } else if (Constants.kUseMapleSim) {
             SimulatedArena.getInstance().placeGamePiecesOnField();
         }
@@ -161,9 +140,7 @@ public class Robot extends LoggedRobot {
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
-        if (mFuelSim != null) {
-            mFuelSim.tick();
-        }
+        FuelPhysicsSimManager.tick();
 
         if (Constants.kUseMapleSimFuel) {
             Logger.recordOutput(
