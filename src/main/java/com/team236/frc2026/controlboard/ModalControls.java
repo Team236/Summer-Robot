@@ -117,4 +117,12 @@ public class ModalControls {
     public Trigger manualArmPivotRetract() {
         return modeSpecific(ControlBoard.getInstance().getManualArmPivotRetract(), Mode.MANUAL);
     }
+
+    public Trigger manualArmIntake() {
+        return modeSpecific(ControlBoard.getInstance().getManualArmIntake(), Mode.MANUAL);
+    }
+
+    public Trigger manualArmOuttake() {
+        return modeSpecific(ControlBoard.getInstance().getManualArmOuttake(), Mode.MANUAL);
+    }
 }
