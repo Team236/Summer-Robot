@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
  * here drive the arm to its predefined stow and intake positions using Motion Magic, or allow
  * manual duty cycle control.
  */
-public class ArmFactory {
+public class ArmPivotFactory {
 
     /**
      * Moves the arm pivot to the stow position.
