@@ -145,7 +145,8 @@ public class Robot extends LoggedRobot {
                     Units.inchesToMeters(7.0),
                     Units.inchesToMeters(7.0),
                     () -> {
-                        if (mRobotContainer.getRobotState().getIntakePossession()) {
+                        if (mRobotContainer.getRobotState().getIntakePossession()
+                                || !mRobotContainer.getArmIntake().isIntaking()) {
                             return false;
                         }
                         return true;

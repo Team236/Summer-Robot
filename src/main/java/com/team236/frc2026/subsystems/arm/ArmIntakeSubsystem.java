@@ -1,5 +1,6 @@
 package com.team236.frc2026.subsystems.arm;
 
+import com.team236.frc2026.Constants;
 import com.team236.frc2026.RobotState;
 import com.team236.lib.subsystems.cancoder.CanCoderIO;
 import com.team236.lib.subsystems.cancoder.CanCoderInputsAutoLogged;
@@ -42,13 +43,18 @@ public class ArmIntakeSubsystem
         this.io.setVoltageOutput(voltage); // Same as: setVoltageImpl(voltage);
     }
 
+    public boolean isIntaking() {
+        return (mInputs.velocityUnitsPerSecond
+                > Constants.ArmConstants.ArmIntakeConstants.kArmIntakeRevolutionThreshold);
+    }
+
     @Override
     public void periodic() {
         super.periodic();
         mRobotState.setArmPivotAngleRadians(mInputs.unitPosition);
 
         Logger.recordOutput(
-                getName() + "/CurrentVelocityRadiansPerSec", mInputs.velocityUnitsPerSecond);
+                getName() + "/CurrentVelocityRadiansPerSect", mInputs.velocityUnitsPerSecond);
         Logger.recordOutput(getName() + "/UnitPose", mInputs.unitPosition);
     }
 }
