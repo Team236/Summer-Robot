@@ -215,6 +215,10 @@ public final class Constants {
         }
 
         public static final class ArmIntakeConstants {
+            public static final double kOuttakeDelaySeconds = 0.25;
+            public static final double kSimOuttakeVelocityMetersPerSec = 5.0;
+            public static final double kSimOuttakeRPM = 0.0;
+
             public static final int kArmIntakeMotorId = 2;
             public static final int kArmIntakeCanCoderId = 2;
 
@@ -286,5 +290,7 @@ public final class Constants {
         public static final double kMargMaxY = kFieldWidthMeters + kFieldBoarderMargin;
         public static final double kMargMinZ = kFieldMinZ - kFieldBoarderMargin;
         public static final double kMargMaxZ = kFieldHeightMeters + kFieldBoarderMargin;
+
+        public static final double kFuelDiameter = 6.0;
     }
 }
