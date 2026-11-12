@@ -18,9 +18,9 @@ public class RobotViz {
         Logger.recordOutput("RobotViz/Arm-Pivot/ArmPose", mRobotState.getArmPose());
 
         if (Robot.isSimulation()) {
-            Optional<Pose3d> heldBallPose = RobotVizHelpers.getGrabberBallFieldPose(mRobotState);
-            if (heldBallPose.isPresent()) {
-                Logger.recordOutput("RobotViz/GrabberBall", heldBallPose.get());
+            Optional<Pose3d> fuelPose = RobotVizHelpers.getGrabberBallFieldPose(mRobotState);
+            if (!fuelPose.isEmpty()) {
+                Logger.recordOutput("RobotViz/GrabberBall", fuelPose.get());
             } else {
                 Logger.recordOutput("RobotViz/GrabberBall", new Pose3d());
             }
