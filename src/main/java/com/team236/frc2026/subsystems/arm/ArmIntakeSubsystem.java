@@ -43,9 +43,13 @@ public class ArmIntakeSubsystem
         this.io.setVoltageOutput(voltage); // Same as: setVoltageImpl(voltage);
     }
 
-    public boolean isIntaking() {
+    public boolean canIntake() {
         return (mInputs.velocityUnitsPerSecond
                 > Constants.ArmConstants.ArmIntakeConstants.kArmIntakeRevolutionThreshold);
+    }
+
+    public boolean isOuttaking() {
+        return (mInputs.velocityUnitsPerSecond < 0.0);
     }
 
     @Override
