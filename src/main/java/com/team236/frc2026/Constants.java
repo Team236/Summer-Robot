@@ -146,6 +146,8 @@ public final class Constants {
                         new Rotation3d());
 
         public static final class ArmPivotConstants {
+            public static final double kArmPivotBaseAngleDegrees = 20.0;
+
             public static final int kArmPivotMotorId = 1;
             public static final int kArmPivotCanCoderId = 1;
 
