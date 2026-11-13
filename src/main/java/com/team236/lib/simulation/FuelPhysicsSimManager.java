@@ -80,11 +80,11 @@ public class FuelPhysicsSimManager {
             return;
         }
 
-        Translation3d ejectionVelField = computeEjectionVelocityFieldFrame();
+        Translation3d ejectionVelField = computeLaunchVelocityVector();
         Logger.recordOutput("Sim/LaunchVelocityVector", ejectionVelField);
     }
 
-    private static Translation3d computeEjectionVelocityFieldFrame() {
+    private static Translation3d computeLaunchVelocityVector() {
         var speeds = mRobotContainer.getSimulatedRobotState().getSimChassisSpeeds();
         double armPivotRads = mRobotContainer.getRobotState().getArmPivotAngleRadians();
         double elevationAngleRadUnits = mBaseRads + armPivotRads;
@@ -95,9 +95,9 @@ public class FuelPhysicsSimManager {
                 Constants.ArmConstants.ArmIntakeConstants.kSimOuttakeVelocityMetersPerSec
                         * Math.sin(elevationAngleRadUnits);
 
-        var robotPoseEntry = mRobotContainer.getRobotState().getLatestFieldToRobot();
+        var robotPose = mRobotContainer.getRobotState().getLatestFieldToRobot();
         double robotYawRads =
-                robotPoseEntry != null ? robotPoseEntry.getValue().getRotation().getRadians() : 0.0;
+                robotPose != null ? robotPose.getValue().getRotation().getRadians() : 0.0;
 
         return new Translation3d(vxRobot, 0.0, vzRobot)
                 .rotateBy(new Rotation3d(0.0, 0.0, robotYawRads))
@@ -117,7 +117,7 @@ public class FuelPhysicsSimManager {
             return;
         }
 
-        Translation3d ejectionVelField = computeEjectionVelocityFieldFrame();
+        Translation3d ejectionVelField = computeLaunchVelocityVector();
 
         mFuelSim.launchBall(
                 fuelPose.get().getTranslation(),
