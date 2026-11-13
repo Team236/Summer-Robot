@@ -3,16 +3,21 @@ package com.team236.lib.simulation;
 import com.team236.frc2026.Constants;
 import com.team236.frc2026.RobotContainer;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import java.util.Optional;
+import org.littletonrobotics.junction.Logger;
 
 public class FuelPhysicsSimManager {
     private static FuelPhysicsSim mFuelSim;
     private static RobotContainer mRobotContainer;
 
     private static final Timer mOuttakeTimer = new Timer();
+    private static final double mBaseRads =
+            (Units.degreesToRadians(
+                    Constants.ArmConstants.ArmPivotConstants.kArmPivotBaseAngleDegrees));
 
     public static void configureFuelSim(RobotContainer container) {
         mRobotContainer = container;
@@ -68,10 +73,33 @@ public class FuelPhysicsSimManager {
             mOuttakeTimer.reset();
         }
         mFuelSim.tick();
+
+        Optional<Pose3d> fuelPose =
+                RobotVizHelpers.getGrabberBallFieldPose(mRobotContainer.getRobotState());
+        if (fuelPose.isEmpty()) {
+            return;
+        }
+        var speeds = mRobotContainer.getSimulatedRobotState().getSimChassisSpeeds();
+        double armPivotRads = mRobotContainer.getRobotState().getArmPivotAngleRadians();
+        double elevationAngleRadUnits = (mBaseRads + armPivotRads);
+        double vxRobot =
+                Constants.ArmConstants.ArmIntakeConstants.kSimOuttakeVelocityMetersPerSec
+                        * Math.abs(Math.sin(elevationAngleRadUnits));
+        double vzRobot =
+                Constants.ArmConstants.ArmIntakeConstants.kSimOuttakeVelocityMetersPerSec
+                        * Math.cos(elevationAngleRadUnits);
+        Translation3d ejectionVelRobot =
+                new Translation3d(vxRobot, 0.0, vzRobot)
+                        .rotateBy(fuelPose.get().getRotation())
+                        .plus(
+                                new Translation3d(
+                                        speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 0.0));
+
+        Logger.recordOutput("Sim/LaunchVelocityVector", ejectionVelRobot);
     }
 
     public static void launchFuel() {
-        if (mFuelSim == null) {
+        if (mFuelSim == null || mRobotContainer == null) {
             return;
         }
 
@@ -82,18 +110,24 @@ public class FuelPhysicsSimManager {
         }
 
         var speeds = mRobotContainer.getSimulatedRobotState().getSimChassisSpeeds();
-
-        mFuelSim.launchBall(
-                fuelPose.get().getTranslation(),
-                new Translation3d(
-                                Constants.ArmConstants.ArmIntakeConstants
-                                        .kSimOuttakeVelocityMetersPerSec,
-                                0.0,
-                                0.0)
+        double armPivotRads = (mRobotContainer.getRobotState().getArmPivotAngleRadians());
+        double elevationAngleRadUnits = (mBaseRads + armPivotRads);
+        double vxRobot =
+                Constants.ArmConstants.ArmIntakeConstants.kSimOuttakeVelocityMetersPerSec
+                        * Math.abs(Math.sin(elevationAngleRadUnits));
+        double vzRobot =
+                Constants.ArmConstants.ArmIntakeConstants.kSimOuttakeVelocityMetersPerSec
+                        * Math.cos(elevationAngleRadUnits);
+        Translation3d ejectionVelRobot =
+                new Translation3d(vxRobot, 0.0, vzRobot)
                         .rotateBy(fuelPose.get().getRotation())
                         .plus(
                                 new Translation3d(
-                                        speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 0.0)),
+                                        speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 0.0));
+
+        mFuelSim.launchBall(
+                fuelPose.get().getTranslation(),
+                ejectionVelRobot,
                 Constants.ArmConstants.ArmIntakeConstants.kSimOuttakeRPM);
         mRobotContainer.getRobotState().setIntakePossession(false);
     }
