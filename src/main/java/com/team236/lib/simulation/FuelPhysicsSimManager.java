@@ -90,10 +90,10 @@ public class FuelPhysicsSimManager {
         double elevationAngleRadUnits = mBaseRads + armPivotRads;
         double vxRobot =
                 Constants.ArmConstants.ArmIntakeConstants.kSimOuttakeVelocityMetersPerSec
-                        * Math.cos(elevationAngleRadUnits);
+                        * Math.sin(elevationAngleRadUnits);
         double vzRobot =
                 Constants.ArmConstants.ArmIntakeConstants.kSimOuttakeVelocityMetersPerSec
-                        * Math.sin(elevationAngleRadUnits);
+                        * Math.cos(elevationAngleRadUnits);
 
         var robotPose = mRobotContainer.getRobotState().getLatestFieldToRobot();
         double robotYawRads =
@@ -101,9 +101,7 @@ public class FuelPhysicsSimManager {
 
         return new Translation3d(vxRobot, 0.0, vzRobot)
                 .rotateBy(new Rotation3d(0.0, 0.0, robotYawRads))
-                .plus(
-                        new Translation3d(
-                                speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 0.0));
+                .plus(new Translation3d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 0.0));
     }
 
     public static void launchFuel() {

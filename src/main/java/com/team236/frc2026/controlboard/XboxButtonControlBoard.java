@@ -46,21 +46,21 @@ public class XboxButtonControlBoard implements IButtonControlBoard {
 
     @Override
     public Trigger getManualArmPivotExtend() {
-        return mController.povUp();
+        return mController.leftTrigger();
     }
 
     @Override
     public Trigger getManualArmPivotRetract() {
-        return mController.povDown();
+        return mController.leftBumper();
     }
 
     @Override
     public Trigger getManualArmIntake() {
-        return mController.rightTrigger();
+        return mController.rightBumper();
     }
 
     @Override
     public Trigger getManualArmOuttake() {
-        return mController.rightBumper();
+        return mController.rightTrigger();
     }
 }
