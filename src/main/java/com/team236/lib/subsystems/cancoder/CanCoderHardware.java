@@ -3,6 +3,7 @@ package com.team236.lib.subsystems.cancoder;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.team236.lib.util.CTREUtil;
@@ -22,7 +23,9 @@ public class CanCoderHardware implements CanCoderIO {
     public CanCoderHardware(CanCoderConfig config) {
         this.config = config;
 
-        canCoder = new CANcoder(config.canId.getDeviceId(), config.canId.getDeviceNetwork());
+        canCoder =
+                new CANcoder(
+                        config.canId.getDeviceId(), new CANBus(config.canId.getDeviceNetwork()));
 
         CTREUtil.applyConfiguration(canCoder, this.config.config);
         positionSignal = canCoder.getAbsolutePosition();

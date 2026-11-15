@@ -1,6 +1,7 @@
 package com.team236.lib.subsystems.motor;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -56,7 +57,10 @@ public class TalonFXIO implements MotorIO {
 
     public TalonFXIO(MotorSubsystemConfig config) {
         this.config = config;
-        talon = new TalonFX(config.talonCANId.getDeviceId(), config.talonCANId.getDeviceNetwork());
+        talon =
+                new TalonFX(
+                        config.talonCANId.getDeviceId(),
+                        new CANBus(config.talonCANId.getDeviceNetwork()));
 
         if (Robot.isSimulation()) {
             this.config.talonConfig.CurrentLimits = new CurrentLimitsConfigs();

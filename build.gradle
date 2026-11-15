@@ -184,6 +184,11 @@ task(eventDeploy) {
 }
 createVersionFile.dependsOn(eventDeploy)
 
+// Applies encoding
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
 // Applies formatting
 tasks.named('compileJava') {
     dependsOn 'spotlessApply'
